@@ -1,0 +1,20 @@
+weaves
+
++ Stability
+
+The regex and smet functions aren't very fault-tolerarnt. They may
+unexpectedly close your q interpreter session. Usually, this is a
+data-typing issue - typically passing a symbol and not a string.
+
+The example (in the directory examples) shows how to use a string
+metric (and regular expressions) reliably.
+
++ Stripping punctuation
+
+The function depunct[] only removes a subset of punctuation
+characters.
+
+!,._;:&/%^`#"\{}()+=-
+
+I couldn't find a way to quote out square brackets []
+

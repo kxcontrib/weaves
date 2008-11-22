@@ -1,0 +1,14 @@
+#!/bin/bash 
+
+test -n "$QLOAD" || QLOAD=@pkgdatadir@/${OSTYPE}.q
+
+test -n "$QHOME" || QHOME=@qhomedir@
+test -n "$QPROG" || QPROG=@qprog@
+
+test -n "$QPATH" || QPATH=@pkgdatadir@:$QHOME
+
+export QLOAD
+export QHOME
+export QPROG
+export QPATH
+

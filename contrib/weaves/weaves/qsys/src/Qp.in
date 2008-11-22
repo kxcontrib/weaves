@@ -1,0 +1,35 @@
+#!/bin/bash
+## weaves
+
+# A number of loaders for q
+# The script Qp is linked to Qs and Qr
+# The same script changes its behaviour based on what it is called
+
+# Qs is "Q straight". It doesn't use the site load file pointed to by QLOAD
+# But does use rlwrap
+
+# Qp does use the QLOAD file and has rlwrap
+
+# Qr also uses the QLOAD file, but no rlwrap.
+
+test -f @sysconfdir@/q.rc && . @sysconfdir@/q.rc
+test -f $HOME/.q.rc && . $HOME/.q.rc
+
+. @sysconfdir@/use-q
+
+: ${HOSTNAME:=$(uname -n)}
+HOSTNAME=${HOSTNAME%%.*}
+
+prog=$(basename $0)
+
+# emacs uses Qr and no wrap
+if [ "$prog" = "Qs" ]
+then
+    unset QLOAD
+    export d_wrap=rlwrap
+elif [ "$prog" = "Qp" ]
+then
+    export d_wrap=rlwrap
+fi
+
+Q $*
