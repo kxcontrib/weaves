@@ -1,0 +1,15 @@
+weaves
+
+Working with qsys
+
+Installing the Qp Qr and Qs scripts won't make them available. They
+are installed into ~/bin. You will need to put this on your PATH.
+
+The q.rc file in ~/etc allows you to change installation easily.
+
+You can override that with one in ~/.q.rc
+
+The scripts use the file ~/etc/use-q to provide a function tailored to a
+particular host or runtime environment. The implemenation given is
+only a sample. The use of the QHOME, QPATH and QLOAD is to demonstrate
+how they can be used.

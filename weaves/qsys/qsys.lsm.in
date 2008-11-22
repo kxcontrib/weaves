@@ -1,0 +1,21 @@
+Begin3
+Title:		qsys
+Version:	@VERSION@
+Entered-date:	@ISODATE@
+Description:	Q system utilities
+		@configure_input@
+		Please edit qsys.lsm.in to fix the Keywords and
+		Primary-site entries, add several more lines of
+		description here if appropriate, and to delete these
+		instructions.
+Keywords:	[substitute your keywords here]
+Author: 	walter.eaves@bigfoot.com (Walter Eaves)
+Maintained-by:	walter.eaves@bigfoot.com (Walter Eaves)
+Primary-site:	metlab.unc.edu pub/Linux/apps/some/directory
+		31k qsys-@VERSION@.tar.gz
+		500  qsys.lsm
+Alternate-site: 
+Original-site:  
+Platforms:      
+Copying-policy:	GNU copyleft
+End

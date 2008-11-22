@@ -1,0 +1,56 @@
+// weaves
+
+/ Regular expression matching - requires egex.so
+
+\d .regex
+
+i.lib:`$"@pkglibdir@/libqregex"
+
+/ Regular expression match: 1st string pattern, 2nd string
+/ Returns boolean
+m: .regex.i.lib 2:(`q_match;2)
+m1: .regex.i.lib 2:(`q_match1;3)
+
+/ Regular expression match: 1st string pattern, 2nd string
+/ Returns integer pair (first, last)
+mark: .regex.i.lib 2:(`q_re_location;2)
+
+/ Regular expression match: 1st string pattern, 2nd string, 3rd 1 for case-insensitive
+/ Returns integer pair (first, last)
+mark1: .regex.i.lib 2:(`q_re_location1;3)
+
+.i.space: .regex.i.lib 2:(`q_re_despace;2)
+.i.punct: .regex.i.lib 2:(`q_re_depunct;2)
+
+space: .i.space[;1]
+punct: .i.punct[;1]
+
+clean: { [x] space punct x }
+
+\d .
+
+/ TODO - Convert to a symbol, dropping punctuation
+
+/ atom
+.regex.sym0: { [x] .regex.space .regex.punct (string x) }
+/ list or atom
+.regex.sym: { [x]
+	     if[ 0 > type x; : .regex.sym0[x]]; 
+	     if[ 10 = type x; : .regex.sym0[`$x]];
+	     .regex.sym0 each x
+	     }
+
+/ These take a dictionary as third argument
+/ icase ignore case
+/ least use least number of characters
+/ wreplace weight replace to double
+
+.smet.lev.d: .regex.i.lib 2:(`q_lev_dist;3)
+.smet.lev.r: .regex.i.lib 2:(`q_lev_ratio;3)
+
+/ wreplace should not be used.
+/ The fourth argument is the weight to give to prefix
+.smet.jrw.r: .regex.i.lib 2:(`q_lev_jaro_winkler_ratio;4)
+
+
+

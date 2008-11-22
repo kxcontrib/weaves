@@ -1,0 +1,231 @@
+	qsys - Q system utilities
+
+
+
+  Copyright (C) 2008 Walter Eaves
+
+  qsys is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+Comments are welcome.
+
+qsys provides some Unix environment scripts and configuration files to 
+work with www.kx.com q/kdb interpreter.
+
+It is designed to be installed into a user's home directory and provides with
+three scripts Qp Qr and Qs to launch the q interpreter.
+
+The run-time system for the q/kdb is extended by the environment variables
+
+ QPROG QHOME QLOAD and QPATH
+
+These are set to default values in the configuration file 
+
+ etc/q.rc
+
+which can use overrides from ~/.q.rc
+
+The scripts all use 
+
+ etc/use-q
+
+to launch the q/kdb interpreter.
+
+The use-q script provides a means of adapting the q runtime
+environment to use other local libraries. And to adapt to tasksets
+for different hosts.
+
+The use-q script can read a file ~/.qstate to relocate the q
+interpreter to another directory before it runs.
+
+The three scripts operate in a slightly different way. The extended
+environment is only active if the QLOAD variable is set.
+
+ Qs unsets the variable QLOAD and launches the q interpreter under
+ rlwrap. It runs q very much as originally shipped.
+
+ Qp leaves QLOAD and runs the interpreter under rlwrap. It loads the
+ extended environment and this form of invocation is useful for the
+ command-line or under the screen(1) utility.
+
+ Qr also doesn't change QLOAD, so the extended environment is
+ available. It doesn't run the interpreter under rlwrap. This is
+ useful for running under an Emacs command-line shell or other IDE.
+
+-- The extended environment
+
+Extra Q scripts are installed into the directory 
+
+ share/qsys
+
+and extra shared object modules into
+
+ lib/qsys
+
+To enable the scripts the QHOME/q.q script is installed (or
+overwritten) with a soft link to the site.q file in share/qsys.
+
+This is read by the q interpreter on startup and, if the QLOAD variable
+is set in the environment, it will 
+
+ invoke .Q.opt on the command-line arguments and store them in .sys.i.args
+ store the initial working directory in .sys.i.cwd
+
+ It will then load the script pointed to by the QLOAD variable. By
+ default, this is the script of the same name as the OSTYPE variable in
+ the environment in the directory share/qsys.
+
+ If the -verbose switch had been given on the command-line a message
+ is displayed.
+
+ The current working directory is added to the QPATH.
+
+ The help file share/qsys/help.q is loaded
+
+ If the -load switch was given on the command-line, any files or
+ directories listed for that switch are loaded.
+
+-- Using functions within the extended environment
+
+Most of the extra utility functions are defined in the QLOAD file.
+
+-- .log
+
+A simple pair of logging functions are defined: .log.tracer and
+.log.typed. These have null implementations and a sample
+implementation can be loaded on top of these two. The file with the
+sample implementations is called log.q
+
+-- .os
+
+A number of utilities are given in .os. These are some constants:
+
+ .os.path_sep "/"
+ .os.paths_sep ":"
+
+Environment variables can be expanded using .os.echoer
+
+Some file and directory tests .os.file .os.directory.
+
+Some filename manipulation utilities: .os.basename, .os.filebase,
+.os.fileext and .os.dirname.
+
+Two primitives to change directory are given: .os.pushd and .os.popd
+pushd changes directory but stores the current directory before doing
+so. popd (if passed a null argument) changes to the last directory
+that was pushd.
+
+-- .sys
+
+Provides the most useful extension the utility
+
+ .sys.qloader
+
+and .sys.qreloader
+
+The will look for a file on the QPATH and load it. .sys.qloader
+maintains a cache of files loaded and will only load a file
+once. .sys.qreloader will load the file repeatedly.
+
+ .sys.qloader enlist("help.q") 
+
+and 
+
+ .sys.qloader ("help.q";"log.q")
+
+are typical invocations, but 
+
+ .sys.qloader ("/var/lib/mappings.qdb";"/q/data/trades")
+
+would load the .qdb file as a table and the directory /q/data/trades
+as a splayed table.
+
+ .sys.qloader ("mappings.qdb";"trades")
+
+would also load the file and the directory if they appeared off the QPATH.
+
+q table files are given the extension .qdb to make them more
+noticeable in the OS. The function .sys.qdb enlist("mappings.qdb")
+will load the table in mappings.qdb as the table mappings. .sys.qdb
+does not search the QPATH.
+
+A number of functions give access to the command-line
+
+ .sys.is_arg`debug
+
+would test for the variable -debug. .sys.arg`debug would return the
+value associated with the -debug variable on the command-line.
+
+The function .sys.exit is also defined and is dependent on the
+command-line variable -halt.
+
+If -halt is *not* set, then .sys.exit[n] will call "exit[n]"
+
+-- .sys.qloader and the -load command-line variable
+
+When the q interpreter is launched using Qp or Qr the -load
+command-line switch allows a number of files and directories to be
+loaded. An example will make this clearer:
+
+We start in a directory ~/src/statistics containing the files:
+
+ stats.q gname.q counts.csv fkey.q
+
+and the QPATH is set to access
+
+ QPATH=~codebase/qtables:~codebase/qscripts
+
+And in these directories are
+
+ ~codebase/qtables/namemaps.qdb
+ ~codebase/qscripts/fkeys.q
+
+In the directory, ~/src/statistics, we invoke q in this way:
+
+ Qp $PWD/stats.q -load /q/data/trades gname.q namemaps.qdb $PWD/counts.csv fkey.q
+
+Before any loading is done, the current working directory is added to
+QPATH
+
+ /q/data/trades is loaded because it is an absolute name.
+
+ gname.q is loaded from ~/src/statistics because that directory is now
+ on the QPATH
+
+ namemaps.qdb is loaded from ~codebase/qtables because that is on the
+ QPATH
+
+ counts.csv is an absolute path, but is not loadable as a q file, so
+ it is stored in the variable .Q.x
+
+ the file fkey.q is loaded from the directory ~codebase/qscripts/ on
+ the QPATH.
+
+Finally the script stats.q is loaded. It can be found because it is an
+absolute file name.
+
+.sys.qloader[] makes it easy to centralize code and re-use it.
+
+-- .sch
+
+Is the last set of utilities provided in the main extension.
+
+It provides schema related functions
+
+ .sch.flipper will flip a table so that the columns become the rows.
+
+ .sch.t2csv will write a table to a CSV file in initial working
+ directory.
+
+	- Walter Eaves <walter.eaves@bigfoot.com>

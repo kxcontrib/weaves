@@ -1,0 +1,21 @@
+Begin3
+Title:		egex
+Version:	@VERSION@
+Entered-date:	@ISODATE@
+Description:	Provides a shared object for q/kdb
+		@configure_input@
+		Please edit egex.lsm.in to fix the Keywords and
+		Primary-site entries, add several more lines of
+		description here if appropriate, and to delete these
+		instructions.
+Keywords:	[substitute your keywords here]
+Author: 	Walter.Eaves@bigfoot.com (Walter Eaves)
+Maintained-by:	Walter.Eaves@bigfoot.com (Walter Eaves)
+Primary-site:	metlab.unc.edu pub/Linux/apps/some/directory
+		31k egex-@VERSION@.tar.gz
+		500  egex.lsm
+Alternate-site: 
+Original-site:  
+Platforms:      
+Copying-policy:	GNU copyleft
+End

@@ -1,0 +1,67 @@
+weaves
+
+Installation is very much as one would expect.
+
+Simply use ./configure, but usually one only wants to install in one's
+own home directory and into the q executable directory
+
+ ./configure --prefix=$HOME --with-qhomedir=$HOME/q
+
+(There are other switches to change the name of the --with-qprogdir and the
+name of the q executable --with-qprog.)
+
+The installation has been tested with Linux and Darwin. It assumes
+that the q program directory will be $qhomedir/[lms][32|64]
+
+That is ~/q/l32 for Linux 32-bit
+
+If this doesn't work, you can try to override by setting 
+
+ --with-progdir=~/q/x64
+
+for example.
+
+The qsys environment comes with a C plugin for the q interpreter "smet".
+
+This is built by default. It can be removed from the build using 
+
+ --disable-string-metrics
+
+This is a sub-build of the main qsys build.
+
+--
+
+The build system builds a C program (qsys) but doesn't install this.
+
+It then builds in the src directory. It just applies sed
+transformations to scripts marked with .in suffix.
+
+ make install
+
+will do the following
+
+ In the $qhomedir given on the command-line to configure, the q.q file
+ will be deleted and replaced by a link to site.q
+
+ A number of q script files are installed in ~/share/qsys
+
+ The scripts Qp Qr and Qs are installed in ~/bin
+
+ The configuration files use-q and q.rc are installed in ~/etc
+
+ Other documentation files are installed. (These currently have
+ nothing of use in them.)
+
+The "string metrics" sub-package will also install into
+
+ ~/share/qsys 
+ ~/lib/qsys
+
+--
+
+There is no feature to uninstall.
+
+--
+
+The installation works on both MacOSX and Linux - both 32bit.
+
