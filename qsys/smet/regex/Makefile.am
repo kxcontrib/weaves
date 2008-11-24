@@ -1,5 +1,6 @@
 
 AM_CFLAGS = -DNDEBUG -I${top_srcdir}/lib -DNO_PYTHON
+CPPFLAGS = $(AM_CFLAGS)
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -18,7 +19,7 @@ TESTS_ENVIRONMENT = $(SHELL) -x
 q_files_TEST = egex1.q egex.q smet.q
 q_files = regex.q.in
 
-EXTRA_DIST=$(TESTS) $(q_files) $(q_files)
+EXTRA_DIST=$(TESTS) $(q_files_TEST) $(q_files)
 
 CLEANFILES = regex.q
 

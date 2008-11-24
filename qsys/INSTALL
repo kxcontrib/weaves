@@ -10,7 +10,7 @@ own home directory and into the q executable directory
 (There are other switches to change the name of the --with-qprogdir and the
 name of the q executable --with-qprog.)
 
-The installation has been tested with Linux and Darwin. It assumes
+The installation has been tested with Linux, Darwin and Solaris. It assumes
 that the q program directory will be $qhomedir/[lms][32|64]
 
 That is ~/q/l32 for Linux 32-bit
@@ -31,9 +31,34 @@ This is a sub-build of the main qsys build.
 
 --
 
-The build system builds a C program (qsys) but doesn't install this.
+For Solaris, I've only tested on 32-bit sparc. I used the gcc 3.4.2
+compiler. Unfortunately, the string-metrics component wouldn't link
+so you will only be able to use the extended environment.
 
-It then builds in the src directory. It just applies sed
+So you should configure
+
+--without-string-metrics
+
+The system will build and install, but you will get unresolved symbols on
+Solaris.
+
+
+--
+
+If you want to extend the package you'll need at least automake 1.9
+
+It's best to delete the contents of the config/ and smet/config/ 
+directories and then
+
+ autoreconf --force --install
+
+and then configure as normal.
+
+--
+
+The build system uses gnulib, so a GCC compiler is required.
+
+It builds in the src directory. It just applies sed
 transformations to scripts marked with .in suffix.
 
  make install

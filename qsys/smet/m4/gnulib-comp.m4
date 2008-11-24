@@ -41,6 +41,10 @@ AC_DEFUN([gl_INIT],
   gl_ltlibdeps=
   gl_source_base='lib'
   gl_FUNC_ALLOCA
+  gl_ERROR
+  m4_ifdef([AM_XGETTEXT_OPTION],
+    [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
+     AM_XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
   AC_SUBST([LIBINTL])
   AC_SUBST([LTLIBINTL])
   gl_LOCALCHARSET
@@ -48,11 +52,15 @@ AC_DEFUN([gl_INIT],
   AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
+  gl_FUNC_MEMCHR
+  gl_FUNC_MEMCPY
   gl_REGEX
   gt_TYPE_SSIZE_T
   AM_STDBOOL_H
   gl_STDINT_H
   gl_STDLIB_H
+  gl_FUNC_STRERROR
+  gl_STRING_MODULE_INDICATOR([strerror])
   gl_HEADER_STRING_H
   gl_FUNC_STRNDUP
   gl_STRING_MODULE_INDICATOR([strndup])
@@ -119,10 +127,15 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/alloca.c
   lib/alloca.in.h
   lib/config.charset
+  lib/error.c
+  lib/error.h
   lib/gettext.h
+  lib/intprops.h
   lib/localcharset.c
   lib/localcharset.h
   lib/malloc.c
+  lib/memchr.c
+  lib/memcpy.c
   lib/ref-add.sin
   lib/ref-del.sin
   lib/regcomp.c
@@ -134,6 +147,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdbool.in.h
   lib/stdint.in.h
   lib/stdlib.in.h
+  lib/strerror.c
   lib/string.in.h
   lib/strndup.c
   lib/strnlen.c
@@ -143,6 +157,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/absolute-header.m4
   m4/alloca.m4
   m4/codeset.m4
+  m4/error.m4
   m4/extensions.m4
   m4/glibc21.m4
   m4/gnulib-common.m4
@@ -150,12 +165,15 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/localcharset.m4
   m4/longlong.m4
   m4/malloc.m4
+  m4/memchr.m4
+  m4/memcpy.m4
   m4/onceonly_2_57.m4
   m4/regex.m4
   m4/ssize_t.m4
   m4/stdbool.m4
   m4/stdint.m4
   m4/stdlib_h.m4
+  m4/strerror.m4
   m4/string_h.m4
   m4/strndup.m4
   m4/strnlen.m4
