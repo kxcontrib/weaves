@@ -9,6 +9,8 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
+CPPFLAGS = -Ilib
+
 SUBDIRS = lib regex examples
 
 noinst_PROGRAMS=egex

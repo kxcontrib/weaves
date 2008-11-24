@@ -6,7 +6,7 @@ dnl This uses gnulib
 
 AC_INIT([q], [0.1.0], [walter.eaves@bigfoot.com], [qsys])
 AC_PREREQ(2.59)
-AC_CONFIG_SRCDIR([qsys.c])
+AC_CONFIG_SRCDIR([qsys.1])
 AC_CONFIG_AUX_DIR([config])
 AM_INIT_AUTOMAKE([foreign])
 
@@ -38,6 +38,8 @@ AC_SUBST([qhomedir],[$qhomedir])
 if test "x$build_cpu" = "xi386"; then
  qcpu=32
 elif test "x$build_cpu" = "xi686"; then
+ qcpu=32
+elif test "x$build_cpu" = "sparc"; then
  qcpu=32
 else
  qcpu=64
