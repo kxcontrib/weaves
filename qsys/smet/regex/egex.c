@@ -18,15 +18,18 @@ Provide regular expression function for q/kdb.
 #include "egex0.h"
 #include "kish.h"
 
+/* #undef NDEBUG */
+
 /* Returns a boolean match */
 K q_re_location1(K patt, K str, K opts)
 {
-  regex_t *regex = 0;
+  regex_t * regex;
   int err_no;
   char * p;
   char * s;
-  regmatch_t result;
+  regmatch_t *result;
   K results;
+  int nsub = 2; /* has to be at least 2 for POSIX */
 
   int icase = 0;
 
@@ -50,23 +53,32 @@ K q_re_location1(K patt, K str, K opts)
   memset(regex, 0, sizeof(regex_t));
 
   if ((err_no = re1_cc(regex, p, icase))) {
-    regfree(regex); free(regex);
+    regfree(regex);
+    free(regex);
     free(p); free(s);
     return ki(err_no);
   }
 
+#if !defined(NDEBUG)
+  fprintf(stderr, "nsub: %d; sizeof(regmatch_t) %d\n", nsub, sizeof(regmatch_t));
+#endif
+  result = (regmatch_t *) malloc(sizeof(regmatch_t)*nsub);
+
   results = ktn(KI,2);
-  if (re1_match(regex, s, &result )) {
-    result.rm_so = -1;
-    result.rm_eo = -1;
+  if (re1_match(regex, s, result, nsub, icase)) {
+    result[0].rm_so = -1;
+    result[0].rm_eo = -1;
   }
-  kI(results)[0] = result.rm_so;
-  kI(results)[1] = result.rm_eo;
+  kI(results)[0] = result[0].rm_so;
+  kI(results)[1] = result[0].rm_eo;
 
 #if !defined(NDEBUG)
-  fprintf(stderr, "pair: %d %d \n", result.rm_so, result.rm_eo);
+  fprintf(stderr, "pair: sizeof %d %d %d \n", sizeof(result), result[0].rm_so, result[0].rm_eo);
 #endif
-  regfree(regex); free(regex);
+  regfree(regex);
+  free(regex);
+  free(result);
+
   free(p); free(s);
 
   return results;

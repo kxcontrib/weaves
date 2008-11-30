@@ -40,11 +40,6 @@ struct levopts {
 static struct levopts call_opts_default = { 0, 0, 0 };
 static struct levopts call_opts;
 
-void strtolower(char *s) {
-  for (; *s; s++)
-    *s = tolower(*s);
-}
-
 /* Returns an int of number of changes needed */
 K c_lev(K str1, K str, K opts, char **hp, char **hs)
 {

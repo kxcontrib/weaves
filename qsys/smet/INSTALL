@@ -11,13 +11,48 @@ I usually install to my $HOME and don't bother making the static library.
 It then appears in in $HOME/lib/qsys
 
 There is a Q script regex.q that loads the library and and sets up
-some simple functions. This is installed to $HOME/share/qsys
+some simple functions. This is installed to $HOME/share/qsys. The load
+module (libqregex) is installed in the $qprogdir. qprogdir is calculated
+from qhomedir (assumed to be $HOME/q) and from the type of CPU and the
+type of OS: l32, m32, s32 and 64.
+
+These may not always work. qhomedir can be specified on the command-line.
+
+ --with-qhomedir=$HOME/src/q
+
+for example. And also
+
+ --with-qprogdir
 
 There are some test scripts in the regex sub-directory that illustrate
 how to use the functions.
 
 There is a fully worked example to use the Jaro-Winkler ratio on some
 company names in the examples directory.
+
+Solaris Notes
+*************
+
+This system now builds on Solaris 8 (32 bit SPARC). To do so, you need to have 
+a GCC compiler (3.4.2), the gnulib-tool available and an
+Internationalisation library - libintl - just needed by GNULib.
+
+The smet directory has to be configured to use gnulib. In that directory, 
+
+ gnulib --libtool --import
+
+And it should re-load memchr, memcpy, strndup, strerror, error and regex.
+
+You then need to autoreconf, and configure and make.
+
+The autoreconf has some warnings. The build has some too. See the log file (build.log)
+for what you can expect.
+
+There is a make check phase that can test whether regular expressions are accessible.
+
+Again from smet
+
+ make -C test check
 
 Installation Instructions
 *************************

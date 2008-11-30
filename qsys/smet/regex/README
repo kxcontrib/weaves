@@ -1,0 +1,37 @@
+weaves
+
+I had a struggle getting to work on GNU/Linux systems and Solaris.
+
+Solaris 8 has a POSIX compliant library. This has a larger regmatch_t structure
+that contains pointers.
+
+GNU/Linux complies with only the offset part of the structure. I have only used
+the offsets.
+
+Solaris 8 has the peculiar semantics that it will only return a substring
+location if the regular expression has sub-expressions.
+
+So all regular expressions have to be wrapped in a pair of brackets:
+(a) will match abc. The brackets are added by the function enquote(),
+which uses sprintf() and a static buffer. enquote() doesn't affect
+the operation of the GNU library, so I've left it enabled for GNU.
+
+Also the POSIX REG_ICASE doesn't seem to work on Solaris 8. So the pattern 
+and the string are forced to lower-case by strtolower(). The REG_ICASE flag is
+passed to re1_cc and re1_match. Again, I've left this enabled for the
+GNU system too.
+
+The POSIX implementation will only return sub-expressions if the nsub
+is set to at least 2. So that means that regmatch_t has be at least
+two in length.
+
+The GNU implementation doesn't need the brackets, observes REG_ICASE
+and will return a sub-string location with a regmatch_t of length 1.
+
+The gnulib-tool --import regex doesn't work (for me) with the POSIX code. 
+It assumes GNU_SOURCE and that regmatch_t is only 8 bytes and not the
+POSIX 24.
+
+So a switch is added to configure.in to check for the larger
+structure. This switches which header file is used in egex0.h. This
+may not work on your POSIX system (it uses /usr/include/regex.h).

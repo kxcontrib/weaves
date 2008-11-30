@@ -77,7 +77,7 @@ fixup_null_alloc (n)
     {
       /* possible revisions: release some memory and re-try, print
 	 more information (e.g. line number of input file) */
-      fprintf(stderr, _("qsys: Memory exhausted"));
+      fprintf(stderr, _("egex: Memory exhausted"));
       exit(1);
     }
   return p;

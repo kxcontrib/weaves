@@ -4,7 +4,7 @@ dnl Regular expression and string metrics for q/kdb
 
 dnl This uses gnulib
 
-AC_INIT([q], [0.1.0], [walter.eaves@bigfoot.com], [qsys])
+AC_INIT([q], [0.1.1], [walter.eaves@bigfoot.com], [qsys])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([qsys.1])
 AC_CONFIG_AUX_DIR([config])

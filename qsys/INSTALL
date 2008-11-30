@@ -32,16 +32,7 @@ This is a sub-build of the main qsys build.
 --
 
 For Solaris, I've only tested on 32-bit sparc. I used the gcc 3.4.2
-compiler. Unfortunately, the string-metrics component wouldn't link
-so you will only be able to use the extended environment.
-
-So you should configure
-
---without-string-metrics
-
-The system will build and install, but you will get unresolved symbols on
-Solaris.
-
+compiler.
 
 --
 

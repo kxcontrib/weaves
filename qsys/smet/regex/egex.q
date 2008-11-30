@@ -1,5 +1,11 @@
 // weaves
 
+/ I've chosen to use the POSIX regular expression library
+/ GNU support it, but POSIX doesn't support GNU.
+
+/ The net effect is that to do sub-string matching you need to put 
+/ your regular expressions into a pair of brackets.
+
 .egex.lib:`$".libs/libqregex"
 
 0N!("Linkage: about to load"; .egex.lib);
@@ -21,11 +27,27 @@ tstr:"abcdefghijkkl"
 count tstr
 0N!("test string: "; tstr);
 
-
 0N!("match: ");
 
+/ Expecting four passes, but one fails in script mode, but works on the command-line
+
+/ Case insensitive option doesn't work either
+0N!("case insensitive:");
+
+0N!("fail: "; 1);
+a:markire["B.+";tstr;0]
+(type a; a)
+
+0N!("passes: "; 1);
+a:markire["B.+";tstr;1]
+(type a; a)
+
 0N!("passes: "; 4);
-matchre[enlist("l");tstr]
+a:matchre[enlist "l";tstr]
+a
+
+if[not a; .sys.exit[1]]
+
 matchre["l$";tstr]
 matchre[".+";tstr]
 matchre["b.+";tstr]
@@ -36,23 +58,21 @@ a:matchre["z.+";tstr]
 
 0N!("mark: ");
 
-0N!("passes: "; 1);
-a:markre["b.+";tstr]
-(type a; a)
-
 0N!("fails: "; 1);
 a:markre["z.+";tstr]
 (type a; a)
 
-/ Case insensitive option
-0N!("case insensitive:");
-
 0N!("passes: "; 1);
-a:markire["B.+";tstr;1]
-(type a; a)
-
-0N!("fail: "; 1);
-a:markire["B.+";tstr;0]
+a:markre["b.+";tstr]
 (type a; a)
 
 if[.sys.is_arg`exit; exit 0]
+
+/  Local Variables: 
+/  mode:q 
+/  q-prog-args: "-halt -load help.q -nodo -verbose -quiet"
+/  fill-column: 75
+/  comment-column:50
+/  comment-start: "/  "
+/  comment-end: ""
+/  End:

@@ -37,7 +37,7 @@ K q_re_despace(K str, K opts)
 
   re1_err(RE1_NOERR);
 
-  /* Pair of strings required */
+  /* One string required */
   if (str->t != 10) return re1_err(RE1_ERR);
 
   /* Don't free the result */
@@ -45,16 +45,22 @@ K q_re_despace(K str, K opts)
     return re1_err(RE1_ERR);
 
   if ( !(s = kstrdup(str)) ) {
-    if (s) free(s);
     return re1_err(RE1_ERR);
   }
+
+#if !defined(NDEBUG)
+  fprintf(stderr, "despace: \"%s\" %d\n", s, strlen(s) );
+#endif
 
   /* Set the ignore case (icase) option */
   if (opts->t == -6 && opts->i == 1)
     icase = REG_ICASE;
 
   /* This is the bulk of the work */
-  while (!re1_match(regex, s, &result )) {
+  while (!re1_match(regex, s, &result, 1, icase)) {
+#if !defined(NDEBUG)
+  fprintf(stderr, "despace: match: \"%s\" %d %d \n", s, result.rm_so, result.rm_eo);
+#endif
     /* Copy last to first + 1 */
     char * p = s + result.rm_eo;
     char * r = s + result.rm_so + 1;
@@ -64,9 +70,6 @@ K q_re_despace(K str, K opts)
 
   results = kpn(s, strlen(s));
 
-#if !defined(NDEBUG)
-  fprintf(stderr, "pair: \"%s\" %d %d \n", s, result.rm_so, result.rm_eo);
-#endif
   free(s);
 
   return results;
@@ -85,7 +88,7 @@ K q_re_depunct(K str, K opts)
 
   re1_err(RE1_NOERR);
 
-  /* Pair of strings required */
+  /* One string required */
   if (str->t != 10) return re1_err(RE1_ERR);
 
   /* Don't free the result */
@@ -102,7 +105,7 @@ K q_re_depunct(K str, K opts)
     icase = REG_ICASE;
 
   /* This is the bulk of the work */
-  while (!re1_match(regex, s, &result )) {
+  while (!re1_match(regex, s, &result, 1, icase)) {
     /* Copy last to first */
     char * p = s + result.rm_eo;
     char * r = s + result.rm_so;
