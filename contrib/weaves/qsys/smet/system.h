@@ -170,7 +170,6 @@ struct utimbuf
 # include <string.h>
 #else
 # include <strings.h>
-char *memchr ();
 #endif
 
 #include <errno.h>

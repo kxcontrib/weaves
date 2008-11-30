@@ -1,5 +1,5 @@
 /* 
-   qsys - Q system utilities
+   egex - 
 
    Copyright (C) 2008 Walter Eaves
 
@@ -17,12 +17,15 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-#include <termios.h>
-#include <grp.h>
-#include <pwd.h>
+   #include <termios.h>
+   #include <grp.h>
+   #include <pwd.h>
 */
 
+#include "config.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <getopt.h>
 #include "system.h"
@@ -32,6 +35,10 @@
 char *xmalloc ();
 char *xrealloc ();
 char *xstrdup ();
+
+#if !defined(VERSION)
+#define VERSION "0.1.0"
+#endif
 
 
 static void usage (int status);
@@ -47,13 +54,36 @@ enum {DUMMY_CODE=129
 
 
 static struct option const long_options[] =
-{
-  {"help", no_argument, 0, 'h'},
-  {"version", no_argument, 0, 'V'},
-  {NULL, 0, NULL, 0}
-};
+  {
+    {"help", no_argument, 0, 'h'},
+    {"version", no_argument, 0, 'V'},
+    {NULL, 0, NULL, 0}
+  };
 
 static int decode_switches (int argc, char **argv);
+
+#include "regex/Levenshtein1.h"
+
+static int writer() {
+  printf(" Levenshtein_DESC %s\n ",  Levenshtein_DESC );
+  printf(" distance_DESC %s\n ",  distance_DESC );
+  printf(" ratio_DESC %s\n ",  ratio_DESC );
+  printf(" hamming_DESC %s\n ",  hamming_DESC );
+  printf(" jaro_DESC %s\n ",  jaro_DESC );
+  printf(" jaro_winkler_DESC %s\n ",  jaro_winkler_DESC );
+  printf(" median_DESC %s\n ",  median_DESC );
+  printf(" median_improve_DESC %s\n ",  median_improve_DESC );
+  printf(" quickmedian_DESC %s\n ",  quickmedian_DESC );
+  printf(" setmedian_DESC %s\n ",  setmedian_DESC );
+  printf(" seqratio_DESC %s\n ",  seqratio_DESC );
+  printf(" setratio_DESC %s\n ",  setratio_DESC );
+  printf(" editops_DESC %s\n ",  editops_DESC );
+  printf(" opcodes_DESC %s\n ",  opcodes_DESC );
+  printf(" inverse_DESC %s\n ",  inverse_DESC );
+  printf(" apply_edit_DESC %s\n ",  apply_edit_DESC );
+  printf(" matching_blocks_DESC %s\n ",  matching_blocks_DESC );
+  printf(" subtract_edit_DESC %s\n ",  subtract_edit_DESC );
+}
 
 int
 main (int argc, char **argv)
@@ -64,7 +94,7 @@ main (int argc, char **argv)
 
   i = decode_switches (argc, argv);
 
-  /* do the work */
+  writer();
 
   exit (0);
 }
@@ -86,7 +116,7 @@ decode_switches (int argc, char **argv)
       switch (c)
 	{
 	case 'V':
-	  printf ("qsys %s\n", VERSION);
+	  printf ("egex %s\n", VERSION);
 	  exit (0);
 
 	case 'h':
@@ -105,7 +135,7 @@ static void
 usage (int status)
 {
   printf (_("%s - \
-Q system utilities\n"), program_name);
+\n"), program_name);
   printf (_("Usage: %s [OPTION]... [FILE]...\n"), program_name);
   printf (_("\
 Options:\n\

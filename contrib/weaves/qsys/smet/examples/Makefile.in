@@ -40,21 +40,32 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/alloca.m4 \
 	$(top_srcdir)/m4/codeset.m4 $(top_srcdir)/m4/error.m4 \
-	$(top_srcdir)/m4/extensions.m4 $(top_srcdir)/m4/glibc21.m4 \
+	$(top_srcdir)/m4/extensions.m4 $(top_srcdir)/m4/gettext.m4 \
+	$(top_srcdir)/m4/glibc2.m4 $(top_srcdir)/m4/glibc21.m4 \
 	$(top_srcdir)/m4/gnulib-common.m4 \
-	$(top_srcdir)/m4/gnulib-comp.m4 \
-	$(top_srcdir)/m4/include_next.m4 \
-	$(top_srcdir)/m4/localcharset.m4 $(top_srcdir)/m4/longlong.m4 \
-	$(top_srcdir)/m4/malloc.m4 $(top_srcdir)/m4/memchr.m4 \
-	$(top_srcdir)/m4/memcpy.m4 $(top_srcdir)/m4/onceonly_2_57.m4 \
-	$(top_srcdir)/m4/regex.m4 $(top_srcdir)/m4/ssize_t.m4 \
+	$(top_srcdir)/m4/gnulib-comp.m4 $(top_srcdir)/m4/iconv.m4 \
+	$(top_srcdir)/m4/include_next.m4 $(top_srcdir)/m4/intdiv0.m4 \
+	$(top_srcdir)/m4/intl.m4 $(top_srcdir)/m4/intlmacosx.m4 \
+	$(top_srcdir)/m4/intmax.m4 $(top_srcdir)/m4/inttypes-pri.m4 \
+	$(top_srcdir)/m4/inttypes_h.m4 $(top_srcdir)/m4/lcmessage.m4 \
+	$(top_srcdir)/m4/lib-ld.m4 $(top_srcdir)/m4/lib-link.m4 \
+	$(top_srcdir)/m4/lib-prefix.m4 \
+	$(top_srcdir)/m4/localcharset.m4 $(top_srcdir)/m4/lock.m4 \
+	$(top_srcdir)/m4/longlong.m4 $(top_srcdir)/m4/malloc.m4 \
+	$(top_srcdir)/m4/memchr.m4 $(top_srcdir)/m4/memcpy.m4 \
+	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/onceonly_2_57.m4 \
+	$(top_srcdir)/m4/po.m4 $(top_srcdir)/m4/printf-posix.m4 \
+	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/m4/regex.m4 \
+	$(top_srcdir)/m4/size_max.m4 $(top_srcdir)/m4/ssize_t.m4 \
 	$(top_srcdir)/m4/stdbool.m4 $(top_srcdir)/m4/stdint.m4 \
-	$(top_srcdir)/m4/stdlib_h.m4 $(top_srcdir)/m4/strerror.m4 \
-	$(top_srcdir)/m4/string_h.m4 $(top_srcdir)/m4/strndup.m4 \
-	$(top_srcdir)/m4/strnlen.m4 $(top_srcdir)/m4/unistd_h.m4 \
-	$(top_srcdir)/m4/wchar.m4 $(top_srcdir)/m4/wctype.m4 \
-	$(top_srcdir)/m4/wint_t.m4 $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.in
+	$(top_srcdir)/m4/stdint_h.m4 $(top_srcdir)/m4/stdlib_h.m4 \
+	$(top_srcdir)/m4/strerror.m4 $(top_srcdir)/m4/string_h.m4 \
+	$(top_srcdir)/m4/strndup.m4 $(top_srcdir)/m4/strnlen.m4 \
+	$(top_srcdir)/m4/uintmax_t.m4 $(top_srcdir)/m4/unistd_h.m4 \
+	$(top_srcdir)/m4/visibility.m4 $(top_srcdir)/m4/wchar.m4 \
+	$(top_srcdir)/m4/wchar_t.m4 $(top_srcdir)/m4/wctype.m4 \
+	$(top_srcdir)/m4/wint_t.m4 $(top_srcdir)/m4/xsize.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -79,9 +90,12 @@ BITSIZEOF_SIG_ATOMIC_T = @BITSIZEOF_SIG_ATOMIC_T@
 BITSIZEOF_SIZE_T = @BITSIZEOF_SIZE_T@
 BITSIZEOF_WCHAR_T = @BITSIZEOF_WCHAR_T@
 BITSIZEOF_WINT_T = @BITSIZEOF_WINT_T@
+BUILD_INCLUDED_LIBINTL = @BUILD_INCLUDED_LIBINTL@
+CATOBJEXT = @CATOBJEXT@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
+CFLAG_VISIBILITY = @CFLAG_VISIBILITY@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -89,6 +103,7 @@ CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
+DATADIRNAME = @DATADIRNAME@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DSYMUTIL = @DSYMUTIL@
@@ -100,9 +115,14 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+GENCAT = @GENCAT@
+GETTEXT_MACRO_VERSION = @GETTEXT_MACRO_VERSION@
+GLIBC2 = @GLIBC2@
 GLIBC21 = @GLIBC21@
 GL_COND_LIBTOOL_FALSE = @GL_COND_LIBTOOL_FALSE@
 GL_COND_LIBTOOL_TRUE = @GL_COND_LIBTOOL_TRUE@
+GMSGFMT = @GMSGFMT@
+GMSGFMT_015 = @GMSGFMT_015@
 GNULIB_CALLOC_POSIX = @GNULIB_CALLOC_POSIX@
 GNULIB_CHOWN = @GNULIB_CHOWN@
 GNULIB_DUP2 = @GNULIB_DUP2@
@@ -151,6 +171,7 @@ GNULIB_STRSEP = @GNULIB_STRSEP@
 GNULIB_STRTOK_R = @GNULIB_STRTOK_R@
 GNULIB_WCWIDTH = @GNULIB_WCWIDTH@
 GREP = @GREP@
+HAVE_ASPRINTF = @HAVE_ASPRINTF@
 HAVE_CALLOC_POSIX = @HAVE_CALLOC_POSIX@
 HAVE_DECL_GETLOGIN_R = @HAVE_DECL_GETLOGIN_R@
 HAVE_DECL_MEMMEM = @HAVE_DECL_MEMMEM@
@@ -172,12 +193,14 @@ HAVE_MALLOC_POSIX = @HAVE_MALLOC_POSIX@
 HAVE_MEMPCPY = @HAVE_MEMPCPY@
 HAVE_MKDTEMP = @HAVE_MKDTEMP@
 HAVE_OS_H = @HAVE_OS_H@
+HAVE_POSIX_PRINTF = @HAVE_POSIX_PRINTF@
 HAVE_READLINK = @HAVE_READLINK@
 HAVE_REALLOC_POSIX = @HAVE_REALLOC_POSIX@
 HAVE_SIGNED_SIG_ATOMIC_T = @HAVE_SIGNED_SIG_ATOMIC_T@
 HAVE_SIGNED_WCHAR_T = @HAVE_SIGNED_WCHAR_T@
 HAVE_SIGNED_WINT_T = @HAVE_SIGNED_WINT_T@
 HAVE_SLEEP = @HAVE_SLEEP@
+HAVE_SNPRINTF = @HAVE_SNPRINTF@
 HAVE_STDINT_H = @HAVE_STDINT_H@
 HAVE_STPCPY = @HAVE_STPCPY@
 HAVE_STPNCPY = @HAVE_STPNCPY@
@@ -192,27 +215,47 @@ HAVE_SYS_PARAM_H = @HAVE_SYS_PARAM_H@
 HAVE_SYS_TYPES_H = @HAVE_SYS_TYPES_H@
 HAVE_UNISTD_H = @HAVE_UNISTD_H@
 HAVE_UNSIGNED_LONG_LONG_INT = @HAVE_UNSIGNED_LONG_LONG_INT@
+HAVE_VISIBILITY = @HAVE_VISIBILITY@
 HAVE_WCHAR_H = @HAVE_WCHAR_H@
 HAVE_WCTYPE_H = @HAVE_WCTYPE_H@
 HAVE_WINT_T = @HAVE_WINT_T@
+HAVE_WPRINTF = @HAVE_WPRINTF@
 HAVE__BOOL = @HAVE__BOOL@
 INCLUDE_NEXT = @INCLUDE_NEXT@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+INSTOBJEXT = @INSTOBJEXT@
+INTLBISON = @INTLBISON@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
+INTL_LIBTOOL_SUFFIX_PREFIX = @INTL_LIBTOOL_SUFFIX_PREFIX@
+INTL_MACOSX_LIBS = @INTL_MACOSX_LIBS@
 ISODATE = @ISODATE@
 LDFLAGS = @LDFLAGS@
-LIBGNU_LIBDEPS = @LIBGNU_LIBDEPS@
-LIBGNU_LTLIBDEPS = @LIBGNU_LTLIBDEPS@
+LIBICONV = @LIBICONV@
 LIBINTL = @LIBINTL@
+LIBMULTITHREAD = @LIBMULTITHREAD@
 LIBOBJS = @LIBOBJS@
+LIBPTH = @LIBPTH@
+LIBPTH_PREFIX = @LIBPTH_PREFIX@
 LIBS = @LIBS@
+LIBTHREAD = @LIBTHREAD@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+LTALLOCA = @LTALLOCA@
+LTLIBC = @LTLIBC@
+LTLIBICONV = @LTLIBICONV@
 LTLIBINTL = @LTLIBINTL@
+LTLIBMULTITHREAD = @LTLIBMULTITHREAD@
 LTLIBOBJS = @LTLIBOBJS@
+LTLIBPTH = @LTLIBPTH@
+LTLIBTHREAD = @LTLIBTHREAD@
 MAKEINFO = @MAKEINFO@
+MSGFMT = @MSGFMT@
+MSGFMT_015 = @MSGFMT_015@
+MSGMERGE = @MSGMERGE@
 NEXT_STDINT_H = @NEXT_STDINT_H@
 NEXT_STDLIB_H = @NEXT_STDLIB_H@
 NEXT_STRING_H = @NEXT_STRING_H@
@@ -228,6 +271,8 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+POSUB = @POSUB@
+PRI_MACROS_BROKEN = @PRI_MACROS_BROKEN@
 PTRDIFF_T_SUFFIX = @PTRDIFF_T_SUFFIX@
 RANLIB = @RANLIB@
 REPLACE_CHOWN = @REPLACE_CHOWN@
@@ -247,11 +292,19 @@ SIZE_T_SUFFIX = @SIZE_T_SUFFIX@
 STDBOOL_H = @STDBOOL_H@
 STDINT_H = @STDINT_H@
 STRIP = @STRIP@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 WCHAR_H = @WCHAR_H@
 WCHAR_T_SUFFIX = @WCHAR_T_SUFFIX@
 WCTYPE_H = @WCTYPE_H@
+WINDRES = @WINDRES@
 WINT_T_SUFFIX = @WINT_T_SUFFIX@
+WOE32 = @WOE32@
+WOE32DLL = @WOE32DLL@
+XGETTEXT = @XGETTEXT@
+XGETTEXT_015 = @XGETTEXT_015@
+XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@

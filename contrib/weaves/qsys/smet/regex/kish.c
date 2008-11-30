@@ -63,9 +63,11 @@ static int smet1_init() {
   re1_init();
 }
 
-/* Copy a char array to a string. */
+/* Copy a char array to a string. A problem with zero-length strings */
 char *kstrdup(K k1) {
+  int tsz=0;
   if (k1->t != 10) return 0;
-  return strndup((const char *)kC(k1), (size_t) k1->n);
+  tsz = k1->n ? k1->n : 1; 
+  return strndup((const char *)kC(k1), (size_t) tsz);
 }
 

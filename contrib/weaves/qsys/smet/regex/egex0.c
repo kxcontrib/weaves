@@ -14,19 +14,41 @@ Provide regular expression function for q/kdb.
 
 #include <string.h>
 
-#include <strings.h>
-#include <errno.h>
-#include <memory.h>
+#include "error.h"
 
 #include "egex0.h"
 
 /* #undef NDEBUG */
 
+void strtolower(char *s) {
+  for (; *s; s++)
+    *s = tolower(*s);
+}
+
+static char qbuffer[1024] = "";
+
+char *enquote(const char *s) {
+  qbuffer[0] = '\0';
+  sprintf(qbuffer, "(%s)", s);
+  return qbuffer;
+}
+
 /* Compile pattern p to r, return error number as zero on success. */
+/* POSIX won't return a location unless you put the whole thing in a pair of brackets */
+/* Ignore case doesn't work either, so forced it down */
+
 int re1_cc(regex_t *r, const char *p, int icase) {
   int err_no = -1;
+  int flags = REG_EXTENDED | icase;
+  char * tbuffer;
+  
+  tbuffer = enquote(p);
 
-  if( (err_no=regcomp(r, p, REG_EXTENDED | icase)) != 0 ) {
+  if (flags & REG_ICASE) {
+    strtolower(tbuffer);
+  }
+
+  if( (err_no=regcomp(r, tbuffer, flags)) != 0 ) {
     size_t length; 
     char *buffer;
 
@@ -36,7 +58,6 @@ int re1_cc(regex_t *r, const char *p, int icase) {
     fprintf(stderr, "regex: %s %d: %s\n", __FILE__, __LINE__, buffer); /* Print the error */
     free(buffer);
   }
-
   return err_no;
 }
 
@@ -85,14 +106,32 @@ regex_t * re1_factory(int which) {
   return re1_factory(which);
 }
 
-int re1_match(const regex_t *r, const char *s, regmatch_t *result) {
-  size_t no_sub = r->re_nsub+1; /* How many matches are there in a line? */
-  char *cp; /* Char pointer */
+/* POSIX and GNU have different invocation semantics */
 
-  if (regexec(r, s, no_sub, result, 0)==0) { /* Found a match */
+/* This is the POSIX version */
+
+int re1_match(const regex_t *r, const char *s, regmatch_t * result, int len, int flags) {
+  size_t no_sub = len; /* length of result */
+
+  if (flags & REG_ICASE) {
+    strtolower((char *)s);
+  }
+
 #if !defined(NDEBUG)
-    fprintf(stderr, "re1_match: %d %d \n", result->rm_so, result->rm_eo);
+    fprintf(stderr, "re1_match: %s\n", s);
 #endif
+
+  if (regexec(r, s, no_sub, result, 0) == 0) {
+#if !defined(NDEBUG)
+    fprintf(stderr, "re1_match: %p %p \n", result, &result[0]);
+#endif
+
+#if !defined(NDEBUG)
+    fprintf(stderr, "re1_match: %d %d \n", result[0].rm_so, result[0].rm_eo);
+#endif
+    /* Some systems don't reply correctly */
+    if (result[0].rm_so > result[0].rm_eo) return 1;
+    if (result[0].rm_so > strlen(s) || result[0].rm_so > strlen(s)) return 1;
     return 0;
   }
 
