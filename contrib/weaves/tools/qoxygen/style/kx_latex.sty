@@ -1,0 +1,51 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kx_latex}[2007/03/09 Kx Systems LaTeX Style]
+
+% Options
+\DeclareOption{hyperlink}{ \def\DBKhyperlink{yes} }
+\DeclareOption{nohyperlink}{ \def\DBKhyperlink{no} }
+\DeclareOption{article}{ \def\DBKisarticle{yes} }
+\DeclareOption{report}{ \def\DBKisarticle{no} }
+\ExecuteOptions{hyperlink,report}
+\ProcessOptions\relax
+
+\usepackage{ifthen}
+
+
+% margin sizes
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{1.5cm}{1.5cm}
+
+% use Adobe fonts, and set sans-serif as default
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\rmdefault}{ptm}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\ttdefault}{pcr}
+
+% don't indent paragraphs, just leave some space
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+
+% set chapter headings to big blue courier
+\ifthenelse{\equal{\DBKisarticle}{yes}}{
+}{
+  \newcommand{\chaptertitle}[1]{{\fontsize{24}{24}\fontfamily{pcr}\fontseries{b}\selectfont\textcolor{blue}{#1}\par\nobreak\vskip 15pt}}
+  \renewcommand{\@makechapterhead}[1]{\chaptertitle{#1}}
+  \renewcommand{\@makeschapterhead}[1]{\chaptertitle{#1}}
+}
+
+% increase table row heights (only above the content)
+\usepackage{array}
+\setlength{\extrarowheight}{.5em}
+
+\newcommand{\DBKtitle}{Title}
+\renewcommand{\title}[1]{\renewcommand{\DBKtitle}{#1}}
+
+\newcommand{\hyperparam}{pdfpagemode=None,colorlinks,linktocpage}
+
+% Includes
+\usepackage{float}
+\usepackage{dbk_core}
+\usepackage{dbk_admonition}
+\usepackage{kx_latex_titlepage}
+\usepackage{kx_latex_headfoot}

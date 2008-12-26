@@ -1,0 +1,20 @@
+% To have other enumerate labelling
+\usepackage{enumerate}
+
+%
+% Resize the alignment for each level
+%
+\renewenvironment{itemize}{%
+  \advance\@itemdepth\@ne
+  \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
+  \begin{list}{\csname\@itemitem\endcsname}{%
+    % on fixe la taille de la puce à exactement la place que ça prend
+    \settowidth{\labelwidth}{\csname\@itemitem\endcsname}%
+    % le décalage selon la profondeur vaut :
+    % leftmargin = labelwidth + labelsep
+    \setlength{\leftmargin}{\labelwidth}%
+    \addtolength{\leftmargin}{\labelsep}%
+  }%
+}%
+{\end{list}}%
+

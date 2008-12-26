@@ -1,0 +1,27 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+
+\usepackage{fancyhdr}
+\usepackage{doxygen}
+
+\usepackage{kx_latex}
+
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{0}
+
+\title{Source Reference}
+\renewcommand{\DBKsubtitle}{$projectname}
+\renewcommand{\DBKpubdate}{$date}
+\renewcommand{\DBKcopyright}{Copyright \textnormal{\copyright} 2007 Kx Systems}
+
+\usepackage{makeidx}
+\makeindex
+
+
+\begin{document}
+
+\IfFileExists{source_reference_frontmatter.tex}{\input{source_reference_frontmatter.tex}}{}
+
+\maketitle
+\tableofcontents

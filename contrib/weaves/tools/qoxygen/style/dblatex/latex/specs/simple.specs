@@ -1,0 +1,6 @@
+#
+# Dblatex spec file example
+#
+TexInputs: ..//
+TexStyle:  dbsimple
+Options:   -b pdftex

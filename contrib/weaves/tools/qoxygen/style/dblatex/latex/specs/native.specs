@@ -1,0 +1,6 @@
+#
+# Dblatex default spec file
+#
+TexInputs: ..//
+TexStyle:  docbook
+Options:   -b pdftex

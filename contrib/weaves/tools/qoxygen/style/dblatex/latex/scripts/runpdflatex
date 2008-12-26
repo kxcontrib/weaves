@@ -1,0 +1,51 @@
+#!/bin/sh
+
+graphics_link()
+{
+  gtemp=""
+  for i in $*; do
+    # Copy locally the graphics
+    if [ -d $i ]; then
+      for i in $i/*.pdf ; do
+        gloc=`basename $i`
+        if [ ! -f $gloc ]; then
+          echo "Link to $gloc"
+          ln -s $i .
+          gtemp="$gtemp $gloc"
+        fi
+      done
+    else
+      echo "Warning: invalid graphic path"
+    fi
+  done
+}
+
+scriptpath=`dirname $0`;
+
+while true
+do
+  case "$1" in
+  --graphpath) graphpath="$2"; shift;;
+  --*)         opt="$opt $1 $2"; shift;;
+  *) break;;
+  esac
+  shift
+done
+
+
+if [ $# -ne 2 ]; then
+  echo "`basename $0` [--graphpath path] file.tex inputpath"
+  exit 1
+fi
+
+graphics_link $graphpath $scriptpath/../graphics
+
+$scriptpath/runlatex $opt $1 "$2" pdflatex pdf
+rc=$?
+
+# Remove the temporary links
+if [ "$gtemp" != "" ]; then
+  rm $gtemp
+fi
+
+exit $rc

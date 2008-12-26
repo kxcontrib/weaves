@@ -1,0 +1,60 @@
+@page {
+	size: auto;
+	margin: 20mm 20mm 20mm 20mm;
+}
+
+body {
+	font-family: helvetica, arial, sans-serif;
+}
+
+p, h1, h2, h3 {
+	text-align: left;
+	margin-bottom: 1em;
+}
+
+a {
+	color: #000000;
+	text-decoration: none;
+}
+
+a img {
+	border: 0px;
+}
+
+.header, h1 {
+	font-family: "courier new", courier, monospace;
+	font-weight: bold;
+	font-size: xx-large;
+	color: blue;
+	margin-top: 1em;
+}
+
+.header2, h2 {
+	font-weight: bold;
+	font-size: x-large;
+}
+
+.header3, h3 {
+	font-weight: normal;
+	font-size: x-large;
+}
+
+div.nav {
+	display: none;
+}
+
+div.logo {
+	float: right;
+}
+
+img.space_filler {
+	display: none;
+}
+
+div.footer {
+	margin-top: 2em;
+}
+
+.footer p {
+	font-family: "courier new", courier, monospace;
+}

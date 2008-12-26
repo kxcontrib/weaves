@@ -1,0 +1,204 @@
+body {
+	color: #000000;
+	background: #FFFFFF;
+	margin: 30px 0px 30px 0px;
+	font-family: helvetica, arial, sans-serif;
+	font-weight: normal;
+	font-size: 10pt;
+	text-align: left;
+}
+
+td { /* This shouldn't be necessary but IE seems to need it! */
+font-size: 10pt
+}
+
+p {
+	text-align: justify;
+}
+
+p, h1, h2, h3 {
+	margin: 0em 0em 0.8em 0em;
+}
+
+li, dt {
+	margin: 0em 0em 0.4em 0em;
+}
+
+ul {
+	padding-left: 1em;
+	margin-left: 1em;
+}
+ul.manual {
+	list-style-type: none;
+}
+
+a { /* "color: inherit !important" should be fine.. but not for IE :-( */
+	color: #000000;
+	text-decoration: none;
+}
+.header a, h1 a {
+	color: blue;
+}
+
+a.highlight, div.toc a, h1 a {
+	border-bottom: 1px dashed;
+}
+
+a img {
+	border: 0px;
+}
+
+.header, h1 { /* "div.chapter > div.titlepage h2" not supported by IE! >:-< */
+font-family: "courier new", courier, monospace;
+font-weight: bold;
+font-size: 14pt;
+color: blue;
+margin-top: 20pt;
+}
+
+.header2, h2 {
+	font-weight: bold;
+	font-size: 11pt;
+}
+
+.header3, h3 {
+	font-weight: bold;
+}
+
+div.footer {
+	margin: 0.6em 2em 0.6em 2em;
+}
+
+.footer p {
+	font-family: "courier new", courier, monospace;
+}
+
+div.toc {
+	margin-top: 2em;
+}
+
+/****************************************************************/
+/* div.main contains the main content.  It is wrapped by 4      */
+/* other divs to allow for border positioning with the          */
+/* background-* properties.  The top border is provided by the  */
+/* navbar menu.  The border_right div should be the outermost   */
+/* and will determine the content area size.                    */
+
+div.main {
+	margin: 0px 0px 0px 0px;
+	padding: 50px 220px 80px 40px;
+	/* IE doesn't support min-height, but height makes some pages
+	* too small this is a hack that seems to work
+	*/
+	min-height: 350px;
+	height: auto !important;
+	height: 350px;
+}
+
+div.border_right {
+	width: 890px;
+	background-image: url(images/right.png);
+	background-position: center right;
+	background-repeat: repeat-y;
+}
+
+div.border_top_right {
+	background-image: url(images/top_right.png);
+	background-position: top right;
+	background-repeat: no-repeat;
+}
+
+div.border_bottom_right {
+	background-image: url(images/bottom_right.png);
+	background-position: bottom right;
+	background-repeat: no-repeat;
+}
+
+div.border_bottom {
+	background-image: url(images/bottom.png);
+	background-position: bottom left;
+	background-repeat: repeat-x;
+}
+
+/****************************************************************/
+/* div.nav contains navigation content and also provides        */
+/* the top border for the main content.                         */
+
+div.nav {
+	width: 890px;  /* Should be the same width as div.border_right */
+	height: 22px;
+	background-image: url(images/menu_end.png);
+	background-position: bottom right;
+	background-repeat: no-repeat;
+}
+
+/* disable normal list style */
+.nav ul, .nav li {
+	list-style-type: none;
+	margin: 0em;
+	padding: 0em;
+}
+
+/* a top-level menu-bar item */
+.nav li.top {
+	width: 110px;	/* Same width & height as menu_back.png */
+	height: 22px;
+	float: left;
+	background-image: url(images/menu_back.png);
+	background-position: top left;
+	background-repeat: repeat-x;
+}
+
+/* a top-level menu-bar text */
+.nav a {
+	display: block;
+	padding: 0.2em 0em 0.1em 0.8em;
+	margin: 0em;
+}
+
+/* a drop-down menu */
+.nav li ul {
+	display: none;
+	position: absolute;
+	background-color: white;
+	border: 2px solid #ED1314;
+	border-width: 0px 2px 2px 2px;
+	-moz-border-radius: 0px 0px 7px 7px;
+}
+
+/* a drop-down menu item */
+.nav li li {
+	width: 106px;	/* top-level menu item width - border */
+}
+.nav li ul a {
+	padding: 0.2em 0.6em 0.2em 0.6em;
+	margin: 0.1em 0em 0.1em 0em;
+}
+
+.nav li.top:hover, .nav li.over {
+	background-image: url(images/menu_select.png);
+}
+
+.nav li:hover ul, .nav li.over ul {
+	display: block;
+}
+
+.nav li ul a:hover {
+	border: 0.1em solid #FF0000;
+	border-width: 0em 0.2em 0em 0.2em;
+	padding: 0.2em 0.4em 0.2em 0.4em;
+}
+
+/****************************************************************/
+/* Standard image positioning:                                  */
+
+div.logo {
+	position: absolute;
+	left: 580px; /* div.border_right width - logo.png width - 50px */
+	top: 120px;
+}
+
+img.space_filler {
+	float: left;
+	margin: 0px 10px 200px 0px;
+}
