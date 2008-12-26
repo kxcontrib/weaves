@@ -20,4 +20,18 @@
 
 Comments are welcome.
 
-	- Walter Eaves <rweaves@ubu.offices.root.depfa.com>
+	- Walter Eaves <Walter.Eaves@bigfoot.com>
+
+There are a number of packages provided here.
+
+qoxygen - was originally developed by Niall Ferguson. It provides a filter to work with
+Doxygen. 
+
+mtoc - was originally developed by Ian Martins and provides a means of putting MatLab
+scripts under Doxygen.
+
+rtoc - is my development of mtoc and puts R scripts under Doxygen.
+
+emacs - I've extended the kdbp-mode.el and the q-minor-mode.el to provide an interactive
+development environment. It works with the qsys extensions I've developed. This is not
+currently installed by configure.
