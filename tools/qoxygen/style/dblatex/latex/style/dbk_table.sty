@@ -1,0 +1,65 @@
+%%
+%% Manages the table columns sizes.
+%%
+%% The principle is to evaluate the column size involved by a star '*' factor.
+%% To evaluate this you need to know:
+%% - the total table size (\textwidth),
+%% - the fixed sizes specified in @colwidth,
+%% - the number of star factors contained in the table.
+
+\usepackage{longtable}
+\usepackage{lscape}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{calc}
+
+% Temporary latex/3797 bug fix (colortbl) by Morten Hoegholm
+\expandafter\renewcommand\expandafter\multicolumn
+  \expandafter[\expandafter3\expandafter]\expandafter{%
+  \multicolumn{#1}{#2}{#3}}
+
+% Make \@xmultirow long
+\expandafter\long\expandafter\def%
+\expandafter\@xmultirow%
+\expandafter#\expandafter1%
+\expandafter[\expandafter#\expandafter2\expandafter]%
+\expandafter#\expandafter3%
+\expandafter[\expandafter#\expandafter4\expandafter]%
+\expandafter#\expandafter5%
+\expandafter{\@xmultirow{#1}[#2]{#3}[#4]{#5}}
+
+% For the newtbl code
+\newdimen\newtblstarfactor%
+\newdimen\newtblsparewidth%
+\newdimen\newtblcolwidth%
+
+\newdimen\colwidth
+\newdimen\fixwidth
+\newdimen\mcellsz
+\newdimen\cellsz
+\newcounter{colnb}
+
+% Margin cell size
+\setlength{\mcellsz}{2\tabcolsep}
+
+% Macro that evaluates the column size for one '*' factor
+%   #1: number of '*' factors. Must not be zero.
+%   #2: total number of columns
+%   #3: cumulated fixed size for all the columns
+%   #4: orientation (no more used)
+
+\def\resizetable#1#2#3#4{ %
+  \setlength{\fixwidth}{#3}%
+  \setlength{\colwidth}{\linewidth-\fixwidth-#2\mcellsz}%-\mcellsz}%
+  \setcounter{colnb}{#1}%
+  \divide\colwidth\value{colnb}%
+}
+
+% Size of a proportional '*' column
+\def\tsize{\colwidth}
+
+% Shortcut to use multirow, so that it works with tsize
+\long\def\mrow#1#2#3{ %
+  \setlength{\cellsz}{#2}%
+  \multirow{#1}{\cellsz}{#3}%
+}

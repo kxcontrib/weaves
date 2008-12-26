@@ -1,0 +1,90 @@
+\newdimen\@TitlepageWidth
+\setlength\@TitlepageWidth{140mm}
+
+% abstract isn't shown in the body as usual but moved to
+% the titlepage
+\newsavebox{\@abstract}
+\renewenvironment{abstract}{\global\setbox\@abstract\vtop\bgroup\begin{minipage}{\@TitlepageWidth}}{\end{minipage}\egroup}
+
+
+\newenvironment{DBKrevtable}{
+  \arrayrulecolor{blue}
+  \begin{longtable}{ |l|l|l|p{80mm}| }
+  \hline
+  {\bf Revision} & {\bf Date} & {\bf Author} & {\bf Note}
+  \tabularnewline\hline
+  \endhead
+}{
+  \end{longtable}
+  \arrayrulecolor{black}
+}
+
+
+% textpos used to position the address text on the right
+\usepackage[absolute]{textpos}
+\setlength{\TPHorizModule}{10mm}
+\setlength{\TPVertModule}{\TPHorizModule}
+\newcommand{\AddressBox}{
+  \begin{textblock}{4}(15,20)
+    \begin{flushright}
+    {\fontsize{9}{14}\fontfamily{pcr}\selectfont
+      \textbf{\textcolor{blue}{address}}
+      \par
+      Kx Systems\\
+      555 Bryant St \#375\\
+      Palo Alto CA\\
+      United States
+      \par
+      \textbf{\textcolor{blue}{web}}
+      \par
+      http://kx.com/
+      \par
+      \textbf{\textcolor{blue}{email}}
+      \par
+      info\textcolor{blue}{@}kx.com
+    }
+    \end{flushright}
+  \end{textblock}
+}
+
+
+\newcommand{\ReportTitlePage}{
+  \begin{titlepage}
+    {\fontsize{36}{36}\fontfamily{pcr}\selectfont
+      \textcolor[rgb]{.66,.66,.66}{
+        \DBKtitle
+      }
+    }
+    \\[10mm]
+    {\fontsize{20}{20}\selectfont \DBKsubtitle}
+    \\[20mm]
+    {\fontsize{14}{14}\selectfont \usebox{\@abstract}}
+    \\[30mm]
+    \begin{minipage}{\@TitlepageWidth}
+    \DBKrevhistory
+    \end{minipage}
+    \vfil
+    \null
+    \AddressBox
+  \end{titlepage}
+}
+
+\newcommand{\ArticleTitlePage}{
+  \thispagestyle{empty}
+  {\fontsize{36}{36}\fontfamily{pcr}\selectfont
+    \textcolor[rgb]{.66,.66,.66}{
+      \DBKtitle
+    }
+  }
+  \\[10mm]
+  {\fontsize{20}{20}\selectfont \DBKsubtitle}
+  \\[10mm]
+  \AddressBox
+}
+
+\ifthenelse{\equal{\DBKisarticle}{yes}}{
+  \renewcommand{\maketitle}{\ArticleTitlePage}
+  \renewcommand{\tableofcontents}{}
+}{
+  \renewcommand{\maketitle}{\ReportTitlePage}
+}

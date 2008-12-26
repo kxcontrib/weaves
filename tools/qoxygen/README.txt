@@ -1,0 +1,42 @@
+This is a documentation system based on Doxygen. 
+
+You are assumed to have the following installed:
+
+- doxygen. I use version 1.5.1. On the Mac I installed the dmg image based 
+  distribution of Doyxgen and manually linked /usr/local/bin/doxygen to the 
+  underlying executable that was installed. This avoids a fink or macports 
+  extravaganza.
+
+- a recent TeX installation. teTeX works well for me on Mac OSX and Linux. 
+ 
+- lex. I use flex 2.5.4.
+
+- a c compiler. A recent gcc should work fine.
+
+Basics:
+
+1. Type make in this directory. 
+
+2. Install qoxygen to somewhere on your PATH.
+
+3. Change to the simple_example directory and type make. 
+
+4. simple_example/source_reference.pdf and example/source_reference/index.html
+   are the pdf and html formatted output from the example.q file. See that
+   q file for examples of commenting functions.
+
+5. Same goes for benchmark_example.
+
+6. You can copy the contents of the example directory to create your own
+   projects. You should edit your copy of example/Makefile in the new project
+   to point TOP_DIR to the directory containing the qoxygen executable and
+   style directory. Adjust the path, also, to the included Makefile from the
+   style directory. For example:
+
+   TOP_DIR=../../tools/qoxygen
+   include ../../tools/qoxygen/style/Makefile
+
+7. "It works for me."
+
+8. Feel free to contribue a nicer html style.
+

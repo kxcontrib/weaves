@@ -1,0 +1,124 @@
+#!/bin/sh
+
+clean()
+{
+  # Remove the temporary files
+  for suffix in log lof lot glo idx ind ilg toc out aux cb
+  do
+    temp=$basefile.$suffix
+    if [ -f $temp ]; then
+      rm $temp*
+    fi
+  done
+}
+
+log_dump()
+{
+  cat $1 | awk '
+  /^l\.[0-9]+/{
+    for (i=0; i < 10; i++) { print line[i]; }
+    print $0;
+  }
+  {
+    for (i = 0; i < 9; i++) { line[i]=line[i+1]; }
+    line[9]=$0;
+  }'
+}
+
+add_inputpath()
+{
+  path=""
+  for i in $2; do
+    path="$path{$i//}"
+  done
+  cat <<eof > $3
+\makeatletter
+\def\input@path{$path}
+\makeatother
+eof
+cat $1 >> $3
+}
+
+scriptpath=`dirname $0`;
+
+while true
+do
+  case "$1" in
+  --texpost) execpost="$2"; shift;;
+  -*) echo "$1: Unknown option"; exit 1;;
+  *) break;;
+  esac
+  shift
+done
+
+if [ $# -lt 2 ]; then
+  echo "`basename $0` file.tex inputpath [texengine extension]"
+  exit 1
+fi
+
+# (la)tex engine to use, and the expected output extension.
+xtex=latex
+oxt=dvi
+if [ $# -ge 4 ]; then
+  xtex=$3
+  oxt=$4
+fi
+
+srcfile=$1
+srcpath=$2
+file=`basename $srcfile .tex`
+srcout=$file.$oxt
+file=${file}_tmp
+basefile=$file
+file=${file}.tex
+pathfile=`dirname $file`
+auxfile=$pathfile/$basefile.aux
+logfile=$pathfile/$basefile.log
+outfile=$pathfile/$basefile.$oxt
+verbose=1
+
+
+# Build the tex file with input@path set
+add_inputpath $srcfile "$srcpath" $file
+
+run=1
+while [ $run -ne 0 ]
+do 
+  echo "latex $file"
+  $xtex -interaction=batchmode $file
+  if [ $? -ne 0 ]; then
+    echo "*** latex error"
+    if [ $verbose -ne 0 ]; then
+      log_dump $logfile
+    fi
+    clean
+    exit 1
+  fi
+  run=`grep -s Rerun $logfile|wc -l`
+done
+
+# Make the index if needed
+if [ -f $basefile.idx ]; then
+  sz=`cat $basefile.idx|wc -l`
+  if [ $sz -ne 0 ]; then
+    makeindex -s $scriptpath/doc.ist $basefile.idx
+    $xtex -interaction=batchmode $file
+    $xtex -interaction=batchmode $file
+  fi
+fi
+
+# Execute post-action if needed
+if [ "$execpost" != "" ]; then
+  $execpost $file
+
+  # Run latex again for the final output
+  $xtex -interaction=batchmode $file
+fi
+
+# Remove the temporary files
+clean
+
+# The temporary file becomes the output file
+mv $outfile $srcout
+
+exit 0
