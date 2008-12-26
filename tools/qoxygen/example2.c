@@ -6,11 +6,13 @@
 /// 
 /// @date 2007-01-25
 /// 
+
 /// Comments starting with a double slash are processed.
 
 
 /// a global variable
 x=42;
+
 y="\"}" "\\"; 
 
 
@@ -18,21 +20,24 @@ y="\"}" "\\";
 f() {};
 
 /// class embedded
-/// classed function
-t::f(x) {};
-/// classed static
-t::g=42;
-/// A class
 
+/// classed function
+t_f(x) {};
+/// classed static
+t_g=42;
+
+/// A class
+/* \d .t */
 
 /// classed function
 f(x) {};
 /// classed static
 g=42;
+
 /// a nested class with a function
 i_h(x) {};
 
-
+/* \d . */
 
 /// Simple function.  Doesn't do much!
 /// @return the value 42
@@ -47,14 +52,25 @@ i(x) {};
 /// @param x an array
 /// @param y another array
 /// @return x.y
-dotproduct (x,y) {};
+dotproduct (x,y) {
+
+};
 
 /// Compute the dot product of 2 arrays
 /// @param x an array
 /// @param y another array
 /// @return x.y
-dotproductloop (x,y) {"}"/// @remarks Very un-q like! 
+dotproductloop (x,y) {
+"}"
+
+
+/// @remarks Very un-q like! 
 /// @note Example only.
+
+
+
+
+
 };
 
 /// A table of trades

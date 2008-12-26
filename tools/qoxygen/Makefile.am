@@ -31,7 +31,7 @@ EXTRA_DIST=mtoc.lsm.in mtoc.spec.in mtoc.texinfo rtocc.l matlab-sample.m R-sampl
 
 #  build and install the .info pages
 info_TEXINFOS = mtoc.texinfo
-mtoc_TEXINFOS = gpl.texinfo
+mtoc_TEXINFOS = ../gpl.texinfo
 
 #  install the man pages
 man_MANS=mtoc.1 rtoc.1

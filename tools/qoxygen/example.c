@@ -6,11 +6,14 @@
 /// 
 /// @date 2007-01-25
 /// 
+
+
 /// Comments starting with a double slash are processed.
 
 
 /// a global variable
 x=42;
+
 y="\"}" "\\"; 
 
 
@@ -30,14 +33,25 @@ i(x) {};
 /// @param x an array
 /// @param y another array
 /// @return x.y
-dotproduct (x,y) {};
+dotproduct (x,y) {
+
+};
 
 /// Compute the dot product of 2 arrays
 /// @param x an array
 /// @param y another array
 /// @return x.y
-dotproductloop (x,y) {"}"/// @remarks Very un-q like! 
+dotproductloop (x,y) {
+"}"
+
+
+/// @remarks Very un-q like! 
 /// @note Example only.
+
+
+
+
+
 };
 
 /// A table of trades

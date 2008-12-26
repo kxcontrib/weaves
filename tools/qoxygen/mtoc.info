@@ -1,6 +1,6 @@
-This is mtoc.info, produced by makeinfo version 4.8 from mtoc.texinfo.
+This is mtoc.info, produced by makeinfo version 4.11 from mtoc.texinfo.
 
-   This file documents the `mtoc' command which R to C for doxygen
+This file documents the `mtoc' command which R to C for doxygen
 
    Copyright (C) 2008 Walter Eaves
 
@@ -548,13 +548,13 @@ Concept Index
 
 
 Tag Table:
-Node: Top836
-Node: Instructions1378
-Node: Copying1878
-Node: Overview21037
-Node: Sample21455
-Node: Invoking mtoc22506
-Node: Problems23415
-Node: Concept Index24045
+Node: Top834
+Node: Instructions1376
+Node: Copying1876
+Node: Overview21035
+Node: Sample21453
+Node: Invoking mtoc22504
+Node: Problems23413
+Node: Concept Index24043
 
 End Tag Table
