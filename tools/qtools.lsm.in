@@ -1,0 +1,21 @@
+Begin3
+Title:		qtools
+Version:	@VERSION@
+Entered-date:	@ISODATE@
+Description:	Q support
+		@configure_input@
+		Please edit qtools.lsm.in to fix the Keywords and
+		Primary-site entries, add several more lines of
+		description here if appropriate, and to delete these
+		instructions.
+Keywords:	[substitute your keywords here]
+Author: 	rweaves@ubu.offices.root.depfa.com (Walter Eaves)
+Maintained-by:	rweaves@ubu.offices.root.depfa.com (Walter Eaves)
+Primary-site:	metlab.unc.edu pub/Linux/apps/some/directory
+		31k qtools-@VERSION@.tar.gz
+		500  qtools.lsm
+Alternate-site: 
+Original-site:  
+Platforms:      
+Copying-policy:	GNU copyleft
+End

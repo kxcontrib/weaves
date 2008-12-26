@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# weaves
+# Provides filtering for Doxygen based on the filename extension.
+# Expects one file on the command-line
+
+# This uses the Aardvark shell utils for realpath, filebase and fileext.
+
+d_check () {
+    echo $args >> ~/tmp/fdoxy.log
+    # set
+}
+
+test $# -ge 1 || exit -1
+
+args="$0 $*"
+
+tfile=$1
+shift
+tfilebasename=$(basename $tfile)
+tfilebase=$(filebase $tfilebasename)
+tfileext=$(fileext $tfile)
+: ${srcdir:=$(dirname $(realpath $tfile))}
+srcdir=$(realpath $srcdir)
+
+test -n "$MAKE_TEST" && d_check
+
+if [ -n "$srcdir" ]
+then
+    if [ -x "$srcdir/${tfilebase}.sh" ]
+    then
+    $(SHELL) -x $srcdir/${tfilebase}.sh
+    exit $?
+    fi
+
+    cd $srcdir
+fi
+
+typeset -i errlevel=-1
+
+case $tfileext in
+    m)
+	mtoc $tfile
+	let errlevel=$?
+    ;;
+    R)
+        if [ -f ~/tmp/$tfilebasename ]
+	then
+	    cat ~/tmp/$tfilebasename
+	fi
+	rtocc $tfile
+	let errlevel=$?
+    ;;
+    *)
+	cat $tfile
+	let errlevel=$?
+    ;;
+esac
+
+exit $errlevel
