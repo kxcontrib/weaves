@@ -1,0 +1,54 @@
+* Author
+
+Walter.Eaves@bigfoot.com
+
+* qoxygen
+
+** Limited support for contexts
+
+I've extended this to support definitions within contexts. This
+
+.sys.this: { [x] x }
+
+will produce sys_this() as a definition within doxygen.
+
+It doesn't support contexts directly, so
+
+\d .ctx
+
+.this: { [x] x }
+
+\d .
+
+will appear as this().
+
+** Source documentation - line numbers
+
+The most useful extension I've made is to align the line numbering so that
+the doxygen will give you a link to the source. This means you can use
+doxygen to document and navigate your source files.
+
+* mtoc and rtoc
+
+These do still work, but I haven't done any development with them lately.
+
+* Emacs Modes - kdbp and q-minor
+
+These have been working for me for some time. The kdbp mode will colour the
+source code files. The q-minor mode give you the means to execute lines and
+buffers. It can't do a block of code at the moment. There is a means of
+using master scripts. I don't really make use of it.
+
+* Revisions
+
+First
+
+[  Local Variables: ]
+[  mode:text ]
+[  mode:outline-minor ]
+[  mode:auto-fill ]
+[  fill-column: 75 ]
+[  comment-column:50 ]
+[  comment-start: "[  "  ]
+[  comment-end:"]" ]
+[  End: ]
