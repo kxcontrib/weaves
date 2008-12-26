@@ -1,0 +1,7 @@
+parse_function <- function(some_text) {
+        f <- parse(text=some_text)
+        if (is.expression(f))
+                f <- f[[1]] 
+        f
+}
+

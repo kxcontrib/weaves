@@ -1,0 +1,77 @@
+.\"                              hey, Emacs:   -*- nroff -*-
+.\" mtoc is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; see the file COPYING.  If not, write to
+.\" the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.TH MTOC 1 "March 24, 2008"
+.\" Please update the above date whenever this man page is modified.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins (default)
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+mtoc \- R to C for doxygen
+.SH SYNOPSIS
+.B mtoc
+.RI [ options ]
+.SH DESCRIPTION
+\fBmtoc\fP washes your windows, mends your fences, mows your lawn...
+.PP
+It also...
+.SH OPTIONS
+\fBmtoc\fP accepts the following options:
+.TP
+.BR  -o ", " --output=\fIname\fP
+Write output to \fIname\fP instead of standard output.
+.TP
+.B  --dry-run
+Take no real actions.
+.TP
+.B  --no-warn
+Disable warnings.
+.TP
+.BR  -q ", " --quiet ", " --silent
+Inhibit usual output.
+.TP
+.B  --brief
+Shorten output.
+.TP
+.BR  -v ", " --verbose
+Print more information.
+.TP
+.BI  --directory= name
+Use specified directory.
+.TP
+.BI  --cd= name
+Change to specified directory before proceeding.
+.TP
+.BR  -? ", " --help
+List all available options and their meanings.
+.TP
+.B  --usage
+Show summary of options.
+.TP
+.BR  -V ", " --version
+Show version of program.
+.\" .SH "SEE ALSO"
+.\" .BR foo (1), 
+.\" .BR bar (1).
+.SH AUTHOR
+Walter Eaves <weaves@ubu.weaves.dynalias.org>.

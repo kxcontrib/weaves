@@ -1,0 +1,52 @@
+#!/bin/sh
+
+d_check () {
+    echo $*
+    set
+}
+
+tfile=$1
+shift
+tfilebase=$(filebase $(basename $tfile))
+tfileext=$(fileext $tfile)
+srcdir=$(realpath $srcdir)
+
+test -n "$MAKE_TEST" && d_check
+
+if [ -n "$srcdir" ]
+then
+    if [ -x "$srcdir/${tfilebase}.sh" ]
+    then
+    $(SHELL) -x $srcdir/${tfilebase}.sh
+    exit $?
+    fi
+
+    cd $srcdir
+fi
+
+typeset -i errlevel=-1
+
+case $tfileext in
+    m)
+	mtoc $tfile > ${tfilebase}.c
+	let errlevel=$?
+    ;;
+    R)
+        rm -f ${tfilebase}.c 2> ${tfilebase}.log
+	rtocc ${FLEX_DEBUG} $tfile > ${tfilebase}.c 2> ${tfilebase}.log
+	let errlevel=$?
+    ;;
+    q)
+        rm -f ${tfilebase}.c 2> ${tfilebase}.log
+	qoxygen ${FLEX_DEBUG} $tfile > ${tfilebase}.c 2> ${tfilebase}.log
+	let errlevel=$?
+    ;;
+    *)
+	$* $tfile
+	let errlevel=$?
+    ;;
+esac
+
+cat ${tfilebase}.c
+
+exit $errlevel
