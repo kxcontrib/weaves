@@ -32,6 +32,12 @@ doxygen to document and navigate your source files.
 
 These do still work, but I haven't done any development with them lately.
 
+* rtoq
+
+There is also r2q from Niall Ferguson. I haven't used this yet. If it works
+let me know. If there are any improvement you can propose, then pass them
+on.
+
 * Emacs Modes - kdbp and q-minor
 
 These have been working for me for some time. The kdbp mode will colour the
