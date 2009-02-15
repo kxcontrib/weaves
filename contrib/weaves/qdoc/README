@@ -1,0 +1,44 @@
+	qdoc - doxygen extension to document q/kdb+ packages
+
+  Copyright (C) 2009 Walter Eaves
+
+  qdoc is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+Comments are welcome.
+
+qdoc is best added as an AC_CONFIG_SUBDIR
+
+if test -d "$srcdir/qdoc"; then
+ AC_CONFIG_SUBDIRS([qdoc])
+fi
+
+It looks for qoxygen.
+
+It generates a doxygen configuration file from that in cfg/dev.doxy.in
+This uses the autoconf definitions for htmldir and others.
+It runs the resulting script through a filter to expand the variables.
+
+A typical configure invocation might be:
+
+ ./configure --prefix=$HOME --htmldir=$HOME/public_html/qdoc
+
+This dev.doxy.in is only a guideline for q/kdb and is biased to produce HTML
+and manual pages. To change the configuration change dev.doxy.in and then
+
+ config.status
+
+to regenerate the file dev.doxy.in
+
+	- Walter Eaves <Walter.Eaves@bigfoot.com>
