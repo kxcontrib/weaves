@@ -7,6 +7,9 @@ test -n "$QPROG" || QPROG=@qprog@
 
 test -n "$QPATH" || QPATH=@pkgdatadir@:$QHOME
 
+test -n "$QTRDR" || QTRDR=":@qtrdrhost@:@qtrdrport@"
+
+export QTRDR
 export QLOAD
 export QHOME
 export QPROG

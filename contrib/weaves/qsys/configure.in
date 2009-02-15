@@ -26,6 +26,13 @@ dnl Checks for programs.
 AC_PROG_INSTALL
 AC_PROG_CC
 AC_LN_S
+AC_PATH_PROG([DOXYGEN], [doxygen])
+AC_PATH_PROG([SED], [sed])
+AC_PATH_PROG([LATEX], [latex])
+AC_PATH_PROG([PDFLATEX], [pdflatex])
+AC_PATH_PROG([MAKEINDEX], [makeindex])
+AC_PATH_PROG([DVIPS], [dvips])
+AC_PATH_PROG([QOXYGEN], [qoxygen])
 
 AC_ARG_WITH([qhomedir],
               AC_HELP_STRING([--with-qhomedir],
@@ -39,7 +46,7 @@ if test "x$build_cpu" = "xi386"; then
  qcpu=32
 elif test "x$build_cpu" = "xi686"; then
  qcpu=32
-elif test "x$build_cpu" = "sparc"; then
+elif test "x$build_cpu" = "xsparc"; then
  qcpu=32
 else
  qcpu=64
@@ -76,6 +83,24 @@ AC_ARG_WITH([qprog],
 
 AC_SUBST([qprog],[$qprogdir/$qprog])
 
+qtrdrhost=""
+AC_ARG_WITH([qtrdrhost],
+              AC_HELP_STRING([--with-qtrdrhost],
+               [Domain name of the QTRDR host. Otherwise, this host]),
+              [qtrdrhost=$withval],
+              [])
+
+AC_SUBST([qtrdrhost],[$qtrdrhost])
+
+qtrdrport=15001
+AC_ARG_WITH([qtrdrport],
+              AC_HELP_STRING([--with-qtrdrport],
+               [Domain name of the QTRDR port. Otherwise, port 15001]),
+              [qtrdrport=$withval],
+              [])
+
+AC_SUBST([qtrdrport],[$qtrdrport])
+
 ## Added an add-on directory
 AC_ARG_ENABLE([string-metrics],
         [AC_HELP_STRING([--with-string-metrics],
@@ -87,6 +112,10 @@ if test x$smet_build = xset; then
  if test -d "$srcdir/smet"; then
   AC_CONFIG_SUBDIRS([smet])
  fi
+fi
+
+if test -d "$srcdir/qdoc"; then
+ AC_CONFIG_SUBDIRS([qdoc])
 fi
 
 dnl Checks for libraries.
@@ -109,4 +138,8 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
-AC_OUTPUT(Makefile src/Makefile qsys.lsm qsys.spec)
+AC_OUTPUT([Makefile
+qsys.lsm
+qsys.spec
+src/Makefile])
+

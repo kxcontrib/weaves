@@ -10,10 +10,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "regex.h" /* Provides regular expression matching */
 #include "string.h" /* String utility functions */
 #include "errno.h" /* Handle errors */
 #include "memory.h" /* Handle errors */
+
+#if defined(HAVE_REGMATCH_T_RM_SP)
+#include "/usr/include/regex.h" 
+#else
+#include "regex.h"
+#endif
 
 int  match_patterns(regex_t *r, FILE *FH)
 {

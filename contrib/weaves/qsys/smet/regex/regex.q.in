@@ -4,7 +4,7 @@
 
 \d .regex
 
-i.lib:`libqregex
+i.lib:`$"@pkglibdir@/libqregex"
 
 / Regular expression match: 1st string pattern, 2nd string
 / Returns boolean

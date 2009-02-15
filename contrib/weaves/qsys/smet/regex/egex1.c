@@ -1,4 +1,4 @@
-/* \file egex1.c
+/** \file egex1.c
    \brief Utility regular expressions for q/kdb using GNUlib
 
 Provide regular expression function for q/kdb.
@@ -13,7 +13,6 @@ Provide regular expression function for q/kdb.
 #include <stdlib.h>
 
 #include <string.h>
-#include "regex.h" /* Provides regular expression matching */
 
 #include <strings.h> /* String utility functions */
 #include <errno.h> /* Handle errors */
@@ -23,6 +22,11 @@ Provide regular expression function for q/kdb.
 #include "egex0.h"
 
 /* #undef NDEBUG */
+
+/** \addtogroup cregex
+   C to Q regular expressions
+   @{
+*/
 
 /* Reduce spaces to one */
 K q_re_despace(K str, K opts)
@@ -126,3 +130,4 @@ K q_re_depunct(K str, K opts)
   return results;
 }
 
+/** @} */

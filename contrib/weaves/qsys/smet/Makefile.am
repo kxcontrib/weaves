@@ -15,7 +15,7 @@ SUBDIRS = lib test regex examples
 
 #  build and install the .info pages
 egex_TEXINFOS = gpl.texinfo
-EXTRA_DIST = system.h m4/gnulib-cache.m4
+EXTRA_DIST = m4/gnulib-cache.m4
 
 clean-local:
 	$(SHELL) -c "rm -f cscope.*"

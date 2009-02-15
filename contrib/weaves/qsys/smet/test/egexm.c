@@ -24,11 +24,13 @@
 
 #include "config.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <getopt.h>
-#include "system.h"
+#include <string.h>
+#include "error.h"
+#include "long-options.h"
+#include "regex.h"
+#include "getopt.h"
+
+#include "stdio.h"
 
 #define EXIT_FAILURE 1
 
@@ -134,13 +136,15 @@ decode_switches (int argc, char **argv)
 static void
 usage (int status)
 {
-  printf (_("%s - \
-\n"), program_name);
-  printf (_("Usage: %s [OPTION]... [FILE]...\n"), program_name);
-  printf (_("\
+  printf ("%s - \
+\n", program_name);
+  printf ("Usage: %s [OPTION]... [FILE]...\n", program_name);
+  printf ("\
 Options:\n\
   -h, --help                 display this help and exit\n\
   -V, --version              output version information and exit\n\
-"));
+");
   exit (status);
 }
+
+/*  gnulib-tool --import error long-options memchr memcpy regex strndup */

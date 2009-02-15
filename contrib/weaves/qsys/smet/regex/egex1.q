@@ -1,4 +1,6 @@
-// weaves
+// @file egex1.q
+// @brief Regular expressions demonstration - advanced
+// @author weaves
 
 .egex.lib:`$".libs/libqregex"
 
