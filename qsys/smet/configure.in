@@ -4,7 +4,7 @@ dnl Regular expression and string metrics for q/kdb
 
 dnl This uses gnulib
 
-AC_INIT([q], [0.2.0], [walter.eaves@bigfoot.com], [qsys])
+AC_INIT([q], [0.1.0], [walter.eaves@bigfoot.com], [qsys])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([test/egexm.c])
 AC_CONFIG_AUX_DIR([config])
@@ -21,7 +21,6 @@ AC_SUBST(VERSION)
 ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)
 
-AC_GNU_SOURCE
 AC_CANONICAL_HOST
 AC_USE_SYSTEM_EXTENSIONS
 
@@ -42,9 +41,14 @@ AC_ARG_WITH([qhomedir],
 
 AC_SUBST([qhomedir],[$qhomedir])
 
+dnl Begin
+dnl Should be a Q macro to deduce the directory name given the host_cpu and host_os
+
 if test "x$build_cpu" = "xi386"; then
  qcpu=32
 elif test "x$build_cpu" = "xi686"; then
+ qcpu=32
+elif test "x$build_cpu" = "sparc"; then
  qcpu=32
 else
  qcpu=64
@@ -63,7 +67,10 @@ fi
 echo $host_os | grep solaris > /dev/null 2>&1 
 if test $? -eq 0; then
    qdirsuffix=s$qcpu
+
 fi
+
+dnl End
 
 AC_ARG_WITH([qprogdir],
               AC_HELP_STRING([--with-qprogdir],
@@ -85,8 +92,12 @@ dnl Checks for libraries.
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h sys/ndir.h ndir.h alloca.h locale.h )
+AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h sys/ndir.h ndir.h alloca.h locale.h regex.h )
 
+dnl Quirky thing for Solaris. We use a GCC compiler, but we don't have
+dnl the GNU regular expression library. So check if the POSIX one is there and
+dnl use that.
+AC_CHECK_MEMBERS([regmatch_t.rm_sp],[],[],[[#include <regex.h>]])
 
 jm_CHECK_TYPE_STRUCT_UTIMBUF
 AC_HEADER_MAJOR
@@ -100,8 +111,6 @@ AC_CHECK_FUNC(mknod)
 dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
-
-AM_GNU_GETTEXT()
 
 AC_OUTPUT([Makefile
 test/Makefile

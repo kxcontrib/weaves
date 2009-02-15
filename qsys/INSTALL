@@ -1,6 +1,10 @@
 weaves
 
-Installation is very much as one would expect.
+Installation is a bit more complicated than usual because I've made use of
+gnulib and gnulib-tool.
+
+The installation needs to run gnulib-tool on the smet directory. There is a
+script autogen.sh that shows the steps.
 
 Simply use ./configure, but usually one only wants to install in one's
 own home directory and into the q executable directory
@@ -21,18 +25,19 @@ If this doesn't work, you can try to override by setting
 
 for example.
 
-The qsys environment comes with a C plugin for the q interpreter "smet".
+String Metrics - the smet directory
 
-This is built by default. It can be removed from the build using 
+The qsys environment comes with a C plugin for the q interpreter "smet".
+The build is in in a sub-directory of this and is built by default. 
+It uses an auxilary autoreconf phase. This may fail. The smet build needs
+to have gnulib-tool run on it first, see the INSTALL file in the smet directory. 
+After you've done that then a complete autoreconf should work.
+
+The can be removed from the build using 
 
  --disable-string-metrics
 
 This is a sub-build of the main qsys build.
-
---
-
-For Solaris, I've only tested on 32-bit sparc. I used the gcc 3.4.2
-compiler.
 
 --
 
@@ -46,8 +51,6 @@ directories and then
 and then configure as normal.
 
 --
-
-The build system uses gnulib, so a GCC compiler is required.
 
 It builds in the src directory. It just applies sed
 transformations to scripts marked with .in suffix.
@@ -79,5 +82,5 @@ There is no feature to uninstall.
 
 --
 
-The installation works on both MacOSX and Linux - both 32bit.
+The installation works on both Linux and Solaris - both 32bit.
 

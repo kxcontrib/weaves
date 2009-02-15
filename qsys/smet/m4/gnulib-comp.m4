@@ -25,8 +25,12 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
-  AC_REQUIRE([AC_GNU_SOURCE])
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
+  dnl Some compilers (e.g., AIX 5.3 cc) need to be in c99 mode
+  dnl for the builtin va_copy to work.  With Autoconf 2.60 or later,
+  dnl AC_PROG_CC_STDC arranges for this.  With older Autoconf AC_PROG_CC_STDC
+  dnl shouldn't hurt, though installers are on their own to set c99 mode.
+  AC_REQUIRE([AC_PROG_CC_STDC])
 ])
 
 # This macro should be invoked from ./configure.in, in the section
@@ -39,31 +43,18 @@ AC_DEFUN([gl_INIT],
   AM_CONDITIONAL([GL_COND_LIBTOOL], [true])
   gl_cond_libtool=true
   gl_source_base='lib'
-changequote(,)dnl
-LTALLOCA=`echo "$ALLOCA" | sed 's/\.[^.]* /.lo /g;s/\.[^.]*$/.lo/'`
-changequote([, ])dnl
-AC_SUBST([LTALLOCA])
-  gl_FUNC_ALLOCA
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
      AM_XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
-  dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
-  AM_GNU_GETTEXT_VERSION([0.17])
+  gl_GETOPT
   AC_SUBST([LIBINTL])
   AC_SUBST([LTLIBINTL])
-  gl_LOCALCHARSET
-  AC_FUNC_MALLOC
-  AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
-  gl_FUNC_MALLOC_POSIX
-  gl_STDLIB_MODULE_INDICATOR([malloc-posix])
+  gl_LONG_OPTIONS
   gl_FUNC_MEMCHR
   gl_FUNC_MEMCPY
-  gl_REGEX
-  gt_TYPE_SSIZE_T
-  AM_STDBOOL_H
+  gl_STDARG_H
   gl_STDINT_H
-  gl_STDLIB_H
   gl_FUNC_STRERROR
   gl_STRING_MODULE_INDICATOR([strerror])
   gl_HEADER_STRING_H
@@ -73,7 +64,6 @@ AC_SUBST([LTALLOCA])
   gl_STRING_MODULE_INDICATOR([strnlen])
   gl_UNISTD_H
   gl_WCHAR_H
-  gl_WCTYPE_H
   m4_popdef([AC_LIBSOURCES])
   m4_popdef([AC_REPLACE_FUNCS])
   m4_popdef([AC_LIBOBJ])
@@ -124,88 +114,44 @@ AC_DEFUN([gl_LIBSOURCES], [
 # This macro records the list of files which have been installed by
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
-  build-aux/config.rpath
   build-aux/link-warning.h
-  lib/alloca.c
-  lib/alloca.in.h
-  lib/config.charset
   lib/error.c
   lib/error.h
+  lib/getopt.c
+  lib/getopt.in.h
+  lib/getopt1.c
+  lib/getopt_int.h
   lib/gettext.h
   lib/intprops.h
-  lib/localcharset.c
-  lib/localcharset.h
-  lib/malloc.c
+  lib/long-options.c
+  lib/long-options.h
   lib/memchr.c
   lib/memcpy.c
-  lib/ref-add.sin
-  lib/ref-del.sin
-  lib/regcomp.c
-  lib/regex.c
-  lib/regex.h
-  lib/regex_internal.c
-  lib/regex_internal.h
-  lib/regexec.c
-  lib/stdbool.in.h
   lib/stdint.in.h
-  lib/stdlib.in.h
   lib/strerror.c
   lib/string.in.h
   lib/strndup.c
   lib/strnlen.c
   lib/unistd.in.h
+  lib/version-etc.c
+  lib/version-etc.h
   lib/wchar.in.h
-  lib/wctype.in.h
-  m4/absolute-header.m4
-  m4/alloca.m4
-  m4/codeset.m4
   m4/error.m4
   m4/extensions.m4
-  m4/gettext.m4
-  m4/glibc2.m4
-  m4/glibc21.m4
+  m4/getopt.m4
   m4/gnulib-common.m4
-  m4/iconv.m4
   m4/include_next.m4
-  m4/intdiv0.m4
-  m4/intl.m4
-  m4/intldir.m4
-  m4/intlmacosx.m4
-  m4/intmax.m4
-  m4/inttypes-pri.m4
-  m4/inttypes_h.m4
-  m4/lcmessage.m4
-  m4/lib-ld.m4
-  m4/lib-link.m4
-  m4/lib-prefix.m4
-  m4/localcharset.m4
-  m4/lock.m4
+  m4/long-options.m4
   m4/longlong.m4
-  m4/malloc.m4
   m4/memchr.m4
   m4/memcpy.m4
-  m4/nls.m4
   m4/onceonly_2_57.m4
-  m4/po.m4
-  m4/printf-posix.m4
-  m4/progtest.m4
-  m4/regex.m4
-  m4/size_max.m4
-  m4/ssize_t.m4
-  m4/stdbool.m4
+  m4/stdarg.m4
   m4/stdint.m4
-  m4/stdint_h.m4
-  m4/stdlib_h.m4
   m4/strerror.m4
   m4/string_h.m4
   m4/strndup.m4
   m4/strnlen.m4
-  m4/uintmax_t.m4
   m4/unistd_h.m4
-  m4/visibility.m4
   m4/wchar.m4
-  m4/wchar_t.m4
-  m4/wctype.m4
-  m4/wint_t.m4
-  m4/xsize.m4
 ])

@@ -3,10 +3,10 @@ CPPFLAGS = -I${top_srcdir}/lib -DNO_PYTHON
 
 ACLOCAL_AMFLAGS = -I m4
 
-qprog_LTLIBRARIES = libqregex.la
-# pkglib_LTLIBRARIES = libqregex.la
+pkglib_LTLIBRARIES = libqregex.la
 libqregex_la_LIBADD = $(LTLIBINTL) ${top_srcdir}/lib/libgnu.la
-libqregex_la_SOURCES = egex0.c egex.c egex1.c Levenshtein.c kish.c smetrics.c
+libqregex_la_SOURCES = egex0.c egex.c egex1.c Levenshtein.c kish.c smetrics.c version-etc-fsf.c
+
 libqregex_la_FLAGS = -module
 
 noinst_HEADERS = egex0.h  k.h  kish.h  Levenshtein1.h  Levenshtein.h  skel.h

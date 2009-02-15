@@ -1,5 +1,5 @@
 
-q_files = darwin8.0.q linux-gnu.q help.q log.q site.q sys.q trdr.q
+q_files = darwin8.0.q linux-gnu.q help.q log.q site.q sys.q trdr.q dbmaint.q
 
 bin_SCRIPTS = Qp Qr Qs
 sysconf_DATA = use-q q.rc

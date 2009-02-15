@@ -4,7 +4,7 @@
 
 # These test programs check that the regular expression library is available.
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I $(top_builddir)/m4
 
 CPPFLAGS = -I $(top_builddir)/lib
 
@@ -16,7 +16,7 @@ README:
 	$(TESTS_ENVIRONMENT) egex.sh
 
 noinst_PROGRAMS = egex mygrep regexpr
-egex_SOURCES = egexm.c egex.1 xmalloc.c getopt.c getopt1.c getopt.h
+egex_SOURCES = egexm.c egex.1 xmalloc.c
 
 mygrep_SOURCES = mygrep.c 
 regexpr_SOURCES = regexpr.c

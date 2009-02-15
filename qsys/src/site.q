@@ -1,15 +1,15 @@
-// weaves
-
-// Only do this site initialization if QLOAD is set
-
-/ System startup file.
-/ Try to set .Q.x to contain otherfile.csv
-
-/ q qfile.q otherfile.csv -arg -args
-
-/ .z.x
-/ .z.f
-/ .Q.x
+// @file site.q
+// @brief The site file loaded at startup - q.q.
+// @author weaves
+// The qsys system startup file.
+// @note
+// This site initialization is only performed if QLOAD is set in the environment.
+// @note
+// It wry to set .Q.x to contain the data files on the command-line.
+// @code
+// Qp qfile.q otherfile.csv -arg -args
+// @endcode
+// It uses .z.x, .z.f and .Q.x
 
 if[0 < count getenv`QLOAD;
    .sys.i.args: .Q.opt .z.x;
@@ -18,15 +18,21 @@ if[0 < count getenv`QLOAD;
    .sys.args`;
 
    if[.sys.is_arg`debug; .sys.qloader enlist("log.q"); .log.trace:1];
-   // Pop a message up to say it is verbose.
+   // Pops up a message up to say it is verbose.
    if[.sys.is_arg`verbose;
       2 ((";" sv (string .z.Z; string .z.f;"verbose")),enlist("\n"))];
    
    .sys.qpath.cwd`;
    .sys.qloader enlist("help.q");
 
+   // If autoport is given on the command-line it will call .sys.autoport
+   if[.sys.is_arg`autoport; .sys.autoport["I"$first .sys.i.args`autoport] ];
+   
+   if[0 < count getenv`QTRDR; .sys.qloader enlist("trdrc.q") ];
+
    // If a load argument is given, load the script
    if[0 = .sys.type_arg`load; .sys.source:.sys.arg`load; .sys.qloader[.sys.source] ];
+
    ]
 
 /  Local Variables: 

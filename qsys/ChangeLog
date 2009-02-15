@@ -1,3 +1,13 @@
+2009-02-15  Walter Eaves  <walter.eaves@bigfoot.com>
+
+	* autogen.sh: An autoconf meta-script.
+
+	* src/trdr.q: Trading service.
+
+	* index.cpp: Documentation file for qsys.
+
+	* configure.in: qdoc support added.
+
 2008-11-22  Walter Eaves  <walter.eaves@bigfoot.com>
 
 	* qsys: initial version.

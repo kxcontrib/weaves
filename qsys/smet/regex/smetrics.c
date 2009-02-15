@@ -12,14 +12,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <string.h>
-#include "regex.h" /* Provides regular expression matching */
+#include "string.h"
 
-#include <strings.h> /* String utility functions */
-#include <errno.h> /* Handle errors */
-#include <memory.h> /* Handle errors */
+#include "error.h" /* Handle errors */
 
 #include "kish.h"
+#include "egex0.h"
 
 #include "Levenshtein.h"
 

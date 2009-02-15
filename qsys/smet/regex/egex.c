@@ -18,6 +18,11 @@ Provide regular expression function for q/kdb.
 #include "egex0.h"
 #include "kish.h"
 
+/** \addtogroup cregex
+   C to Q regular expressions
+   @{
+*/
+
 /* #undef NDEBUG */
 
 /* Returns a boolean match */
@@ -117,3 +122,4 @@ K q_get_first_cpu_frequency(K x)
   return kf(frequency);
 }
 
+/** @} */

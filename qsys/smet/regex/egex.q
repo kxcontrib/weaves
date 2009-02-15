@@ -1,10 +1,12 @@
-// weaves
-
-/ I've chosen to use the POSIX regular expression library
-/ GNU support it, but POSIX doesn't support GNU.
-
-/ The net effect is that to do sub-string matching you need to put 
-/ your regular expressions into a pair of brackets.
+// @file egex.q
+// @brief Regular expressions demonstration - basic
+// @author weaves
+//
+// I've chosen to use the POSIX regular expression library.
+// GNU support it, but POSIX doesn't support GNU.
+// @n
+// The net effect is that to do sub-string matching you need to put 
+// your regular expressions into a pair of brackets.
 
 .egex.lib:`$".libs/libqregex"
 
