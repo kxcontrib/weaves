@@ -1,0 +1,21 @@
+Begin3
+Title:		qdoc
+Version:	@VERSION@
+Entered-date:	@ISODATE@
+Description:	doxygen extension to document q/kdb+ packages
+		@configure_input@
+		Please edit qdoc.lsm.in to fix the Keywords and
+		Primary-site entries, add several more lines of
+		description here if appropriate, and to delete these
+		instructions.
+Keywords:	[substitute your keywords here]
+Author: 	Walter.Eaves@bigfoot.com (Walter Eaves)
+Maintained-by:	Walter.Eaves@bigfoot.com (Walter Eaves)
+Primary-site:	metlab.unc.edu pub/Linux/apps/some/directory
+		31k qdoc-@VERSION@.tar.gz
+		500  qdoc.lsm
+Alternate-site: 
+Original-site:  
+Platforms:      
+Copying-policy:	GNU copyleft
+End

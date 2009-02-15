@@ -1,0 +1,27 @@
+/*! @file index.cpp 
+ @author weaves
+ @date November 2008
+ @brief Documentation for qsys.
+*/
+
+/*! \mainpage qsys
+
+\section intro1 Introduction
+
+ qsys is a suite of scripts and C runtime components to add facilities to the
+ q/kdb interpreter.
+
+\section Dependencies
+
+ The C runtime components provide regular expression and need a POSIX regular
+ expression library.
+
+\section Documentation
+
+  Doxygen documentation is extracted from source code comments.
+
+\section Feedback
+
+  Please send any feedback to the authors.
+
+*/
