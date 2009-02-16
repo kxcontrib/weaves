@@ -32,13 +32,22 @@ It runs the resulting script through a filter to expand the variables.
 
 A typical configure invocation might be:
 
- ./configure --prefix=$HOME --htmldir=$HOME/public_html/qdoc
+ ./configure --prefix=$HOME 
 
-This dev.doxy.in is only a guideline for q/kdb and is biased to produce HTML
-and manual pages. To change the configuration change dev.doxy.in and then
+The doxygen installs into ${prefix}/share/doc usually. You can change this
+
+ either - by editting the dev.doxy.in
+ or - using the prefix command to configure
+
+But you will need to add a real cfg/dev.doxy.in. There is a sample - for the 
+qsys system at code.kx.com
+
+This dev.doxy.in.sample is only a guideline for q/kdb and is biased to produce HTML
+and manual pages. You only need to change the INPUT and EXCLUDE and it should be ready to go.
+If you update the configuration you should change your dev.doxy.in and then
 
  config.status
 
-to regenerate the file dev.doxy.in
+to regenerate the file dev.doxy
 
 	- Walter Eaves <Walter.Eaves@bigfoot.com>
