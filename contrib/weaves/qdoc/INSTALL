@@ -1,3 +1,13 @@
+weaves
+
+This builds documentation for a q/kdb system using qoxygen.
+
+You will need a qoxygen for your system
+
+ http://code.kx.com/
+
+And search for qoxygen
+
 Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002 Free Software
 Foundation, Inc.
 
