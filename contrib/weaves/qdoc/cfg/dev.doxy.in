@@ -588,7 +588,7 @@ GENERATE_HTML          = YES
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `html' will be used as the default path.
 
-HTML_OUTPUT            = @htmldir@
+HTML_OUTPUT             = @datadir@/doc/@PACKAGE@/html
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for 
 # each generated HTML page (for example: .htm,.php,.asp). If it is left blank 
@@ -700,7 +700,7 @@ GENERATE_LATEX         = YES
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `latex' will be used as the default path.
 
-LATEX_OUTPUT           = @dvidir@
+LATEX_OUTPUT           = @datadir@/doc/@PACKAGE@
 
 # The LATEX_CMD_NAME tag can be used to specify the LaTeX command name to be 
 # invoked. If left blank `latex' will be used as the default command name.
@@ -777,7 +777,7 @@ GENERATE_RTF           = NO
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `rtf' will be used as the default path.
 
-RTF_OUTPUT             = @docdir@
+RTF_OUTPUT             = @datadir@/doc/@PACKAGE@/rtf
 
 # If the COMPACT_RTF tag is set to YES Doxygen generates more compact 
 # RTF documents. This may be useful for small projects and may help to 
@@ -847,7 +847,7 @@ GENERATE_XML           = NO
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `xml' will be used as the default path.
 
-XML_OUTPUT             = @htmldir@
+XML_OUTPUT             = @datadir@/doc/@PACKAGE@/xml
 
 # The XML_SCHEMA tag can be used to specify an XML schema, 
 # which can be used by a validating XML parser to check the 
