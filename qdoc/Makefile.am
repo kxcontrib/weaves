@@ -8,23 +8,18 @@
 # There is a rule .doxo := .doxi that runs DOXYGEN on that .doxi
 # Use the <name>.doxo as dependent to trigger any post-processing.
 
-# There is a new documentation target: docs-dev and it uses cfg/dev.doxy
-
-bin_PROGRAMS=qdoc
-qdoc_SOURCES=qdoc.c qdoc.1 xmalloc.c system.h aclocal.m4 getopt.c getopt1.c getopt.h system.h
-
 #  uncomment the following if qdoc requires the math library
 #qdoc_LDADD=-lm
 
-EXTRA_DIST=qdoc.lsm.in qdoc.spec.in qdoc.texinfo expander.sh index.cpp.sample
+EXTRA_DIST=qdoc.lsm.in qdoc.spec.in qdoc.texinfo expander.sh index.cpp.sample aclocal.m4
 
 #  if you write a self-test script named `chk', uncomment the
 #  following and add `chk' to the EXTRA_DIST list
 #TESTS=chk
 
 #  build and install the .info pages
-info_TEXINFOS = qdoc.texinfo
-qdoc_TEXINFOS = gpl.texinfo
+# info_TEXINFOS = qdoc.texinfo
+# qdoc_TEXINFOS = gpl.texinfo
 
 #  install the man pages
 man_MANS=qdoc.1
