@@ -13,8 +13,8 @@ EXTRA_DIST=qsys.lsm.in qsys.spec.in qsys.texinfo INSTALL aclocal.m4 qsys.1 autog
 #TESTS=chk
 
 #  build and install the .info pages
-info_TEXINFOS = qsys.texinfo
-qsys_TEXINFOS = gpl.texinfo
+# info_TEXINFOS = qsys.texinfo
+# qsys_TEXINFOS = gpl.texinfo
 
 #  install the man pages
 man_MANS=qsys.1

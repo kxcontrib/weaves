@@ -323,19 +323,75 @@ zs:{`d`P`L`G`D!(system"d"),v[1 2 3],enlist last v:value x}
 \d .sch
 
 // Update a table so that the attribute named with the symbol asym is cast to a symbol
-.sch.a2sym: { [tbl;asym]
+a2sym: { [tbl;asym]
 	     f: { `$(string first x) };
 	     b: (enlist `i)!enlist `i;
 	     a: (enlist asym)!enlist (f;asym);
 	     ![tbl;();b;a] }
 
+
+// Make an hsym.
+a2hsym:{ [x;y]
+	p:":" sv ("";(string x);(string y));
+	hsym `$p }
+
 // Select from a table where a name n is in a set of values v, keying on the column k and returning 
 // the value in the column c.
-.sch.a2list: { [tbl;n;v;c;k]
+a2list: { [tbl;n;v;c;k]
 	      c1: ( enlist (in;n;enlist v) );
 	      b: (enlist k)!enlist k;
 	      a: (enlist c)!enlist ({first x};c);
 	      ?[foliotypes;c1;b;a] }
+
+// Update a table so that the attribute named with the symbol asym is cast to a symbol.
+// @note
+// Equivalent to this 
+// @code
+// update asym:`$(string first x) asym by i from tbl
+// @endcode
+
+a2sym: { [tbl;asym]
+	f: { `$(string first x) };
+	b: (enlist `i)!enlist `i;
+	a: (enlist asym)!enlist (f;asym);
+	![tbl;();b;a] }
+
+// Select from a table where a name n is in a set of values v, keying on the column k and returning 
+// the value in the column c.
+//
+// @note
+// Equivalent to this
+// @code
+// select c:{ first x } c by k from tbl where n in v 
+// @endcode
+// Useful for extracting from a mapping table:
+// @code
+// tenors:select nvalue by ovalue from foliotypes where name in `tenor
+// @endcode
+a2mapping: { [tbl;n;v;c;k]
+	    c1: ( enlist (in;n;enlist v) );
+	    b: (enlist k)!enlist k;
+	    a: (enlist c)!enlist ({first x};c);
+	    v xcol ?[tbl;c1;b;a] }
+
+// Update a field named by asym in the table tbl, by looking up its
+// keyed value in the table ttbl and using the value in the table named
+// by the column tvalue.
+//
+// @note
+// Very similar to vlookup.
+// @n
+// a2remap[tbl;`tenor;values;`nvalue] would be equivalent to 
+// @code
+// update tenor:{ txf[values;x;`nvalue] } each tenor by i from tbl
+// @endcode
+// And values:([tenor:`a1`a2] nvalue:`b1`b2)
+// The table values would be produced by a2mapping.
+a2remap: { [tbl;asym;ttbl;tvalue]
+	  f: { txf[y;x;z] };
+	  b: (enlist `i)!enlist `i;
+	  a: (enlist asym)!enlist (f[;ttbl;tvalue];asym);
+	  ![tbl;();0b;a] }
 
 // @brief Generates a file name with the given MIME extension and saves to it.
 //
@@ -363,6 +419,26 @@ flipper: { [tbl1;keying]
 	  d1[keying]:cols value tbl1;
 	  flip d1 }
 
+// @brief Moves the symbols nsyms in syms to the front of the list.
+//
+// The elements of the list nsyms are moved to the front of the list syms.
+// @note
+// No checking
+l.promote: { [syms; nsyms] .t.msyms:syms;
+             { .t.msyms:(.t.msyms _ .t.msyms ? x) } each nsyms;
+             a:raze nsyms,.t.msyms;
+             a }
+
+// @brief Moves the columns named in the list nsyms to the front of the columns of the table t.
+//
+// Uses sch_l_promote()
+// @note
+// No checking
+promote: { [nsyms;t] xcols[.sch.l.promote[cols t; nsyms];t] }
+
+// @brief Pad a string x with character c to length y 
+overlay:{ [x;y;c] ((y - count x)#enlist(c)),x }
+
 \d .
 
 // @}
@@ -386,13 +462,3 @@ flipper: { [tbl1;keying]
 /  comment-start: "/  "
 /  comment-end: ""
 /  End:
-
-
-
-
-
-
-
-
-
-
