@@ -154,7 +154,13 @@ qsource: { [tfile]
 	  enlist("") }
 
 // @brief If a name is undefined.
+//
 // Check if the name appears in the context ctx.
+// @note
+// Expunge a name from a context is simply
+// @code
+// delete a from `.
+// @endcode
 undef: { [ctx;name] (count key ctx) = ((key ctx)?name) }
 
 // @brief List joined with its indices.
@@ -366,6 +372,7 @@ a2sym: { [tbl;asym]
 // @endcode
 // Useful for extracting from a mapping table:
 // @code
+// a2mapping[foliotypes;`name;`tenor;`nvalue;`ovalue]
 // tenors:select nvalue by ovalue from foliotypes where name in `tenor
 // @endcode
 a2mapping: { [tbl;n;v;c;k]
@@ -392,6 +399,35 @@ a2remap: { [tbl;asym;ttbl;tvalue]
 	  b: (enlist `i)!enlist `i;
 	  a: (enlist asym)!enlist (f[;ttbl;tvalue];asym);
 	  ![tbl;();0b;a] }
+
+// @brief Select a key field c from a table tbl where the column n is null
+//
+// Select fields that have a null value in the column named by n.
+// The return valuesare null
+// @param tbl table with a columns n and c
+// @return a list of distinct c values
+//
+// @note
+// @code
+// a2null[tdb2;`sandpsector;`clientassetid]
+// select clientassetid by i from tdb2 where null sandpsector
+// @endcode
+// @note
+// Does not find the keys with a "by"
+
+a2null: { [tbl;n;c]
+	 k:`i;
+         c1: ( enlist (null;n) );
+	 b: (enlist k)!enlist k;
+	 a: (enlist c)!enlist ({first x};c);
+	 distinct (value ?[tbl;c1;b;a])[c] }
+
+// List the cols in a table except the first n in a table with a prefix
+rename: { [l; n; prfx ]
+	 m:n#(l);
+	 mx:{ `$(y,(string x)) }[;prfx] each (n)_(l);
+	 (m, mx) }
+
 
 // @brief Generates a file name with the given MIME extension and saves to it.
 //
