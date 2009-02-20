@@ -7,7 +7,7 @@ A GCC compiler (3.4.2) was used.
 
 The smet directory has to be configured to use gnulib. In that directory, 
 
- ~/src/gnulib/gnulib-tool --libtool --import memchr memcpy strndup strerror error getopt long-options stdint
+ ~/src/gnulib/gnulib-tool --libtool --import memchr memcpy strndup strerror error getopt long-options stdint crc
 
 You then need to autoreconf, and configure and make.
 

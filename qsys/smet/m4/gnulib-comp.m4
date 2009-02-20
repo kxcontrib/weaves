@@ -46,6 +46,7 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='lib'
+  gl_CRC
   gl_HEADER_ERRNO_H
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
@@ -197,6 +198,8 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/link-warning.h
+  lib/crc.c
+  lib/crc.h
   lib/errno.in.h
   lib/error.c
   lib/error.h
@@ -220,6 +223,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/version-etc.c
   lib/version-etc.h
   lib/wchar.in.h
+  m4/crc.m4
   m4/errno_h.m4
   m4/error.m4
   m4/extensions.m4

@@ -6,10 +6,10 @@ t1tot2.csv:
 #  if you write a self-test script named `chk', uncomment the
 #  following and add `chk' to the EXTRA_DIST list
 
-TESTS = names.sh
+TESTS = names.sh egcrc.sh
 TESTS_ENVIRONMENT = $(SHELL) -x 
 
-EXTRA_DIST = t1.csv t2.csv names0.q names1.q $(BUILT_SOURCES) $(TESTS)
+EXTRA_DIST = t1.csv t2.csv names0.q names1.q egcrc.q $(BUILT_SOURCES) $(TESTS)
 
 
 
