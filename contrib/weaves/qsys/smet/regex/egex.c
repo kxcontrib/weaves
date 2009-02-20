@@ -18,6 +18,8 @@ Provide regular expression function for q/kdb.
 #include "egex0.h"
 #include "kish.h"
 
+#include "crc.h"
+
 /** \addtogroup cregex
    C to Q regular expressions
    @{
@@ -120,6 +122,35 @@ K q_get_first_cpu_frequency(K x)
 {
   static double frequency = -1.0;
   return kf(frequency);
+}
+
+/** 
+ * Return a CRC-32 for a string.
+ * 
+ * @param str string
+ * 
+ * @return an int
+ */
+
+K q_crc32(K str)
+{
+  char * s;
+  K results;
+  uint32_t r;
+
+  /* Pair of strings required */
+  if (str->t != 10) return re1_err(RE1_ERR);
+
+  if (!(s = kstrdup(str))) {
+    if (s) free(s);
+    return re1_err(RE1_ERR);
+  }
+
+  r = crc32(s, strlen(s));
+
+  results = kj(r);
+
+  return results;
 }
 
 /** @} */

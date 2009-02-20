@@ -23703,6 +23703,18 @@ fi
 
 
 
+  gl_LIBOBJS="$gl_LIBOBJS crc.$ac_objext"
+
+
+
+
+
+
+
+
+
+
+
 
 
 

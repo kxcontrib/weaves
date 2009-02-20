@@ -17,6 +17,14 @@
 
 read_cycles:.egex.lib 2:(`q_get_first_cpu_frequency;1)
 
+/ Simple CRC-32
+
+.crc32.str:.egex.lib 2:(`q_crc32;1)
+
+0N!("crc32: ",string .crc32.str["abc"]);
+0N!("crc32: ",string .crc32.str["abc1"]);
+
+
 / in: two args; out: boolean
 matchre: .egex.lib 2:(`q_match;2)
 markre: .egex.lib 2:(`q_re_location;2)

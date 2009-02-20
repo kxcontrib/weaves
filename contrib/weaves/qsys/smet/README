@@ -23,6 +23,7 @@ Comments are welcome.
 	- Walter Eaves <Walter.Eaves@bigfoot.com>
 
 The regular expression code was written by me from examples I found.
+The CRC code is from gnulib.
 
 The Levenshtein code comes from a Python module available under the
 GNU licence. The following notes come from that source code.
