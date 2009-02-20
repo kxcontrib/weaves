@@ -22,10 +22,19 @@ mark1: .regex.i.lib 2:(`q_re_location1;3)
 .i.space: .regex.i.lib 2:(`q_re_despace;2)
 .i.punct: .regex.i.lib 2:(`q_re_depunct;2)
 
-space: .i.space[;1]
+// Removes all punctuation marks.
 punct: .i.punct[;1]
 
-clean: { [x] space punct x }
+// Reduces multiple spaces to just one.
+space: .i.space[;1]
+
+// Removes all spaces.
+space0: { [x] x[where not x in " "] }
+
+clean: { [x] .regex.space .regex.punct x }
+clean1: { [x] .regex.space0 .regex.space .regex.punct x }
+
+elide0: { [x;y] a:(" " vs x); b:{ $[ x ~ y;"";x] }[;y] each a; .regex.space (" " sv b) }
 
 \d .
 
@@ -51,6 +60,22 @@ clean: { [x] space punct x }
 / wreplace should not be used.
 / The fourth argument is the weight to give to prefix
 .smet.jrw.r: .regex.i.lib 2:(`q_lev_jaro_winkler_ratio;4)
+
+// Cyclic redundancy checks
+
+\d .crc
+
+i.lib:.regex.i.lib
+
+// Basic string based.
+// @return long unsigned integer
+i.str:.crc.i.lib 2:(`q_crc32;1)
+
+// String encoded
+// @return string
+str2str: { .Q.x10 .crc.i.str[ lower .regex.space0 .regex.space .regex.punct x ] }
+
+\d
 
 
 
