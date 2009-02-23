@@ -13,22 +13,23 @@
 
 \d .trdr
 
-updt: { [x] servers::servers }
+updt: { [x] servers::servers; props::props; }
 
 // Connections pairings table.
 // Connections for auto-withdraw on disconnect
 cp:()!()
 
 // Reference counted types.
-ttypes: ( [`symbol$k:()] `symbol$v:(); `int$ni:0N )
+ttypes: ( [k:`symbol$()] v:`symbol$(); ni:`int$() )
 
-// Basic table: s is an hsym, stype and tprop map to the table
-offers0: ([`symbol$n:()] `symbol$s:(); `.trdr.ttypes$ttype:() )
+// Table of properties: offer and then name and value
+tprops: ( [] toffer:(); tname:(); tvalue:() )
+tprops:select by toffer,tname from tprops
+
+// Basic table: s is an hsym, ttype and tprop map to their tables
+offers0: ([n:`symbol$()] s:`symbol$(); ttype:`.trdr.ttypes$() )
 
 offers: offers0;
-
-/ Table of properties: offer and then name and value
-tprops: ( [`.trdr.offers$o:()] `symbol$nm:(); `symbol$vl:() )
 
 status: { show .trdr.cp; 0N!"offers"; show .trdr.offers; 0N!"types"; show .trdr.ttypes; 0N!"props"; show .trdr.tprops; }
 
@@ -40,9 +41,9 @@ i.export: { [me;ptype;p;tnonce]
 	   n: $[null tnonce; .trdr.nonce .z.w; tnonce];
 	   0N!("i.export: me;t;p: "; me; (ptype; first p; last p); .z.w );
 	   0N!("i.export: n:tnonce"; (n; tnonce) );
+	   insert[`.trdr.tprops;(n,p)];
 	   insert[`.trdr.offers;(n;me;ptype)];
 	   .trdr.ttypes::update ni:ni+1 from .trdr.ttypes where k = ptype;
-	   upsert[`.trdr.tprops;(`.trdr.offers$n; first p; last p)];
 	   .trdr.cp[n]:.z.w;
 	   .trdr.updt`; n }
 
@@ -54,17 +55,15 @@ export: { [x] .trdr.i.export[x[0];x[1];x[2];`] }
 
 // Remove the offer, no need for a list version.
 // @note
-// Some messing about with types. tprops holds a number of null entries. And won't delete
-// using \c `.trdr.offers$`, so I had to force a string test.
+// The offer key in tprops can't be used to delete with.
 withdraw: { [offer] 
 	   if[ not .sys.is_key[.trdr.offers;offer]; : offer];
 	   toffer:.trdr.offers offer;
 	   0N!("withdraw0:"; offer; toffer; .z.w);
-	   0N!("withdraw1:";select from .trdr.tprops where o in `.trdr.offers$offer);
-	   delete from `.trdr.tprops where o in `.trdr.offers$offer;
-	   delete from `.trdr.tprops where { 0 = count (string x) } each o;
+	   0N!("withdraw1:"; select from .trdr.tprops where toffer = offer);
 	   .trdr.ttypes:update ni:ni-1 from .trdr.ttypes where k in toffer`ttype;
 	   delete from `.trdr.offers where n in offer;
+	   delete from `.trdr.tprops where toffer in offer;
 	   .trdr.updt`; offer }
 
 // Modify is used remotely by a list invocation
@@ -77,7 +76,7 @@ i.modify: { [offer;ptype;tprops]
 	      insert[`.trdr.ttypes;(ptype; toffer`s;0)] ];
 	   .trdr.offers:update ttype:ptype from .trdr.offers where n = offer;
 	   .trdr.ttypes:update ni:ni+1 from .trdr.ttypes where k = ptype;
-	   .trdr.tprops:update nm:first tprops, vl:last tprops from .trdr.tprops where o = offer;
+	   .trdr.tprops:update tname:first tprops, tvalue:last tprops from .trdr.tprops where toffer = offer;
 	   .trdr.updt`; offer }
 
 
@@ -88,7 +87,7 @@ modify: { [x] .trdr.i.modify[ x[0];x[1];x[2] ] }
 i.query: { [stype;constr;prefs;omax]
 	 os:exec n from .trdr.offers where ttype = stype;
 	 if[ not count os; : `.trdr.offers$() ];
-	 ps:exec o from .trdr.tprops where (o in os) and (nm in constr) and (vl in prefs);
+	 ps:exec toffer from .trdr.tprops where (toffer in os) and (tname in constr) and (tvalue in prefs);
 	 if[ not count ps; : `.trdr.offers$() ];
 	 offer:omax#(.trdr.offers flip enlist ps)[`s];
 	 if[.sys.is_arg`verbose; 0N!offer];
@@ -102,7 +101,9 @@ restore: { dc:get `.trdr; `.trdr set dc }
 \d .
 
 servers:()
-.trdr.updt: { servers::select offer:n, server:s, ttype:ttype.k, offers:ttype.ni, prop:txf[.trdr.tprops;n;`nm], propv:txf[.trdr.tprops;n;`vl], service: { .sch.a2url[x;x] } each s from .trdr.offers }
+props:()
+.trdr.updt: { props::select tname, tvalue by n:toffer from .trdr.tprops;
+	     servers::select offer:n, server:s, ttype:ttype.k, pn:props[([]n);`tname], pv:props[([]n);`tvalue], offers:ttype.ni, service: { .sch.a2url[x;x] } each s from .trdr.offers }
 
 .trdr.ttypes,:([k:enlist(`basic)]; v:enlist(`$"Basic service"); ni:0 )
 .trdr.ttypes,:([k:enlist(`trdr)]; v:enlist(`$"Trader service"); ni:0 )
