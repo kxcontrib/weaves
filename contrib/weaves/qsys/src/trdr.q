@@ -100,6 +100,10 @@ restore: { dc:get `.trdr; `.trdr set dc }
 
 \d .
 
+.os.remap: { [x] hspec:(":" vs (string x));
+	    hspec[1]:$[ hspec[1] ~ "dbasumdh"; "summitdmz"; hspec[1] ];
+	    .sch.a2hsym[`$hspec[1]; `$hspec[2]] }
+
 servers:()
 props:()
 .trdr.updt: { props::select tname, tvalue by n:toffer from .trdr.tprops;
