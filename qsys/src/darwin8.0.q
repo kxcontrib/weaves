@@ -329,11 +329,25 @@ zs:{`d`P`L`G`D!(system"d"),v[1 2 3],enlist last v:value x}
 \d .sch
 
 // Update a table so that the attribute named with the symbol asym is cast to a symbol
+a2str: { [tbl;asym]
+	f: { string x };
+	b: (enlist `i)!enlist `i;
+	a: (enlist asym)!enlist (f;asym);
+	![tbl;();b;a] }
+
+// Convert a table's symbols to strings and save the resulting table.
+t2str: { [tsym]
+	 .t.tbl1:value string tsym;
+	 v:exec c from (meta .t.tbl1) where t = "s";
+	 { .t.tbl1::.sch.a2str[.t.tbl1;x] } each v;
+	 .t.tbl1 }
+
+// Update a table so that the attribute named with the symbol asym is cast to a symbol
 a2sym: { [tbl;asym]
-	     f: { `$(string first x) };
-	     b: (enlist `i)!enlist `i;
-	     a: (enlist asym)!enlist (f;asym);
-	     ![tbl;();b;a] }
+	f: { `$(string first x) };
+	b: (enlist `i)!enlist `i;
+	a: (enlist asym)!enlist (f;asym);
+	![tbl;();b;a] }
 
 
 // Make an hsym.
@@ -341,13 +355,17 @@ a2hsym:{ [x;y]
 	p:":" sv ("";(string x);(string y));
 	hsym `$p }
 
-// Select from a table where a name n is in a set of values v, keying on the column k and returning 
-// the value in the column c.
+// Make a url from an hsym and a symbol
+a2url: { [h;y] a:("http://",(1_string h)); b:("<a href=\"",a,"\">",(string y),"</a>"); b }
+
+
+// Select from a table where a name n is in a set of values v, keying on the column k and 
+// returning the value in the column c.
 a2list: { [tbl;n;v;c;k]
-	      c1: ( enlist (in;n;enlist v) );
-	      b: (enlist k)!enlist k;
-	      a: (enlist c)!enlist ({first x};c);
-	      ?[foliotypes;c1;b;a] }
+	 c1: ( enlist (in;n;enlist v) );
+	 b: (enlist k)!enlist k;
+	 a: (enlist c)!enlist ({first x};c);
+	 ?[foliotypes;c1;b;a] }
 
 // Update a table so that the attribute named with the symbol asym is cast to a symbol.
 // @note
@@ -428,6 +446,10 @@ rename: { [l; n; prfx ]
 	 mx:{ `$(y,(string x)) }[;prfx] each (n)_(l);
 	 (m, mx) }
 
+// Given a table name as a symbol and a string mime type return an hsym.
+mimefile: { [tsym;mime] 
+	   v:(.sys.i.cwd,.os.path_sep,(string tsym),".",mime);
+	   hsym `$v }
 
 // @brief Generates a file name with the given MIME extension and saves to it.
 //
@@ -435,12 +457,18 @@ rename: { [l; n; prfx ]
 // @note
 // The path of the saved file is to the initial current working directory.
 t2mime: { [tsym; mime]
-	 v:(.sys.i.cwd,.os.path_sep,(string tsym),".",mime);
-	 v1:hsym `$v;
+	 v1:.sch.mimefile[tsym;mime];
 	 save v1 }
 
 // @brief Save to a CSV file.
 t2csv:t2mime[;"csv"]
+
+// Convert a table's symbols to strings and save the resulting table.
+t2csv2: { [tsym]
+	 .t.tbl1:.sch.t2str[tsym];
+	 v:save mimefile[tsym;"csv"] set .t.tbl1;
+	 delete tbl1 from `.t;
+	 v }
 
 // @brief Flips a table: columns become rows.
 //

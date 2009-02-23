@@ -13,6 +13,8 @@
 
 \d .trdr
 
+updt: { [x] servers::servers }
+
 // Connections pairings table.
 // Connections for auto-withdraw on disconnect
 cp:()!()
@@ -28,12 +30,10 @@ offers: offers0;
 / Table of properties: offer and then name and value
 tprops: ( [`.trdr.offers$o:()] `symbol$nm:(); `symbol$vl:() )
 
-status: { show .trdr.cp; show .trdr.offers; show .trdr.ttypes; show .trdr.tprops; }
+status: { show .trdr.cp; 0N!"offers"; show .trdr.offers; 0N!"types"; show .trdr.ttypes; 0N!"props"; show .trdr.tprops; }
 
-status: { select offer:n, server:s, ttype:ttype.k, offers:ttype.ni, prop:txf[.trdr.tprops;n;`nm], propv:txf[.trdr.tprops;n;`vl] from .trdr.offers }
-
-/ Add an offer: an hsym, a type and a name-value pair
-/ Add an entry to the connection pairings
+// Add an offer: an hsym, a type and a name-value pair.
+// Add an entry to the connection pairings.
 i.export: { [me;ptype;p;tnonce]
 	   if[ not .sys.is_key[.trdr.ttypes;ptype];
 	      insert[`.trdr.ttypes;(ptype; me;0)] ];
@@ -44,7 +44,7 @@ i.export: { [me;ptype;p;tnonce]
 	   .trdr.ttypes::update ni:ni+1 from .trdr.ttypes where k = ptype;
 	   upsert[`.trdr.tprops;(`.trdr.offers$n; first p; last p)];
 	   .trdr.cp[n]:.z.w;
-	   n }
+	   .trdr.updt`; n }
 
 // Service trader - a naming service for Q.
 // When an important service appears wants to announce itself, it uses
@@ -52,16 +52,20 @@ i.export: { [me;ptype;p;tnonce]
 // When a client wants to see if a service is available, it uses the client
 export: { [x] .trdr.i.export[x[0];x[1];x[2];`] }
 
-// Remove the offer, no need for a list version
+// Remove the offer, no need for a list version.
+// @note
+// Some messing about with types. tprops holds a number of null entries. And won't delete
+// using \c `.trdr.offers$`, so I had to force a string test.
 withdraw: { [offer] 
 	   if[ not .sys.is_key[.trdr.offers;offer]; : offer];
 	   toffer:.trdr.offers offer;
-	   0N!("withdraw:"; offer; toffer; .z.w);
-	   0N!("withdraw:";select from .trdr.tprops where o = offer);
-	   .trdr.tprops:delete from .trdr.tprops where o = `.trdr.offers$offer;
-	   .trdr.offers:delete from .trdr.offers where n = offer;
+	   0N!("withdraw0:"; offer; toffer; .z.w);
+	   0N!("withdraw1:";select from .trdr.tprops where o in `.trdr.offers$offer);
+	   delete from `.trdr.tprops where o in `.trdr.offers$offer;
+	   delete from `.trdr.tprops where { 0 = count (string x) } each o;
 	   .trdr.ttypes:update ni:ni-1 from .trdr.ttypes where k in toffer`ttype;
-	   offer }
+	   delete from `.trdr.offers where n in offer;
+	   .trdr.updt`; offer }
 
 // Modify is used remotely by a list invocation
 i.modify: { [offer;ptype;tprops] 
@@ -74,7 +78,7 @@ i.modify: { [offer;ptype;tprops]
 	   .trdr.offers:update ttype:ptype from .trdr.offers where n = offer;
 	   .trdr.ttypes:update ni:ni+1 from .trdr.ttypes where k = ptype;
 	   .trdr.tprops:update nm:first tprops, vl:last tprops from .trdr.tprops where o = offer;
-	   offer }
+	   .trdr.updt`; offer }
 
 
 // List version - I'm hoping that the call on itself enforces locking.
@@ -92,9 +96,13 @@ i.query: { [stype;constr;prefs;omax]
 
 query: { [x] .trdr.i.query[ x[0];x[1];x[2];x[3] ] }
 
+archive: { `:trdr set value `.trdr }
+restore: { dc:get `.trdr; `.trdr set dc }
+
 \d .
 
-// @}
+servers:()
+.trdr.updt: { servers::select offer:n, server:s, ttype:ttype.k, offers:ttype.ni, prop:txf[.trdr.tprops;n;`nm], propv:txf[.trdr.tprops;n;`vl], service: { .sch.a2url[x;x] } each s from .trdr.offers }
 
 .trdr.ttypes,:([k:enlist(`basic)]; v:enlist(`$"Basic service"); ni:0 )
 .trdr.ttypes,:([k:enlist(`trdr)]; v:enlist(`$"Trader service"); ni:0 )
@@ -108,6 +116,8 @@ query: { [x] .trdr.i.query[ x[0];x[1];x[2];x[3] ] }
 
 .trdr.t:(":" vs .trdr.s)
 
+// @}
+
 / Check hosts match
 if[ (.z.h <> `$.trdr.t[1]); 0N!("trdr: bad host"); .sys.exit 1];
 
@@ -119,13 +129,11 @@ if[-11h = type .trdr.tp1; 0N!("trdr: bad port"; .trdr.t[2]; .trdr.tp1); .sys.exi
 // This is the server implementation's first export offer - itself.
 // It uses a reserved port: usually 15001
 // It is usually only used remotely
-ex1:.trdr.export (hsym `$.trdr.s;`trdr;`impl`qsys)
-
-status:.trdr.status
+.trdr.ex1:.trdr.export (hsym `$.trdr.s;`trdr;`impl`qsys)
 
 0N!("query: "; .trdr.query (`trdr;enlist(`impl); enlist(`qsys);1));
 
-0N!("modify: "; .trdr.modify (ex1;`trdr;(`impl`qsys)));
+0N!("modify: "; .trdr.modify (.trdr.ex1;`trdr;(`impl`qsys)));
 
 // Automatically deletes all offers from disconnected clients
 .z.pc: { [x]
@@ -133,7 +141,12 @@ status:.trdr.status
 	      .trdr.withdraw[n];
 	      .trdr.cp::.trdr.cp _ n]; }
 
-show status`
+.trdr.updt`
+
+\l doth.k
+
+status:.trdr.status
+status`
 
 \
 
@@ -164,10 +177,6 @@ status`
 \
 
 0N!("withdraw: "; .trdr.withdraw[ex1]);
-
-show .trdr.ttypes
-show .trdr.tprops
-show .trdr.offers
 
 
 

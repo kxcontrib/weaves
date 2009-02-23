@@ -8,8 +8,8 @@
 // @endcode
 // It will invoke sys_exit() on the host on a machine called ubu at port 14901.
 
-// @addtogroup commander
-// Contains the commander.q script. This can be used to 
+// @addtogroup commanders Managers
+// The commander.q script. This can be used to 
 // send a single command to named host on port with -cmd
 // Instructs a remote load of a script with -rload.
 // It can be passed -rhost, -port or -hsym :host:port to specify the host.
