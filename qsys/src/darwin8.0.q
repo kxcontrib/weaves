@@ -113,6 +113,9 @@ popd: { [d] if[ 0 = count .os.dirstack; : .os.dirstack];
        .os.dirstack:(d)_.os.dirstack;
        value("\\cd ",first ndir) }
 
+// Allows one to re-map an hsym. Used by .sch.url
+remap: { [ahsym] ahsym }
+
 \d .
 
 // @}
@@ -356,7 +359,7 @@ a2hsym:{ [x;y]
 	hsym `$p }
 
 // Make a url from an hsym and a symbol
-a2url: { [h;y] a:("http://",(1_string h)); b:("<a href=\"",a,"\">",(string y),"</a>"); b }
+a2url: { [h;y] a:("http://",(1_string .os.remap[h])); b:("<a href=\"",a,"\">",(string y),"</a>"); b }
 
 
 // Select from a table where a name n is in a set of values v, keying on the column k and 
