@@ -331,6 +331,11 @@ zs:{`d`P`L`G`D!(system"d"),v[1 2 3],enlist last v:value x}
 
 \d .sch
 
+// True is a string begins with a character 
+// @todo
+// Check for no spaces or punctuation
+is_token: { all enlist (first upper 1#string x) within "AZ" }
+
 // Update a table so that the attribute named with the symbol asym is cast to a symbol
 a2str: { [tbl;asym]
 	f: { string x };
