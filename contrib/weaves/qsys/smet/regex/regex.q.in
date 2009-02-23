@@ -71,9 +71,9 @@ i.lib:.regex.i.lib
 // @return long unsigned integer
 i.str:.crc.i.lib 2:(`q_crc32;1)
 
-// String encoded
+// The base36 encoding of the CRC32 of the cleaned  string
 // @return string
-str2str: { .Q.x10 .crc.i.str[ lower .regex.space0 .regex.space .regex.punct x ] }
+str2str: { [str] .Q.x12 .crc.i.str[ lower .regex.space0 .regex.space .regex.punct str ] }
 
 \d
 
