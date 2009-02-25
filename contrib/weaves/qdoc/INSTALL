@@ -10,6 +10,13 @@ unlimited permission to copy, distribute and modify it.
 Basic Installation
 ==================
 
+You will need to use gnulib-tool before you can run the build procedure.
+
+I don't think that configure on its own will work. You will need to use 
+autoreconf.
+
+There is a script autogen.sh that gives the steps.
+
 These are generic installation instructions.
 
    The `configure' shell script attempts to guess correct values for
