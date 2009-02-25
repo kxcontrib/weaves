@@ -4,7 +4,7 @@
 # This script is an example of how to run configure and build
 
 cd smet
-eval `grep gnulib-tool INSTALL`
+./autogen.sh
 cd -
 
 autoreconf --force --install

@@ -343,12 +343,19 @@ a2str: { [tbl;asym]
 	a: (enlist asym)!enlist (f;asym);
 	![tbl;();b;a] }
 
-// Convert a table's symbols to strings and save the resulting table.
-t2str: { [tsym]
-	 .t.tbl1:value string tsym;
-	 v:exec c from (meta .t.tbl1) where t = "s";
-	 { .t.tbl1::.sch.a2str[.t.tbl1;x] } each v;
-	 .t.tbl1 }
+a2str1: { [tbl;asym]
+	b: (enlist `i)!enlist `i;
+	a: (enlist asym)!enlist (enlist("");asym);
+	![tbl;();b;a] }
+
+// Convert a table's symbols to strings.
+t2str: { [tbl]
+	.t.tbl:tbl;
+	v:exec c from (meta .t.tbl) where t = "s";
+	{ .t.tbl::.sch.a2str[.t.tbl;x] } each v;
+	v:exec c from (meta .t.tbl) where t = " ";
+	{ .t.tbl::.sch.a2str1[.t.tbl;x] } each v;
+	.t.tbl }
 
 // Update a table so that the attribute named with the symbol asym is cast to a symbol
 a2sym: { [tbl;asym]
@@ -473,9 +480,8 @@ t2csv:t2mime[;"csv"]
 
 // Convert a table's symbols to strings and save the resulting table.
 t2csv2: { [tsym]
-	 .t.tbl1:.sch.t2str[tsym];
-	 v:save mimefile[tsym;"csv"] set .t.tbl1;
-	 delete tbl1 from `.t;
+	 tbl1:.sch.t2str[value string tsym];
+	 v:save mimefile[tsym;"csv"] set tbl1;
 	 v }
 
 // @brief Flips a table: columns become rows.
