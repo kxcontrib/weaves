@@ -319,6 +319,16 @@ is_key: { [t;k] ((key t) ? k) < count (key t) }
 // Does appear in the tutorial from Borror.
 zs:{`d`P`L`G`D!(system"d"),v[1 2 3],enlist last v:value x}
 
+// @brief Triggering on a switch on the command-line.
+//
+// Any of the values with the command-line argument named by ssym returns true.
+trigger: { [ssym;f;v]
+	  if[not .sys.is_arg ssym; :0b ];
+	  arg: .sys.arg ssym;
+	  args: $[ 0 > type arg; enlist(string arg); arg];
+	  args:{ (type y)$x }[;v] each args;
+	  any v f\: args }
+
 \d .
 
 // @}
@@ -460,6 +470,9 @@ rename: { [l; n; prfx ]
 	 m:n#(l);
 	 mx:{ `$(y,(string x)) }[;prfx] each (n)_(l);
 	 (m, mx) }
+
+// Rename a matching symbol in a list
+rename1: { [l;x;y] l[l?x]:y; l }
 
 // Given a table name as a symbol and a string mime type return an hsym.
 mimefile: { [tsym;mime] 
