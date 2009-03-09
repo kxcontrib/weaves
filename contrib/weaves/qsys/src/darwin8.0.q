@@ -282,6 +282,23 @@ type_arg: { [name]
 // @brief Returns true if a argument is present on the command-line.
 is_arg: { [name] (type null) <> type type_arg name }
 
+// @brief Argument trigger - looks for an argument with a matching number.
+//
+// If the argument is present and has an integer value
+// that is true with the function given.
+// Stop if a test argument has been given and is greater than 1 (the default).
+// @param arg command-line argument to look for
+// @param f comparison function
+// @param v comparison value
+trigger: { [arg; f; v]
+	  if[.sys.is_arg[arg];
+	     not .sys.type_arg[arg];
+	     sarg: @[ { "H"$x }; first .sys.arg[arg]; `$"unint" ];
+	     if[ -11h = type sarg; :0b ];
+	     : .[f;(sarg;v)] ];
+	  0b }
+
+
 // @brief Lowest port for use by Q servers.
 i.lowerport:10000
 // @brief Highest port for use by Q servers.
@@ -387,10 +404,11 @@ a2url: { [h;y] a:("http://",(1_string .os.remap[h])); b:("<a href=\"",a,"\">",(s
 // Select from a table where a name n is in a set of values v, keying on the column k and 
 // returning the value in the column c.
 a2list: { [tbl;n;v;c;k]
+	 tbl: $[ -11h = type tbl; value string tbl; tbl];
 	 c1: ( enlist (in;n;enlist v) );
-	 b: (enlist k)!enlist k;
+	 b: $[all null k; 0b; (enlist k)!enlist k];
 	 a: (enlist c)!enlist ({first x};c);
-	 ?[foliotypes;c1;b;a] }
+	 ?[tbl;c1;b;a] }
 
 // Update a table so that the attribute named with the symbol asym is cast to a symbol.
 // @note

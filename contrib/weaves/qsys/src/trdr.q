@@ -101,7 +101,7 @@ restore: { dc:get `.trdr; `.trdr set dc }
 \d .
 
 .os.remap: { [x] hspec:(":" vs (string x));
-	    hspec[1]:$[ hspec[1] ~ "dbasumdh"; "summitdmz"; hspec[1] ];
+	    hspec[1]:$[ hspec[1] ~ "dbasumdh"; "summitdmz.dc.depfa.com"; hspec[1] ];
 	    .sch.a2hsym[`$hspec[1]; `$hspec[2]] }
 
 servers:()
