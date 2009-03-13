@@ -30,8 +30,8 @@ CLEANFILES = qoxygen.c lex.yy.cc lex.yy.c rtoc.c $(BUILT_SOURCES)
 EXTRA_DIST=mtoc.lsm.in mtoc.spec.in mtoc.texinfo rtocc.l matlab-sample.m R-sample.R R-sample1.R tester fdoxy qoxygen.l
 
 #  build and install the .info pages
-info_TEXINFOS = mtoc.texinfo
-mtoc_TEXINFOS = ../gpl.texinfo
+# info_TEXINFOS = mtoc.texinfo
+# mtoc_TEXINFOS = ../gpl.texinfo
 
 #  install the man pages
 man_MANS=mtoc.1 rtoc.1

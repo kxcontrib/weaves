@@ -45,12 +45,12 @@ int yyFlexLexer::yywrap() {
     return ::yywrap();
 }
 
-%}
+int comment_caller;
+string fname;
+int rlinecount = 0;
+int rflinecount = 0; // lineno() doesn't work
 
-	int comment_caller;
-	string fname;
-	int linecount = 0;
-	int flinecount = 0; // lineno() doesn't work
+%}
 
 ID	[.a-zA-Z][0-9a-zA-Z_.]*
 QID	\"[.a-zA-Z][0-9a-zA-Z_. ]*\"
