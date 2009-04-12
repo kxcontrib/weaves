@@ -1,0 +1,13 @@
+Package: q4r
+Type: Package
+Title: Access to a q/kdb+ time-series server
+Version: 0.1
+Date: 2009-02-28
+Author: Walter Eaves
+Maintainer: Walter Eaves <Walter.Eaves@bigfoot.com>
+Description: Provides access to the q/kdb+ server.
+ This uses the rserver.so shared object. This should be installed in the first of the 
+ .libPaths() directories. The the .onLoad() function in the library will work.
+ You must build and install the shared object yourself. 
+License: GPL version 2 or later.
+Packaged: Tue Mar 10 17:12:36 2009; rq4r
