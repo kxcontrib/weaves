@@ -8,5 +8,5 @@ cd smet
 cd -
 
 autoreconf --force --install
-./configure --prefix=$HOME --with-qhomedir=$HOME/src/q --with-string-metrics --with-qtrdrhost=ubu --with-qtrdrport=15001
+./configure --prefix=$HOME --with-qhomedir=$HOME/src/q --with-string-metrics --with-qtrdrhost=ubu --with-qtrdrport=15001 --disable-dependency-tracking
 make
