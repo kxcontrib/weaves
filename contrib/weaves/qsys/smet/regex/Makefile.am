@@ -3,14 +3,16 @@ CPPFLAGS = -I${top_srcdir}/lib -DNO_PYTHON
 
 ACLOCAL_AMFLAGS = -I m4
 
-noinst_PROGRAMS = egext
-egext_SOURCES = egext.c
-egext_LDADD = c.o libqregex.la -lpthread -lm
+# The build of the test program doesn't work under Solaris.
+
+# noinst_PROGRAMS = egext
+# egext_SOURCES = egext.c
+# egext_LDADD = c.o libqregex.la -lpthread -lm
 
 BUILT_SOURCES = c.o
 
 c.o:
-	ln -sf ../../../../../kx/kdb+/l32/c.o .
+	echo set link for c.o
 
 pkglib_LTLIBRARIES = libqregex.la
 libqregex_la_LIBADD = $(LTLIBINTL) ${top_srcdir}/lib/libgnu.la
