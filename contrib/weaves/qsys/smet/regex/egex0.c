@@ -11,6 +11,7 @@ Provide regular expression function for q/kdb.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include <string.h>
 
@@ -66,23 +67,53 @@ struct id_regex_t {
   regex_t * patt;
 };
 
-/* problem with quoting square brackets */
+/* problem with quoting square brackets - see the manual */
 
 static struct id_regex_t regexs[] = {
-  { "[!,._;:&/%^£#\"\\{}()+=-]+", 0 },
+  { "[]\[!,._;:&/%^£$#`\'\"\\{}()+=-]+", 0 },
   { " [ ]+", 0 },
   { "", 0 }, /* end */
-  /* attempts */
-  { "[^:alnum: ]+", 0 },
+  { "", 0 }, /* end */
+  { "", 0 }, /* end */
+  { "", 0 }, /* end */
+  { "", 0 }, /* end */
+  { "", 0 }, /* end */
+  { "", 0 }, /* end */
   { "", 0 }
 };
 
+#define RE1_MAX_SIZE (sizeof(regexs) / sizeof(regexs[0]))
+
+int re1_factory_last() {
+  int i;
+  
+  for (i=RE1_SIZE; i<RE1_MAX_SIZE; i++)
+    if (!regexs[i].patt) return i;
+
+  return -1;
+}
+
+int re1_factory_reset() {
+  int i,f=0;
+
+  for (i=RE1_SIZE; i<RE1_MAX_SIZE; i++)
+    if (regexs[i].patt) {
+      f++;
+      regfree(regexs[i].patt);
+      regexs[i].patt = 0;
+      regexs[i].spatt[0] = '\0';
+    }
+
+  return f;
+}
+
 /* Cached create */
-regex_t * re1_factory(int which) {
+regex_t * re1_factory(int which, const char *str) {
   regex_t * result = 0;
   int err_no = -1;
+  const char *tstr;
 
-  if (which < 0 || which > (RE1_SIZE - 1)) return result;
+  if (which > (RE1_MAX_SIZE - 1)) return result;
 
   /* known */
   if ( (result = regexs[which].patt) ) return result;
@@ -90,20 +121,25 @@ regex_t * re1_factory(int which) {
   if ( !(result = (regex_t *) malloc(sizeof(regex_t)) ) ) {
     return result = 0;
   }
+  
+  if (which < RE1_SIZE) tstr = regexs[which].spatt; else tstr = str;
 
-  if ( (err_no = re1_cc(result, regexs[which].spatt, 0)) ) {
-    if (result) free(result); result = 0;
-    return result;
+  if (!tstr || !strlen(tstr)) return result = 0;
+
+  if ( (err_no = re1_cc(result, tstr, 0)) ) {
+    if (result) free(result);
+    return result = 0;
   }
 
   regexs[which].patt = result;
+  strcpy(regexs[which].spatt, tstr);
 
 #if !defined(NDEBUG)
     fprintf(stderr, "re1_match: result: %p; spatt %s; err_no %d \n",
 	    &regexs[which].patt, regexs[which].spatt, err_no);
 #endif
 
-  return re1_factory(which);
+    return re1_factory(which, 0);
 }
 
 /* POSIX and GNU have different invocation semantics */

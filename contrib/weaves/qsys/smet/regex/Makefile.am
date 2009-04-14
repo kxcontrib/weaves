@@ -3,6 +3,15 @@ CPPFLAGS = -I${top_srcdir}/lib -DNO_PYTHON
 
 ACLOCAL_AMFLAGS = -I m4
 
+noinst_PROGRAMS = egext
+egext_SOURCES = egext.c
+egext_LDADD = c.o libqregex.la -lpthread -lm
+
+BUILT_SOURCES = c.o
+
+c.o:
+	ln -sf ../../../../../kx/kdb+/l32/c.o .
+
 pkglib_LTLIBRARIES = libqregex.la
 libqregex_la_LIBADD = $(LTLIBINTL) ${top_srcdir}/lib/libgnu.la
 libqregex_la_SOURCES = egex0.c egex.c egex1.c Levenshtein.c kish.c smetrics.c version-etc-fsf.c
@@ -17,7 +26,7 @@ noinst_HEADERS = egex0.h  k.h  kish.h  Levenshtein1.h  Levenshtein.h  skel.h
 TESTS = egex.sh smet.sh egex1.sh
 TESTS_ENVIRONMENT = $(SHELL) -x 
 
-q_files_TEST = egex1.q egex.q smet.q
+q_files_TEST = egex1.q egex.q smet.q egex2.q
 q_files = regex.q.in
 
 EXTRA_DIST = README $(TESTS) $(q_files_TEST) $(q_files)

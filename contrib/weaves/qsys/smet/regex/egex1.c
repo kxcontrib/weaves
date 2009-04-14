@@ -45,7 +45,7 @@ K q_re_despace(K str, K opts)
   if (str->t != 10) return re1_err(RE1_ERR);
 
   /* Don't free the result */
-  if ( !(regex = re1_factory(RE1_SPACE)) )
+  if ( !(regex = re1_factory(RE1_SPACE, 0)) )
     return re1_err(RE1_ERR);
 
   if ( !(s = kstrdup(str)) ) {
@@ -96,7 +96,7 @@ K q_re_depunct(K str, K opts)
   if (str->t != 10) return re1_err(RE1_ERR);
 
   /* Don't free the result */
-  if ( !(regex = re1_factory(RE1_PUNCT)) )
+  if ( !(regex = re1_factory(RE1_PUNCT, 0)) )
     return re1_err(RE1_ERR);
 
   if ( !(s = kstrdup(str)) ) {

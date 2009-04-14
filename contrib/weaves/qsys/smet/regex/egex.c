@@ -27,13 +27,22 @@ Provide regular expression function for q/kdb.
 
 /* #undef NDEBUG */
 
-/* Returns a boolean match */
+/** 
+ * Find a location within the string.
+ * 
+ * @param patt The pattern to compile.
+ * @param str The string to search within.
+ * @param opts The options to the search.
+ * 
+ * @return an integer array - first and last position within the string.
+ */
+
 K q_re_location1(K patt, K str, K opts)
 {
   regex_t * regex;
   int err_no;
-  char * p;
-  char * s;
+  char * p = 0;
+  char * s = 0;
   regmatch_t *result;
   K results;
   int nsub = 2; /* has to be at least 2 for POSIX */
@@ -43,27 +52,35 @@ K q_re_location1(K patt, K str, K opts)
   re1_err(RE1_NOERR);
 
   /* Pair of strings required */
-  if (patt->t != 10 || str->t != 10) return re1_err(RE1_ERR);
-
-  if (!(p = kstrdup(patt)) || !(s = kstrdup(str)) ) {
-    if (p) free(p);
-    if (s) free(s);
+  if ( ! ((patt->t == -6 || patt->t == 10) && str->t == 10) ) 
     return re1_err(RE1_ERR);
-  }
 
   /* Set the ignore case (icase) option */
   if (opts->t == -6 && opts->i == 1)
     icase = REG_ICASE;
 
-  /* Make space for the regular expression */
-  regex = (regex_t *) malloc(sizeof(regex_t));
-  memset(regex, 0, sizeof(regex_t));
+  if (!(s = kstrdup(str))) {
+    if (s) free(s);
+    return re1_err(RE1_ERR);
+  }
 
-  if ((err_no = re1_cc(regex, p, icase))) {
-    regfree(regex);
-    free(regex);
-    free(p); free(s);
-    return ki(err_no);
+  if (patt->t == -6) {
+    if (!(regex = re1_factory(patt->i, 0)))
+      return ki(err_no);
+  } else if (patt->t == 10 && !(p = kstrdup(patt))) {
+    if (p) free(p);
+    return re1_err(RE1_ERR);
+  } else {
+    /* Make space for the regular expression */
+    regex = (regex_t *) malloc(sizeof(regex_t));
+    memset(regex, 0, sizeof(regex_t));
+    
+    if ((err_no = re1_cc(regex, p, icase))) {
+      regfree(regex);
+      free(regex);
+      free(p); free(s);
+      return ki(err_no);
+    }
   }
 
 #if !defined(NDEBUG)
@@ -82,21 +99,24 @@ K q_re_location1(K patt, K str, K opts)
 #if !defined(NDEBUG)
   fprintf(stderr, "pair: sizeof %d %d %d \n", sizeof(result), result[0].rm_so, result[0].rm_eo);
 #endif
-  regfree(regex);
-  free(regex);
+  if(patt->t != -6) {
+    regfree(regex);
+    free(regex);
+  }
   free(result);
 
-  free(p); free(s);
+  if (p) free(p);
+  if (p) free(s);
 
   return results;
 }
 
-/* Returns a boolean match */
+/** Returns a boolean match */
 K q_re_location(K patt, K str) {
   return q_re_location1(patt, str, kb(0));
 }
 
-/* Returns a boolean match */
+/** Returns a boolean match */
 K q_match1(K patt, K str, K opts)
 {
   K result = q_re_location1(patt, str, opts);
@@ -107,6 +127,48 @@ K q_match1(K patt, K str, K opts)
 K q_match(K patt, K str)
 {
   return q_match1(patt, str, kb(0));
+}
+
+/** 
+ * Compile a regular expression pattern.
+ * 
+ * @param patt The pattern to compile.
+ * 
+ * @return an integer index into the array that contains the compiled
+ * pattern. This is negative if there is no space left in the array.
+ */
+
+K q_re_compile(K patt) {
+  regex_t * regex;
+  char * p;
+  int idx;
+
+  re1_err(RE1_NOERR);
+
+  /* Pair of strings required */
+  if (patt->t != 10) return re1_err(RE1_ERR);
+
+  if (!(p = kstrdup(patt))) {
+    if (p) free(p);
+    return re1_err(RE1_ERR);
+  }
+
+  idx = re1_factory_last();
+  regex = re1_factory(idx, p);
+
+  if(p) free(p);
+
+  return ki(idx);
+}
+
+/** 
+ * Clear all the cached compiled regular expressions.
+ * 
+ * @return an integer of the number of patterns freed.
+ */
+
+K q_re_reset(K x) {
+  return ki(re1_factory_reset());
 }
 
 /** 
