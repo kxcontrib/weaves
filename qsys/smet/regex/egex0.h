@@ -21,6 +21,8 @@ extern void strtolower(char *s);
 #define RE1_LAST RE1_SPACE
 #define RE1_SIZE RE1_SPACE + 1
 
-extern regex_t * re1_factory(int which);
+extern regex_t * re1_factory(int which, const char *str);
+extern int re1_factory_last();
+extern int re1_factory_reset();
 
 #endif

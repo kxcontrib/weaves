@@ -51,7 +51,7 @@ a:depunct[b;d]
 (type a; a)
 
 0N!("pass: "; 1.0);
-b:"a,  b;  c: a/b \\or a's or d`s or - any! - (any) or [any] or {any}"
+b:"a,  b;  c: a/b \\or a's or d`s or - any! - (any) or [any] or {any} $"
 d:()!()
 a:depunct[b;d]
 (type a; a)
@@ -63,7 +63,7 @@ a:despace[depunct[b;d];d]
 (type a; a)
 
 0N!("pass: "; 1.0);
-b:"a,  b;  c: a/b \\or a's or d`s or - any! - (any) or [any] or {any}"
+b:"a,  b;  c: a/b \\or a's or d`s or - any! - (any) or [any] or {any} $"
 d:()!()
 a:despace[depunct[b;d];d]
 (type a; a)
