@@ -1,4 +1,9 @@
+# weaves
+
 # AM_CFLAGS ?= -DNDEBUG
+
+## qoxygen2 is the original
+## qoxygen is the newer one that uses some C++ and counts lines.
 
 BUILT_SOURCES = lex.cc qlex.cc
 
