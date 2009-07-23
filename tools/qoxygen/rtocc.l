@@ -63,7 +63,7 @@ DEF     (<-)|(=)
 %%
 
 <*>^.*$	{
-	linecount++;
+	rlinecount++;
 	if (yy_flex_debug) (*yyout) << "sm: " << YY_START;
 	REJECT;
 	}
@@ -97,7 +97,7 @@ DEF     (<-)|(=)
 
 <paramList>\)	{
 		  ECHO;
-		  (*yyout) << "{}" << "\t// " << flinecount << " \"" << tfilename << '"';
+		  (*yyout) << "{}" << "\t// " << rflinecount << " \"" << tfilename << '"';
 		  BEGIN(ignore);
 		}
 
@@ -110,7 +110,7 @@ DEF     (<-)|(=)
 	fname = fname.assign(yytext);
         fname = replace_all_copy( fname, "\"", "" );
         fname = replace_all_copy( fname, ".", "_" );
-	flinecount = linecount;
+	rflinecount = rlinecount;
 
 	if (yy_flex_debug) (*yyout) << "id: " << fname;
 	BEGIN(defining);
