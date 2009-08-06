@@ -548,6 +548,73 @@ promote: { [nsyms;t] xcols[.sch.l.promote[cols t; nsyms];t] }
 // @brief Pad a string x with character c to length y 
 overlay:{ [x;y;c] ((y - count x)#enlist(c)),x }
 
+// Using string as an intermediate type, the value of x is cast to that given by y.
+// @param x is the input value
+// @param y is the type string ("d", "e", "c", "s")
+i.cast: { [x;y] $[ y = " "; $[10h = type x; x; string x]; (upper y)$(string x)] }
+
+// Change the type of the column named by asym to the type character given by atype
+// in the table tbl.
+a2retype: { [tbl;asym;atype] 
+	   f: .sch.i.cast[;atype];
+	   b: (enlist `i)!enlist `i;
+	   a: (enlist asym)!enlist (f;asym);
+	   t2: ![tbl;();b;a] }
+
+i.mismatch: { [tbl;rtbl]
+	     required0: (cols tbl) where (cols tbl) in (cols rtbl);
+	     // Mismatched types
+	     f: { [csym;m1;r1]
+		 a:m1[csym;`t];
+		 b:r1[csym;`t];
+		 $[all(a = "C";b=" "); 1b; a = b] };
+	     f0: f[;meta tbl;meta rtbl];
+	     bad1:required0 where not f0 each required0;
+	     flip exec (c;t) from (meta rtbl) where c in bad1 }
+
+t2retype: { [tbl;rtbl]
+	   .t.tbl:tbl;
+	   bad1:.sch.i.mismatch[tbl;rtbl];
+	   { .t.tbl::.sch.a2retype[.t.tbl;x[0];x[1]] } each bad1;
+	   .t.tbl }
+
+
+// Update a table so that the attribute named with the symbol asym is set to the value.
+// @note
+// If a string is passed, does an enlist using a local function \c f.
+// If a null symbol is passed, it is converted to a symbol list.
+a2value: { [tbl;asym;tvalue]
+	  tvalue: $[ -11h = type tvalue; `symbol$(); tvalue];
+	  f: { $[10h = type x; enlist(x); $[ -11h = type x; `symbol$(); x] ] };
+	  b: (enlist `i)!enlist `i;
+	  a: (enlist asym)!enlist (f;tvalue);
+	  ![tbl;();b;a] }
+
+// Return the null value from a table.
+// @param csym the symbol for a column name
+// @param m1 meta-data from a table: meta tbl
+// @return a pair: (csym, null value)
+// @note 
+// The null value comes from using sch_i_cast()
+i.null: { [csym;m1] a:m1[csym;`t];
+	 v: $[a = " "; ""; .sch.i.cast[`;a]];
+	 (csym; v) }
+
+// Given a reference table rtbl, add missing columns to a named table with a null value
+t2required: { [tbl;rtbl]
+	     required0: (cols rtbl) where not (cols rtbl) in (cols tbl);
+	     b:.sch.i.null[;meta rtbl] each required0;
+	     .t.tbl:tbl;
+	     { .t.tbl::.sch.a2value[.t.tbl;x[0];x[1]] } each b;
+	     .t.tbl }
+
+// Given a reference table rtbl, delete columns from the named table that are not in rtbl.
+t2unrequired: { [tbl;rtbl]
+	       unrequired0: (cols tbl) where not (cols tbl) in (cols rtbl);
+	       ![tbl;();0b;unrequired0] }
+
+t2rematch: { [tbl;rtbl] bad1:.sch.i.mismatch[tbl;rtbl]; }
+
 \d .
 
 // @}
