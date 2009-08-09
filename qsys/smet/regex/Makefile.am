@@ -12,7 +12,8 @@ ACLOCAL_AMFLAGS = -I m4
 BUILT_SOURCES = c.o
 
 c.o:
-	echo set link for c.o
+	$(RM) $@
+	$(LN_S) ../../lib/c.o 
 
 pkglib_LTLIBRARIES = libqregex.la
 libqregex_la_LIBADD = $(LTLIBINTL) ${top_srcdir}/lib/libgnu.la
