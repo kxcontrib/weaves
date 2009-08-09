@@ -87,7 +87,7 @@ case $1 in
     echo $QTRDR
     ;;
     *)
-    d_usage 2>&1
+    d_usage
     exit 1
     ;;
 esac
