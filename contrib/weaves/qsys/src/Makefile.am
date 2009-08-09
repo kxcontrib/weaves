@@ -1,13 +1,13 @@
 
 q_files = darwin8.0.q linux-gnu.q help.q log.q site.q sys.q trdr.q dbmaint.q trdrc.q trader-cull.q commander.q
 
-bin_SCRIPTS = Qp Qr Qs
+bin_SCRIPTS = Qp Qr Qs qsys-config
 sysconf_DATA = use-q q.rc
 pkgdata_DATA = $(q_files)
 
 CLEANFILES = $(bin_SCRIPTS) $(sysconf_DATA)
 
-EXTRA_DIST = Qp.in Qr.in Qs.in use-q.in q.rc.in $(q_files)
+EXTRA_DIST = Qp.in Qr.in Qs.in use-q.in q.rc.in qsys-config $(q_files)
 
 do_subst = sed -e 's,[@]pkgdatadir[@],$(pkgdatadir),g' \
 	       -e 's,[@]sysconfdir[@],$(sysconfdir),g' \
