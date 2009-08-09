@@ -1,9 +1,9 @@
 #!/bin/sh
 
-test -f /home/weaves/etc/q.rc && . /home/weaves/etc/q.rc
+test -f @sysconfdir@/q.rc && . @sysconfdir@/q.rc
 test -f $HOME/.q.rc && . $HOME/.q.rc
 
-. /home/weaves/etc/use-q
+. @sysconfdir@/use-q
 
 : ${HOSTNAME:=$(uname -n)}
 HOSTNAME=${HOSTNAME%%.*}
@@ -63,25 +63,25 @@ case $1 in
     echo @PACKAGE_VERSION@
     ;;
     --pkgdatadir)
-    echo /home/weaves/share/qsys
+    echo @pkgdatadir@
     ;;
     --sysconfdir)
-    echo /home/weaves/etc
+    echo @sysconfdir@
     ;;
     --qhomedir)
-    echo /home/weaves/src/q
+    echo @qhomedir@
     ;;
     --qprogdir)
-    echo /home/weaves/src/q/l32
+    echo @qprogdir@
     ;;
     --qtrdrhost)
-    echo reine
+    echo @qtrdrhost@
     ;;
     --qtrdrport)
-    echo 15001
+    echo @qtrdrport@
     ;;
     --qprog)
-    echo /home/weaves/src/q/l32/q
+    echo @qprog@
     ;;
     --QTRDR)
     echo $QTRDR
