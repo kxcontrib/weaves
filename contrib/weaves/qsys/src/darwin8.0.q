@@ -398,7 +398,8 @@ a2hsym:{ [x;y]
 	hsym `$p }
 
 // Make a url from an hsym and a symbol
-a2url: { [h;y] a:("http://",(1_string .os.remap[h])); b:("<a href=\"",a,"\">",(string y),"</a>"); b }
+a2url: { [h;y] a:("http://",(1_string .os.remap[h])); b:("<a href=\"",a,"\">",(string y),"</a>"); `$b }
+a2url1: { [h] a:("http://",(1_string .os.remap[h])); `$a }
 
 
 // Select from a table where a name n is in a set of values v, keying on the column k and 
@@ -602,7 +603,8 @@ i.null: { [csym;m1] a:m1[csym;`t];
 
 // Given a reference table rtbl, add missing columns to a named table with a null value
 t2required: { [tbl;rtbl]
-	     required0: (cols rtbl) where not (cols rtbl) in (cols tbl);
+	     crtbl: $[98h = type rtbl; cols rtbl; rtbl];
+	     required0: crtbl where not crtbl in (cols tbl);
 	     b:.sch.i.null[;meta rtbl] each required0;
 	     .t.tbl:tbl;
 	     { .t.tbl::.sch.a2value[.t.tbl;x[0];x[1]] } each b;
@@ -610,10 +612,29 @@ t2required: { [tbl;rtbl]
 
 // Given a reference table rtbl, delete columns from the named table that are not in rtbl.
 t2unrequired: { [tbl;rtbl]
-	       unrequired0: (cols tbl) where not (cols tbl) in (cols rtbl);
+	       crtbl: $[98h = type rtbl; cols rtbl; rtbl];
+	       unrequired0: (cols tbl) where not (cols tbl) in crtbl;
 	       ![tbl;();0b;unrequired0] }
 
 t2rematch: { [tbl;rtbl] bad1:.sch.i.mismatch[tbl;rtbl]; }
+
+t.match0: { a:y ss x; $[0 < count a; $[0 = a[0]; (count a; x; y); ()]; :() ] }
+t.match1: { [x;y] b:{ a:.t.match0[x; y]; $[ 0 < count a; a; ::] }[;x] each string each y;
+	    b:raze b where (1< count each b); b }
+
+t.match: { [x;y] { .t.match1[x;y] }[;y] each string x }
+
+// Return a table of pairs of symbols of names in names.
+// @param families symlist of name prefixes.
+// @param children symlist of names.
+// @return a table
+// @note 
+// (gro) and (gro0; gro1) would return a table (gro; gro0); (gro; gro1)
+// This uses string matching.
+familiarize: { [families;children]
+	      a:.sch.t.match[families;children];
+	      b: ([] f0:(`$a[;1;]); c0:(`$a[;2;]));
+	      b }
 
 \d .
 
