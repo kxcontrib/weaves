@@ -7,6 +7,7 @@ cd smet
 ./autogen.sh
 cd -
 
+cp lib2/Makefile.am lib
 autoreconf --force --install
-./configure --prefix=$HOME --with-qhomedir=$HOME/src/q --with-string-metrics --with-qtrdrhost=ubu --with-qtrdrport=15001 --disable-dependency-tracking
+./configure --prefix=$HOME --with-qhomedir=$HOME/src/q --with-string-metrics --with-qtrdrhost=$HOSTNAME --with-qtrdrport=15001 --disable-dependency-tracking
 make

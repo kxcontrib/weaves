@@ -107,7 +107,8 @@ restore: { dc:get `.trdr; `.trdr set dc }
 servers:()
 props:()
 .trdr.updt: { props::select tname, tvalue by n:toffer from .trdr.tprops;
-	     servers::select offer:n, server:s, ttype:ttype.k, pn:props[([]n);`tname], pv:props[([]n);`tvalue], offers:ttype.ni, service: { .sch.a2url[x;x] } each s from .trdr.offers }
+	     servers::select offer:n, server:s, ttype:ttype.k, pn:props[([]n);`tname], pv:props[([]n);`tvalue], offers:ttype.ni, service: { .sch.a2url[x;x] } each s from .trdr.offers;
+	     servers::`pn`pv xasc servers }
 
 .trdr.ttypes,:([k:enlist(`basic)]; v:enlist(`$"Basic service"); ni:0 )
 .trdr.ttypes,:([k:enlist(`trdr)]; v:enlist(`$"Trader service"); ni:0 )
