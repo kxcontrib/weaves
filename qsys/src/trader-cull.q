@@ -45,29 +45,26 @@ servers:flip servers
 operator: { [x;cmd]
 	   tsym: hsym x;
 	   th: @[hopen;tsym;`failed];
-	   0N!(th; x; cmd);
+	   if[.sys.is_arg`verbose; 0N!("list: ";th; x; cmd)];
 	   if[-11h = type th; : ::];
-	   if[not .sys.is_arg`nodo;
-	      0N!(th; x; cmd);
-	      if[ -11h <> type @[(th);cmd;`]; hclose th]
-	      ]
-	   }
+	   if[.sys.is_arg`nodo; : ::];
+	   if[.sys.is_arg`verbose; 0N!("kill: ";th; x; cmd)];
+	   if[ -11h <> type @[(th);cmd;`]; hclose th] }
 
 // The operation performed.
 {
  operator[x[1]; y];
- tr(".trdr.withdraw[`",(string x[0]),"]");
+ if[not .sys.is_arg`nodo; tr(".trdr.withdraw[`",(string x[0]),"]") ];
  }[;".sys.exit[0]"] each servers
 
 if[.sys.is_arg`exit; .sys.exit[0] ]
 
 
-/  q-prog-args: "-nodo -verbose -quiet -autoport"
-
 /  Local Variables: 
 /  mode:q 
 /  q-prog-args: "-verbose"
 /  q-prog-args: "-verbose -type pricing help"
+/  q-prog-args: "-nodo -verbose -quiet -autoport -type folios"
 /  fill-column: 75
 /  comment-column:50
 /  comment-start: "/  "

@@ -3,6 +3,10 @@ weaves
 Installation is a bit more complicated than usual because I've made use of
 gnulib and gnulib-tool.
 
+Also, this installation uses an SVN repository and some externals to keep the source up-to-date.
+The SVN repository is read-only, so you need to copy a Makefile.am. This is done in the autogen.sh
+script as well.
+
 The installation needs to run gnulib-tool on the smet directory. There is a
 script autogen.sh that shows the steps.
 

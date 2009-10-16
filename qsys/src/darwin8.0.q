@@ -462,10 +462,35 @@ a2remap: { [tbl;asym;ttbl;tvalue]
 	  a: (enlist asym)!enlist (f[;ttbl;tvalue];asym);
 	  ![tbl;();0b;a] }
 
+// Number that are unnull.
+//
+// Count null values for a column.
+// @note
+// Can be used to insert records into a count table.
+// @n
+// @code
+// .t.counts: ([] c:(); n:`int$() )
+// { `.t.counts insert .t.unnull[tdb05; x] } each cols tdb05
+// @endcode
+// @note
+// The underlying type has to be compatible with the null.
+
+nnull0: { [atbl; asym] 
+	  c:enlist ({ [x;y] y x };asym;null);
+	  a: (enlist asym)!(enlist(count;asym));
+	  r:?[atbl;c;0b;a];
+	  (first raze key first r; `int$(first raze value first r)) }
+
+nnull: { [atbl; syms]
+	  .t.ncounts: ([] c:(); n:`int$() );
+	  syms: $[(any null syms); cols atbl; syms ];
+	  { `.t.ncounts insert .sch.nnull0[y; x] }[;atbl] each syms;
+	  .t.ncounts }
+
 // @brief Select a key field c from a table tbl where the column n is null
 //
 // Select fields that have a null value in the column named by n.
-// The return valuesare null
+// The return values are null
 // @param tbl table with a columns n and c
 // @return a list of distinct c values
 //
