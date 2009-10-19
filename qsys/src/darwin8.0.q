@@ -644,10 +644,10 @@ t2unrequired: { [tbl;rtbl]
 t2rematch: { [tbl;rtbl] bad1:.sch.i.mismatch[tbl;rtbl]; }
 
 t.match0: { a:y ss x; $[0 < count a; $[0 = a[0]; (count a; x; y); ()]; :() ] }
-t.match1: { [x;y] b:{ a:.t.match0[x; y]; $[ 0 < count a; a; ::] }[;x] each string each y;
+t.match1: { [x;y] b:{ a:.sch.t.match0[x; y]; $[ 0 < count a; a; ::] }[;x] each string each y;
 	    b:raze b where (1< count each b); b }
 
-t.match: { [x;y] { .t.match1[x;y] }[;y] each string x }
+t.match: { [x;y] { .sch.t.match1[x;y] }[;y] each string x }
 
 // Return a table of pairs of symbols of names in names.
 // @param families symlist of name prefixes.
