@@ -22,12 +22,18 @@ if[0 < count getenv`QLOAD;
    if[.sys.is_arg`verbose;
       2 ((";" sv (string .z.Z; string .z.f;"verbose")),enlist("\n"))];
    
+   if[.sys.is_arg`verbose; .sys.qloader enlist("help.q")];
+
    .sys.qpath.cwd`;
-   .sys.qloader enlist("help.q");
+
+   // Extend the qpath if given.
+   if[.sys.is_arg`qpath;
+      .t.a:.os.absolutely[.sys.i.cwd;] each .sys.arg`qpath;
+      .sys.qpath.add.i each .t.a];
 
    // If autoport is given on the command-line it will call .sys.autoport
    if[.sys.is_arg`autoport; .sys.autoport["I"$first .sys.i.args`autoport] ];
-   
+
    if[0 < count getenv`QTRDR; .sys.qloader enlist("trdrc.q") ];
 
    // If a load argument is given, load the script
@@ -37,7 +43,7 @@ if[0 < count getenv`QLOAD;
 
 /  Local Variables: 
 /  mode:q 
-/  q-prog-args: " -nodo -verbose -quiet -load help.q"
+/  q-prog-args: " -nodo -verbose -quiet -qpath $PWD .. -load help.q"
 /  fill-column: 75
 /  comment-column:50
 /  comment-start: "/  "

@@ -67,6 +67,17 @@ file:{ [str] @[{ system("test -f ", x); x }; .os.echoer[str]; string` ] }
 extant: { [functor; paths]
 	  functor each paths @ where { 0 < count x } each functor each paths }
 
+// @brief Checks if an absolute path - looks for path_sep in first position.
+// Used with file() and directory(), this only returns the path if the result
+// of the function has a count > 0.
+
+absolute: { [x] all .os.path_sep = 1 # x }
+
+// @brief Marks all paths absolute by pre-pending with a path.
+absolutely: { [p;x] a:.os.echoer x;
+	     $[.os.absolute a; a; p,.os.path_sep,a] }
+
+
 // @brief The basename of a path.
 // Uses path_sep.
 basename: { [sym]
