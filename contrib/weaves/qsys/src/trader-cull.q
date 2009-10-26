@@ -18,6 +18,8 @@
 tradercull:()!()
 \d .
 
+\T 3
+
 // The trader handle.
 tr: @[hopen;.trdr.s;`fail]
 if[ -11h = type tr;
@@ -26,20 +28,26 @@ if[ -11h = type tr;
 
 // The offers at the trader
 offers:tr ".trdr.offers"
+tprops:()
+
+// Not very efficient
+tprops: tr $[.sys.is_arg`name; "0!.trdr.tprops"; "0#0!.trdr.tprops" ]
+tprops: $[not .sys.is_arg`name; tprops; select from tprops where tname in `$.sys.arg`name ]
+tprops: $[not .sys.is_arg`value; tprops; select from tprops where tvalue in `$.sys.arg`value ]
 
 // A list of the servers to terminate.
-servers:select from offers where ttype <> `trdr
+servers:$[not .sys.is_arg`test; select from offers where ttype <> `trdr; offers]
 
 // The list of types we will be terminating.
 // @note
 // If no -type argument given then all types are used.
-ttypes: $[not .sys.is_arg`type;
-	  distinct value servers[;`ttype];
-	  { `$x } each (.sys.arg`type) ]
+ttypes: $[not .sys.is_arg`type; distinct value servers[;`ttype]; { `$x } each (.sys.arg`type) ]
 
-servers: exec (n;s) from servers where ttype in ttypes
+servers:select from servers where ttype in ttypes
 
-servers:flip servers
+servers:0!servers lj select by n:toffer from tprops
+
+servers: $[not .sys.is_arg`name; servers; select from servers where not null tname ]
 
 // Invoke the cmd (usually exit[0]) on the server named by x.
 operator: { [x;cmd]
@@ -51,20 +59,29 @@ operator: { [x;cmd]
 	   if[.sys.is_arg`verbose; 0N!("kill: ";th; x; cmd)];
 	   if[ -11h <> type @[(th);cmd;`]; hclose th] }
 
+.err.level: $[ .sys.is_arg`list; 1; 0]
+
 // The operation performed.
-{
+{ [x;y]
  operator[x[1]; y];
+ if[.sys.is_arg`verbose; 0N!("offer";x[0]) ]; 
+ if[.sys.is_arg`list; .err.level:0; : :: ];
  if[not .sys.is_arg`nodo; tr(".trdr.withdraw[`",(string x[0]),"]") ];
- }[;".sys.exit[0]"] each servers
+ }[;".sys.exit[0]"] each servers[;`n`s];
 
-if[.sys.is_arg`exit; .sys.exit[0] ]
+if[all(.sys.is_arg`exit;not .sys.is_arg`test); .sys.exit[.err.level] ]
 
+if[.sys.is_arg`verbose;0N!("error";.err.level)];
 
 /  Local Variables: 
 /  mode:q 
 /  q-prog-args: "-verbose"
 /  q-prog-args: "-verbose -type pricing help"
 /  q-prog-args: "-nodo -verbose -quiet -autoport -type folios"
+/  q-prog-args: "-test -nodo -verbose -quiet -autoport -type trdr"
+/  q-prog-args: "-test -nodo -verbose -quiet -autoport -type trdr -name pricing -value lxp"
+/  q-prog-args: "-exit -test -list -nodo -quiet -autoport -type pricing -name impl -value qsys"
+/  q-prog-args: "-verbose -nodo -list -type pricing -name name -value lxp -load trader-cull.q"
 /  fill-column: 75
 /  comment-column:50
 /  comment-start: "/  "
