@@ -12,10 +12,12 @@
 
 # Qr also uses the QLOAD file, but no rlwrap.
 
+. @sysconfdir@/use-q
+
+# A variety of sources
 test -f @sysconfdir@/q.rc && . @sysconfdir@/q.rc
 test -f $HOME/.q.rc && . $HOME/.q.rc
-
-. @sysconfdir@/use-q
+test -f .q.rc && . .q.rc
 
 : ${HOSTNAME:=$(uname -n)}
 HOSTNAME=${HOSTNAME%%.*}
