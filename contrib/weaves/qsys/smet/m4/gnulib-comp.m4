@@ -47,7 +47,6 @@ AC_DEFUN([gl_INIT],
   gl_COMMON
   gl_source_base='lib'
   gl_CRC
-  gl_HEADER_ERRNO_H
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
@@ -70,10 +69,10 @@ AC_DEFUN([gl_INIT],
   gl_UNISTD_H
   gl_WCHAR_H
   m4_ifval(gl_LIBSOURCES_LIST, [
-    m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
+    m4_syscmd([test ! -d ]gl_LIBSOURCES_DIR[ ||
       for gl_file in ]gl_LIBSOURCES_LIST[ ; do
-        if test ! -r ]m4_defn([gl_LIBSOURCES_DIR])[/$gl_file ; then
-          echo "missing file ]m4_defn([gl_LIBSOURCES_DIR])[/$gl_file" >&2
+        if test ! -r ]gl_LIBSOURCES_DIR[/$gl_file ; then
+          echo "missing file ]gl_LIBSOURCES_DIR[/$gl_file" >&2
           exit 1
         fi
       done])dnl
@@ -109,10 +108,10 @@ AC_DEFUN([gl_INIT],
   gl_COMMON
   gl_source_base='tests'
   m4_ifval(gltests_LIBSOURCES_LIST, [
-    m4_syscmd([test ! -d ]m4_defn([gltests_LIBSOURCES_DIR])[ ||
+    m4_syscmd([test ! -d ]gltests_LIBSOURCES_DIR[ ||
       for gl_file in ]gltests_LIBSOURCES_LIST[ ; do
-        if test ! -r ]m4_defn([gltests_LIBSOURCES_DIR])[/$gl_file ; then
-          echo "missing file ]m4_defn([gltests_LIBSOURCES_DIR])[/$gl_file" >&2
+        if test ! -r ]gltests_LIBSOURCES_DIR[/$gl_file ; then
+          echo "missing file ]gltests_LIBSOURCES_DIR[/$gl_file" >&2
           exit 1
         fi
       done])dnl
@@ -200,7 +199,6 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/link-warning.h
   lib/crc.c
   lib/crc.h
-  lib/errno.in.h
   lib/error.c
   lib/error.h
   lib/getopt.c
@@ -224,7 +222,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/version-etc.h
   lib/wchar.in.h
   m4/crc.m4
-  m4/errno_h.m4
   m4/error.m4
   m4/extensions.m4
   m4/getopt.m4
@@ -243,5 +240,4 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strnlen.m4
   m4/unistd_h.m4
   m4/wchar.m4
-  m4/wint_t.m4
 ])
