@@ -141,7 +141,8 @@ modify0: { [x] if[ -11h = type .trdr.hs; : :: ];
 	     .trdr.offered:x; : n];
 	  if[ not (.trdr.offered ~ x);
 	     n:.trdr.i.modify0 x; 
-	     .trdr.offered:x; : n]; }
+	     .trdr.offered:x; : n];
+	  first key .trdr.i.offers }
 
 \d .
 
