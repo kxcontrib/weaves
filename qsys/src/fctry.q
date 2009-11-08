@@ -14,26 +14,14 @@
 // 
 // @{
 
-schema: $[.sys.undef[`.;`schema]; ()!(); schema ]
-
-.fctry.schema::schema
-
 \d .fctry
 
-/// Record children in this table
-i.children: ([] m:`symbol$(); n:`symbol$());
+i.states: `parent`child`adult`
+i.state: `
 
-/// Identity of the factory.
-i.parent: { [] .sch.a2hsym . (.z.h;system"p") }
-
-parent: $[0 < count s:getenv`Q_FCTRY; hsym `$s; .fctry.i.parent` ]
-
-/// Debug version of the creation function
-i.cmd: { [x] 
-	es:"=" sv ("export Q_FCTRY";.Q.s1 string parent); es,:enlist ";";
-	ms:"=" sv ("export Q_NONCE";.Q.s1 string m:.trdr.nonce`); ms,:enlist ";";
-	c:" " sv (es;ms;"screen Qp -autoport";"-load";" " sv .sys.i.qloads);
-	c }
+splayname: { [x]
+	    nm: $[ 0 = count s:system"a"; ""; string first s ];
+	    schema[`splay]:nm }
 
 /// Production version of the creation function.
 ///
@@ -44,6 +32,13 @@ i.cmd: { [x] es:"=" sv ("export Q_FCTRY";.Q.s1 string parent); es,:enlist ";";
 	c:" " sv (es;ms;"Qr -autoport";"-load";" " sv .sys.i.qloads;"> /dev/null 2>&1 &");
 	(m;c) }
 
+/// Debug version of the creation function
+i.cmd: { [x] 
+	es:"=" sv ("export Q_FCTRY";.Q.s1 string parent); es,:enlist ";";
+	ms:"=" sv ("export Q_NONCE";.Q.s1 string m:.trdr.nonce`); ms,:enlist ";";
+	c:" " sv (es;ms;"screen Qp -autoport";"-load";" " sv .sys.i.qloads);
+	c }
+
 /// Method for clients to construct a child.
 make: { [x] ms:i.cmd`; system ms[1]; insert[`.fctry.i.children;(ms[0];`)] }
 
@@ -51,27 +46,22 @@ make: { [x] ms:i.cmd`; system ms[1]; insert[`.fctry.i.children;(ms[0];`)] }
 updt: { [x;y] 0N!("updt";x);
        update n:`$y from `.fctry.i.children where m = `$x }
 
-\d .
-
-/// Set the name of the table to load.
-if[ 0 < count a:system"a"; schema[`splay]:string first a]
-
-schema[`.fctry.make]:"The instruction that will make another server."
-
-// If we are not a child, then make a test one 
-if[ all(.sys.is_arg`test;0 = count getenv`Q_FCTRY); .t.a:.fctry.make` ]
-
 // Publish to the trader
-.t.ttype: $[ 0 = count getenv`Q_FCTRY; `fctry; `splay]
-.t.n: .trdr.modify0 (.t.ttype;(`name;`$schema`splay))
-.t.n
+retrade: { [x] 
+	  .trdr.modify0 (x;(`name;`$schema`splay)) }
 
-// If we are a child callback
-h:-1
-if[ 0 < count s:getenv`Q_FCTRY;
-   m:`$getenv`Q_NONCE;
-   h: hopen hsym `$s;
-   h (" . " sv (".fctry.updt"; .Q.s1 string (m;.t.n))) ]
+restate: { [x]
+	  // parents never change
+	  s1: $[`fctrys.q in .sys.i.qloaded; `parent; .fctry.i.state ];
+	  if[ s1 = `parent; : .fctry.i.state:s1];
+
+	  // a child matures
+	  s1: $[`fctryc.q in .sys.i.qloaded; `child; s1 ];
+	  s1: $[(s1 = `child) and (0 < count .fctry.schema`splay); `adult; s1 ];
+	  .fctry.i.state: s1;
+	  s1 }
+
+\d .
 
 // @}
 

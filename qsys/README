@@ -1,4 +1,4 @@
-	qsys - Q system utilities
+	qsys - Q system utilities and Services
 
 
 
@@ -62,6 +62,30 @@ environment is only active if the QLOAD variable is set.
  Qr also doesn't change QLOAD, so the extended environment is
  available. It doesn't run the interpreter under rlwrap. This is
  useful for running under an Emacs command-line shell or other IDE.
+
+-- Distributed System Services: trader and factory
+
+qsys also adds a trader and splayed table factory to q/kdb+
+
+ Qp -p 15001
+
+is all you need to do to start a trader. This can collect
+announcements from q/kdb+ servers.
+
+In your file, do this:
+
+ .trdr.modify0 (`splay;(`name;`prices))
+
+And you've announced yourself
+
+ .trdr.query0 (`splay;(`name;`prices))
+
+is all a client needs to the do to find the service.
+
+A factory can be used to clone a server for a splayed table. That
+means a client can get their own server for a splayed table and can
+set the .Q.view as required and load tables onto the server without
+fear of corrupting someone else's work.
 
 -- The extended environment
 
