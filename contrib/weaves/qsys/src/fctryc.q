@@ -30,6 +30,11 @@ h:-1
 		  h:: hopen hsym .fctry.schema`parent;
 		  h (" . " sv (".fctry.updt"; .Q.s1 string (m; x))) }
 
+.fctry.mature: { [x]
+		.fctry.splayname`;
+		.fctry.restate`;
+		.fctry.retrade .fctry.i.state }
+
 .fctry.i.m: all(0 < count getenv`Q_FCTRY;0 < count getenv`Q_NONCE)
 if[ not .fctry.i.m; .sys.exit -1]
 
