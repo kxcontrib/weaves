@@ -1,6 +1,27 @@
-weaves
+*weaves
 
-Working with qsys
+*New Service: factory
+
+qsys now supports a factory server for splayed tables.
+
+If you need a splayed table server and you want to set the .Q.view,
+you can use a factory to create a server just for you.
+
+*New Functions: add a load path to the command-line
+
+Servers can now be given an additional set of paths to load from on
+the command-line.
+
+*New Functions: automated port choice
+
+A server can now get a free port and publish it to the trader.
+
+*New Service: trader
+
+qsys now has a trader service. This means you can find splay table
+servers in a lookup server.
+
+*Working with qsys
 
 Installing the Qp Qr and Qs scripts won't make them available. They
 are installed into ~/bin. You will need to put this on your PATH.

@@ -116,8 +116,14 @@ query0: { [x]
 	if[ -11h = type .trdr.hs; : :: ];
 	 hsym first .trdr.query[`;`;`;1] }
 
+// @brief Query by nonce.
+// Uses the key.
+query1: { [x] 
+	if[ -11h = type .trdr.hs; : :: ];
+	 .trdr.hs "@" sv (".trdr.offers";.Q.s1 x) }
+
 // @brief The offers made by this exporter.
-offers: { [x] .trdr.i.offers }
+offerees: { [x] .trdr.i.offers }
 
 // @brief Modify the offer at the server.
 // This is the low-level remote call on the server.
@@ -130,8 +136,8 @@ i.modify0: { [x] if[ -11h = type .trdr.hs; : :: ];
 	    tprops: $[0 <> type x; `; $[ 2 <= count x; x[1]; `] ];
 	    ttype: $[null ttype; .trdr.impl`; ttype];
 	    tprops: $[11h <> type tprops; .trdr.prop`; tprops];
-	    offer:.trdr.modify (first key .trdr.offers`; ttype; tprops);
-	    .trdr.i.offers[offer]::(first first value .trdr.offers`;ttype;tprops);
+	    offer:.trdr.modify (first key .trdr.offerees`; ttype; tprops);
+	    .trdr.i.offers[offer]::(first first value .trdr.offerees`;ttype;tprops);
 	    offer }
 
 // @brief Abbreviated local version of modify.

@@ -1,3 +1,10 @@
+2009-11-08  Walter Eaves  <Walter.Eaves@depfa.com>
+
+	* trdrc.q: changed the name of the local .trdr.i.offers to
+	offerees. Added a simple lookup: query1.
+
+	* src/fctrys.q: Added a factory service for splayed tables.
+
 2009-02-15  Walter Eaves  <walter.eaves@bigfoot.com>
 
 	* autogen.sh: An autoconf meta-script.
