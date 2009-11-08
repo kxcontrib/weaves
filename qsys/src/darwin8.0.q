@@ -193,6 +193,9 @@ qpath.cwd: { t:getenv`PWD; .sys.qpath.add.i t; t }
 // @brief A list of files/directories loaded.
 // Basenames of files are stored.
 i.qloaded: ()
+// @brief A list of files/directories loaded.
+// Full paths of files are stored.
+i.qloads: ()
 
 // @Load a <name>.qdb file using filebase as the table name.
 // 
@@ -206,19 +209,25 @@ qdb: { [tfile] .os.pushd .sys.i.cwd;
       .os.popd`;
       a }
 
+i.abs: { $[.os.absolute x; x; .os.path_sep sv (.sys.i.cwd;x)] }
+
 // @brief Low-level loader - may cache loads.
 // 
 // Used by qloader. This actually does the loading.
 // Echoes a message "loaded" - not under verbose or trace.
+// 
+// It checks the basename hasn't already been loaded.
 i.qload: { [tfile]
 	  t:`$(.os.basename tfile);
 	  t1:0b;
 	  if[ (0 < count .sys.i.qloaded);
-	     t1:(.sys.i.qloaded ? t) < (count .sys.i.qloaded);
+	     t1:t in .sys.i.qloaded;
 	     if[t1 and (not .sys.reload); : ::]
 	     ];
-	  $[.sys.is_qdb tfile; .sys.qdb tfile; value ("\\l ", tfile)];
+	  a: $[.sys.is_qdb tfile; .sys.qdb tfile; @[value;("\\l ", tfile);`qload] ];
+	  if[ not null a ; return : ::];
 	  .sys.i.qloaded: $[ (not .sys.reload) and (not t1); .sys.i.qloaded,t; .sys.i.qloaded ];
+	  .sys.i.qloads: $[ (not .sys.reload) and (not t1); .sys.i.qloads, enlist .sys.i.abs tfile; .sys.i.qloads ];
 	  0N!("loaded: ", tfile);
 	  t }
 
