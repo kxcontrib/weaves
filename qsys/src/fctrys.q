@@ -28,23 +28,7 @@ i.parent: { [] .sch.a2hsym . (.z.h;system"p") }
 
 parent: $[0 < count s:getenv`Q_FCTRY; hsym `$s; .fctry.i.parent` ]
 
-/// Production version of the creation function.
-///
-/// It passes two strings in the environment: the parent in Q_FCTRY and 
-/// a nonce as a ticket: Q_NONCE.
-i.cmd: { [x] es:"=" sv ("export Q_FCTRY";.Q.s1 string parent);
-	es,:enlist ";";
-	ms:"=" sv ("export Q_NONCE";.Q.s1 string m:.trdr.nonce`); ms,:enlist ";";
-	c:" " sv (es;ms;"Qr -autoport";"-load";" " sv .sys.i.qloads;"> /dev/null 2>&1 &");
-	(m;c) }
-
-/// Debug version of the creation function
-i.cmd: { [x] 
-	es:"=" sv ("export Q_FCTRY";.Q.s1 string parent); es,:enlist ";";
-	ms:"=" sv ("export Q_NONCE";.Q.s1 string m:.trdr.nonce`); ms,:enlist ";";
-	c:" " sv (es;ms;"screen Qp -autoport";"-load";" " sv .sys.i.qloads);
-	c }
-
+// Scripts the client should load: fctry0.q does the callback
 i.clients: ("fctry.q";"fctryc.q";"fctryc0.q")
 
 /// Debug version of the creation function
@@ -54,19 +38,47 @@ i.cmd0: { [x]
 	 c:" " sv (es;ms;"screen -dmS lxp1 Qp -autoport";"-qpath";.sys.i.cwd;"-load";" " sv i.clients);
 	 (m;c) }
 
-/// Method for clients to construct a child.
-make: { [x] ms:i.cmd`; 0N!(" " vs ms[1]);
-       system ms[1]; insert[`.fctry.i.children;(ms[0];`)] }
-
-/// Method for a blank client
+/// Method to construct an empty child
 make0: { [x] ms:i.cmd0`;
 	0N!(show " " vs ms[1]);
 	system ms[1]; insert[`.fctry.i.children;(ms[0];`)] }
 
-/// Call-back for the client.
+/// Call-back for the empty child
 updt: { [x;y] 0N!("updt";x);
        update n:`$y by i from `.fctry.i.children where m = `$x;
        select from .fctry.i.children where n = `$y }
+
+/// Find the full path of the loaded splay
+splaypath: { a:(`$.fctry.schema`splay) = { `$.os.basename x } each .sys.i.qloads; first .sys.i.qloads where a }
+
+i.fetch: { [x] exec first n from .fctry.i.children where not null n }
+
+i.release: { [x] delete from `.fctry.i.children where n = x }
+
+/// Load function
+i.cmd: { [x] 
+	c:" " sv (".sys.qloader enlist"; .Q.s1 x);
+	c1:"; " sv (c;".fctry.mature`");
+	c1 }
+
+.fctry.hopen: { [x] 
+	       if[ null a:.fctry.i.fetch`; : ()];
+	       a1:.trdr.query1 a;
+	       if[ null a2:(a1 @ `s); : ()];
+	       (a; hopen hsym a2) }
+
+/// Method for parent to load the child.
+///
+/// Blocked call to load. Release and make a new child.
+make: { [x1]
+       x: $[ null x1; .fctry.schema`splaypath; x1 ];
+       h1:.fctry.hopen`;
+       if[ 0 = count h1; : ::];
+       ms:i.cmd x;
+       h1[1](ms);
+       i.release h1[0];
+       make0`;
+       h1[0] }
 
 \d .
 
@@ -84,22 +96,15 @@ if[ .fctry.i.state = `parent; .t.a:.fctry.make0` ]
 
 .fctry.retrade .fctry.i.state
 
+.fctry.schema[`splaypath]:.fctry.splaypath`;
+
 \
 
-/// Set the name of the table to load.
-if[ 0 < count a:system"a"; schema[`splay]:string first a]
+// Later a client calls us and tells us to load
 
-// Publish to the trader
-.t.ttype: $[ 0 = count getenv`Q_FCTRY; `fctry; `splay]
-.t.n: .trdr.modify0 (.t.ttype;(`name;`$schema`splay))
-.t.n
+.fctry.ch1: .fctry.hopen`
 
-// If we are a child callback
-h:-1
-if[ 0 < count s:getenv`Q_FCTRY;
-   m:`$getenv`Q_NONCE;
-   h: hopen hsym `$s;
-   h (" . " sv (".fctry.updt"; .Q.s1 string (m;.t.n))) ]
+.fctry.make`
 
 // @}
 
