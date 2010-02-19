@@ -201,11 +201,17 @@ i.qloads: ()
 // 
 // Push and pop the directory, just in case it is relative to
 // the initial working directory.
+// @note
+// A naming problem (no embedded '-') means I have to use a global
+// temporary.
 qdb: { [tfile] .os.pushd .sys.i.cwd;
       t:.os.filebase .os.basename tfile;
       th:hsym `$tfile;
       (t;th);
-      a:value(t,": get ", .Q.s1 th);
+      // a:value(t,": get ", .Q.s1 th);
+      .tmp.tqdb:get th;
+      a:value(t, ":.tmp.tqdb");
+      delete tqdb from `.tmp;
       .os.popd`;
       a }
 

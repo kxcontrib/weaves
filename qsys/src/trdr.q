@@ -156,6 +156,10 @@ status`
 
 \
 
+// This section is for test. I have used it to illustrate that I can't use
+// foreign keys across .trdr.tprops and .trdr.offers.
+// deleting from offers causes a null to enter into tprops.
+
 .trdr.s: $[ 0 < count getenv`QTRDR; getenv`QTRDR; .trdr.def.s ]
 
 any not null value .trdr.ttypes `basic
