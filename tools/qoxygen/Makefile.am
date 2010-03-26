@@ -7,7 +7,13 @@
 
 BUILT_SOURCES = lex.cc qlex.cc
 
+noinst_PROGRAMS = string0
+
+string0_SOURCES = string0.cc
+
 bin_PROGRAMS=mtoc rtoc rtocc qoxygen qoxygen2
+
+LDADD = -L$(top_srcdir)/lib -lgnu
 
 mtoc_SOURCES=mtoc1.c xmalloc.c system.h aclocal.m4 mtoc.1 mtoc.l
 rtoc_SOURCES=rtoc1.c xmalloc.c system.h aclocal.m4 rtoc.1 rtoc.l lex.hh

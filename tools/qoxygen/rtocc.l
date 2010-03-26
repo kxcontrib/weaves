@@ -32,14 +32,14 @@ plotter <- function(x) {}
 
 %{
 #include <string>
+#include <vector>
 #include <iostream>
+#include <algorithm>
+#include <iterator>
+
 #include "lex.hh"
 
-#include <iterator>
-#include <boost/algorithm/string.hpp>
-
 using namespace std;
-using namespace boost;
 
 int yyFlexLexer::yywrap() {
     return ::yywrap();
@@ -108,8 +108,17 @@ DEF     (<-)|(=)
 
 <commented>^({ID}|{QID}) {
 	fname = fname.assign(yytext);
-        fname = replace_all_copy( fname, "\"", "" );
-        fname = replace_all_copy( fname, ".", "_" );
+
+	vector<char> V(fname.c_str(), fname.c_str() + fname.length());
+        vector<char>::iterator e0 =
+          remove_if(V.begin(), V.end(), bind2nd(equal_to<char>(), '\"'));
+        V.erase(e0, V.end());
+
+	replace_if(V.begin(), V.end(), bind2nd(equal_to<char>(), '.'), '_' );
+	string s0(V.begin(), V.end());
+
+	fname = fname.assign(s0);
+
 	rflinecount = rlinecount;
 
 	if (yy_flex_debug) (*yyout) << "id: " << fname;
