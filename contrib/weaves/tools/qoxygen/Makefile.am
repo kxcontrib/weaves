@@ -16,7 +16,7 @@ qoxygen2_SOURCES = qoxygen.l
 qoxygen2_LDADD = $(LEXLIB)
 
 lex.cc: rtocc.l
-	flex++ $(FLEX_DEBUG) -o $@ $<
+	flex -+ $(FLEX_DEBUG) -o $@ $<
 
 rtocc_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 lex.cc
 rtocc_LDADD = $(FLEXLIB)
@@ -25,7 +25,7 @@ qoxygen_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 qlex.cc rtocc2.
 qoxygen_LDADD = $(LEXLIB)
 
 qlex.cc: qoxygen2.l
-	flex++ $(FLEX_DEBUG) -o $@ $<
+	flex -+ $(FLEX_DEBUG) -o $@ $<
 
 CLEANFILES = qoxygen.c lex.yy.cc lex.yy.c rtoc.c $(BUILT_SOURCES)
 
