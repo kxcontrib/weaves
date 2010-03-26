@@ -46,10 +46,8 @@ plot: { [x] x }
 #include "lex.hh"
 
 #include <iterator>
-#include <boost/algorithm/string.hpp>
 
 using namespace std;
-using namespace boost;
 
 int yyFlexLexer::yywrap() {
     return ::yywrap();

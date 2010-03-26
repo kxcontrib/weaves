@@ -1,3 +1,21 @@
+weaves
+
+This now builds and installs on Cygwin.
+
+You will need to use gnulib-tool. This isn't always easy to get
+
+http://erislabs.net/ianb/projects/gnulib/gnulib-20100308-stable.tar.gz
+
+You will then need to run 
+
+ gnulib-tool
+
+and it should install argp.h and error.h and many dependencies.
+
+After that you will need to autoreconf, configure and make
+
+--
+
 Installation Instructions
 *************************
 

@@ -1,3 +1,13 @@
+weaves
+
+Building qoxygen.
+
+I've now added a requirement on gnulib-tool. With it, qoxygen can build on Cygwin and Solaris.
+
+See the installation notes in the directory above.
+
+-- From the original notes for mtoc
+
 This is a documentation system based on Doxygen. 
 
 You are assumed to have the following installed:
@@ -9,9 +19,9 @@ You are assumed to have the following installed:
 
 - a recent TeX installation. teTeX works well for me on Mac OSX and Linux. 
  
-- lex. I use flex 2.5.4.
+- lex. I use flex 2.5.35.
 
-- a c compiler. A recent gcc should work fine.
+- a c and c++ compiler. gcc and g++ version 3 work fine.
 
 Basics:
 
