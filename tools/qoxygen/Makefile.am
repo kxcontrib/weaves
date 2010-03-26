@@ -5,7 +5,7 @@
 ## qoxygen2 is the original
 ## qoxygen is the newer one that uses some C++ and counts lines.
 
-BUILT_SOURCES = lex.cc qlex.cc
+BUILT_SOURCES = mtoc.c lex.cc qlex.cc
 
 noinst_PROGRAMS = string0
 
@@ -13,22 +13,23 @@ string0_SOURCES = string0.cc
 
 bin_PROGRAMS=mtoc rtoc rtocc qoxygen qoxygen2
 
-LDADD = -L$(top_srcdir)/lib -lgnu
+LDADD = -L$(top_srcdir)/lib -lgnu $(LEXLIB)
 
 mtoc_SOURCES=mtoc1.c xmalloc.c system.h aclocal.m4 mtoc.1 mtoc.l
+
 rtoc_SOURCES=rtoc1.c xmalloc.c system.h aclocal.m4 rtoc.1 rtoc.l lex.hh
 
 qoxygen2_SOURCES = qoxygen.l
-qoxygen2_LDADD = $(LEXLIB)
 
 lex.cc: rtocc.l
 	flex -+ $(FLEX_DEBUG) -o $@ $<
 
+mtoc.c: mtoc.l
+	flex $(FLEX_DEBUG) -o $@ $<
+
 rtocc_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 lex.cc
-rtocc_LDADD = $(FLEXLIB)
 
 qoxygen_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 qlex.cc rtocc2.cc
-qoxygen_LDADD = $(LEXLIB)
 
 qlex.cc: qoxygen2.l
 	flex -+ $(FLEX_DEBUG) -o $@ $<

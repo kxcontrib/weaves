@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qoxygen", "qoxygen.vcproj", "{D59761BC-7BFB-463E-9EE3-C66E90C58A59}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "..\Setup\Setup.vdproj", "{F99BD991-2671-4140-AB69-94E4D6234744}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D59761BC-7BFB-463E-9EE3-C66E90C58A59}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D59761BC-7BFB-463E-9EE3-C66E90C58A59}.Debug|Win32.Build.0 = Debug|Win32
+		{D59761BC-7BFB-463E-9EE3-C66E90C58A59}.Release|Win32.ActiveCfg = Release|Win32
+		{D59761BC-7BFB-463E-9EE3-C66E90C58A59}.Release|Win32.Build.0 = Release|Win32
+		{F99BD991-2671-4140-AB69-94E4D6234744}.Debug|Win32.ActiveCfg = Debug
+		{F99BD991-2671-4140-AB69-94E4D6234744}.Release|Win32.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
