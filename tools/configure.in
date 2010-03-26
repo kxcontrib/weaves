@@ -6,7 +6,7 @@ dnl Every other copy of the package version number gets its value from here
 AM_INIT_AUTOMAKE(rtoc, 0.1.1)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
-AM_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER([config.h lib/gnulib.h])
 
 AC_SUBST(VERSION)
 
@@ -18,10 +18,14 @@ AC_CANONICAL_HOST
 dnl Checks for programs.
 AC_PROG_INSTALL
 AC_PROG_CC
+gl_EARLY
 AC_PROG_CXX
 AC_PROG_AWK
 AM_PROG_LEX
 AC_PROG_YACC
+AC_PROG_RANLIB
+
+gl_INIT
 
 AC_PATH_PROG(CCPATH,$CC)
 AC_PATH_PROG(DOXYGEN,doxygen)
@@ -52,6 +56,7 @@ AC_CHECK_LIB(fl, yywrap)
 AC_CHECK_LIB(m, round)
 
 AC_OUTPUT([Makefile 
+lib/Makefile
 qoxygen/Makefile 
 qtools.lsm 
 qtools.spec])
