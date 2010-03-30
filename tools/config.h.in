@@ -268,8 +268,17 @@
 /* Define to 1 if you have the `rawmemchr' function. */
 #undef HAVE_RAWMEMCHR
 
+/* Define to 1 if accept is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_ACCEPT
+
+/* Define to 1 if accept4 is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_ACCEPT4
+
 /* Define to 1 if atoll is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_ATOLL
+
+/* Define to 1 if bind is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_BIND
 
 /* Define to 1 if btowc is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_BTOWC
@@ -280,6 +289,9 @@
 
 /* Define to 1 if chown is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_CHOWN
+
+/* Define to 1 if connect is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_CONNECT
 
 /* Define to 1 if dprintf is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_DPRINTF
@@ -356,6 +368,15 @@
 /* Define to 1 if getpagesize is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_GETPAGESIZE
 
+/* Define to 1 if getpeername is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_GETPEERNAME
+
+/* Define to 1 if getsockname is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_GETSOCKNAME
+
+/* Define to 1 if getsockopt is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_GETSOCKOPT
+
 /* Define to 1 if getsubopt is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_GETSUBOPT
 
@@ -373,6 +394,9 @@
 
 /* Define to 1 if linkat is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_LINKAT
+
+/* Define to 1 if listen is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_LISTEN
 
 /* Define to 1 if lseek is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_LSEEK
@@ -440,6 +464,12 @@
 /* Define to 1 if realpath is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_REALPATH
 
+/* Define to 1 if recv is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_RECV
+
+/* Define to 1 if recvfrom is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_RECVFROM
+
 /* Define to 1 if renameat is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_RENAMEAT
 
@@ -449,8 +479,17 @@
 /* Define to 1 if rpmatch is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_RPMATCH
 
+/* Define to 1 if send is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_SEND
+
+/* Define to 1 if sendto is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_SENDTO
+
 /* Define to 1 if setenv is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SETENV
+
+/* Define to 1 if setsockopt is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_SETSOCKOPT
 
 /* Define to 1 if setstate_r is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SETSTATE_R
@@ -458,11 +497,17 @@
 /* Define to 1 if setusershell is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SETUSERSHELL
 
+/* Define to 1 if shutdown is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_SHUTDOWN
+
 /* Define to 1 if sleep is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SLEEP
 
 /* Define to 1 if snprintf is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SNPRINTF
+
+/* Define to 1 if socket is declared even after undefining macros. */
+#undef HAVE_RAW_DECL_SOCKET
 
 /* Define to 1 if srandom_r is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_SRANDOM_R
@@ -557,6 +602,12 @@
 /* Define to 1 if wcwidth is declared even after undefining macros. */
 #undef HAVE_RAW_DECL_WCWIDTH
 
+/* Define to 1 if the system has the type `sa_family_t'. */
+#undef HAVE_SA_FAMILY_T
+
+/* Define to 1 if you have the `shutdown' function. */
+#undef HAVE_SHUTDOWN
+
 /* Define to 1 if 'sig_atomic_t' is a signed integer type. */
 #undef HAVE_SIGNED_SIG_ATOMIC_T
 
@@ -617,6 +668,9 @@
 
 /* Define to 1 if the system has the type `struct random_data'. */
 #undef HAVE_STRUCT_RANDOM_DATA
+
+/* Define to 1 if the system has the type `struct sockaddr_storage'. */
+#undef HAVE_STRUCT_SOCKADDR_STORAGE
 
 /* Define to 1 if `st_blocks' is a member of `struct stat'. */
 #undef HAVE_STRUCT_STAT_ST_BLOCKS
@@ -708,6 +762,9 @@
 
 /* Define if you have the 'wint_t' type. */
 #undef HAVE_WINT_T
+
+/* Define to 1 if you have the <ws2tcpip.h> header file. */
+#undef HAVE_WS2TCPIP_H
 
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
