@@ -13,7 +13,7 @@ PDFLATEX_FLAGS = --interaction batchmode
 .SUFFIXES : .pdf .html .tex
 .PHONY : all clean html pdf doxygen
 
-all: doxygen
+all: ${DOXYGEN_HTML_DIR}
 
 doxygen: ${DOXYGEN_PDF}
 
