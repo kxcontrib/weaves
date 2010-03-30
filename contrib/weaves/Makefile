@@ -3,5 +3,5 @@ all:
 	R CMD INSTALL q4r_0.1.tar.gz
 
 am-install-local:
-	cp tools/qoxygen/Setup/Release/qoxygen.msi dists
-	cp tools/qoxygen/Setup/Release/setup.exe dists/qoxygen_setup.exe
+	cp tools/doxygen0/Setup/Release/doxygenf.msi dists
+	cp tools/doxygen0/Setup/Release/setup.exe dists/doxygenf.exe

@@ -1,4 +1,4 @@
-SUBDIRS = lib qoxygen
+SUBDIRS = lib doxygen0
 
 ACLOCAL_AMFLAGS = -I m4
 
