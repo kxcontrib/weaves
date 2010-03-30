@@ -100,3 +100,10 @@ void closeCommentBlock()			/* end comment block */
   }
 }
 
+#ifndef __GNUC__
+int main(int argc, char **argv) {
+	yyin = (argc>1) ? fopen(argv[1], "r") : stdin;
+	yylex();
+	return EXIT_SUCCESS;
+}
+#endif
