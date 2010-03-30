@@ -1,0 +1,7 @@
+weaves
+
+doxygenf.msi and doxygenf.exe are the DoxyGen filters for .q files.
+These have been built with VisualStudio 2005 on Windows XP SP3. 
+They have a prerequisite on the VC8 redistributable package.
+
+The doxygenf package puts qoxygen.exe and mtoc.exe into the user's Application Data folder.
