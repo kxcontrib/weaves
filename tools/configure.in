@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(qoxygen/rtocc1.cc)
+AC_INIT(doxygen0/rtocc1.cc)
 AC_CONFIG_AUX_DIR([config])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(rtoc, 0.1.1)
+AM_INIT_AUTOMAKE(doxygen0, 0.1.1)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER([config.h lib/gnulib.h])
@@ -57,6 +57,6 @@ AC_CHECK_LIB(m, round)
 
 AC_OUTPUT([Makefile 
 lib/Makefile
-qoxygen/Makefile 
+doxygen0/Makefile 
 qtools.lsm 
 qtools.spec])

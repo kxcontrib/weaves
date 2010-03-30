@@ -554,7 +554,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="qoxygen/rtocc1.cc"
+ac_unique_file="doxygen0/rtocc1.cc"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -3357,7 +3357,7 @@ fi
 
 
 # Define the identity of the package.
- PACKAGE=rtoc
+ PACKAGE=doxygen0
  VERSION=0.1.1
 
 
@@ -12874,7 +12874,7 @@ _ACEOF
 fi
 
 
-ac_config_files="$ac_config_files Makefile lib/Makefile qoxygen/Makefile qtools.lsm qtools.spec"
+ac_config_files="$ac_config_files Makefile lib/Makefile doxygen0/Makefile qtools.lsm qtools.spec"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -13623,7 +13623,7 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
-    "qoxygen/Makefile") CONFIG_FILES="$CONFIG_FILES qoxygen/Makefile" ;;
+    "doxygen0/Makefile") CONFIG_FILES="$CONFIG_FILES doxygen0/Makefile" ;;
     "qtools.lsm") CONFIG_FILES="$CONFIG_FILES qtools.lsm" ;;
     "qtools.spec") CONFIG_FILES="$CONFIG_FILES qtools.spec" ;;
 
