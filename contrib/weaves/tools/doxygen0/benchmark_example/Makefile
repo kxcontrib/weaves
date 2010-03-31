@@ -1,7 +1,6 @@
-TOP_DIR=..
-
-all: 
-	doxygen doxygen.conf 
+DOXYGEN_OUT = doxygen.doxo
 
 include ../style/Makefile
+
+TOP_DIR=..
 
