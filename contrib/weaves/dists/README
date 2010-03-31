@@ -1,7 +1,27 @@
 weaves
 
-doxygenf.msi and doxygenf.exe are the DoxyGen filters for .q files.
-These have been built with VisualStudio 2005 on Windows XP SP3. 
-They have a prerequisite on the VC8 redistributable package.
+DoxyGen filters for .q files
 
-The doxygenf package puts qoxygen.exe and mtoc.exe into the user's Application Data folder.
+http://www.stack.nl/~dimitri/doxygen/config.html#cfg_filter_patterns
+
+doxygenf.zip contains Cygwin and Windows XP SP3 builds of the qoxygen.exe 
+utility.
+
+- Windows
+
+These have been built with VisualStudio 2005 on Windows XP SP3. 
+doxygenf.msi and doxygenf.exe are the install and setup executable.
+There is a requirement that the VC8 redistributable package be installed.
+
+The executables install into c:\Documents and Settings\user\Application Data
+
+On Windows, DoxyGen will use the executable, but DoxyGen does not like spaces in the path.
+So use quotes in the FILTER_PATTERNS specification. 
+
+- Cygwin on Windows
+
+The executable in i686-pc-cygwin require the cyggcc_s-1 and cygwin1 DLLs.
+
+This is a late Cygwin build (post 1.7). The source at
+ code.kx.com
+does support a Cygwin build: it needs gcc3 or better, flex, autoconf and automake.
