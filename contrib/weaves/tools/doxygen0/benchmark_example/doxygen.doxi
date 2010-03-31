@@ -1,0 +1,10 @@
+@include ../style/doxygen.conf
+# The FILTER_PATTERNS tag can be used to specify filters on a per file pattern
+# filter if there is a match.
+# The filters are a list of the form:
+# pattern=filter (like *.cpp=my_cpp_filter). See INPUT_FILTER for further
+# info on how filters are used. If FILTER_PATTERNS is empty, INPUT_FILTER
+FILTER_PATTERNS        = *.q=qoxygen1.sh
+# If the FILTER_SOURCE_FILES tag is set to YES, the input filter (if set using
+# INPUT_FILTER) will be used to filter the input files when producing source
+FILTER_SOURCE_FILES    = NO
