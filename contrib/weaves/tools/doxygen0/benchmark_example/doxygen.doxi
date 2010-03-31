@@ -1,4 +1,4 @@
-@include ../style/doxygen.conf
+@INCLUDE = ../style/doxygen.conf
 # The FILTER_PATTERNS tag can be used to specify filters on a per file pattern
 # filter if there is a match.
 # The filters are a list of the form:
