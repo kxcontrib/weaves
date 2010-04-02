@@ -1,6 +1,7 @@
 
 q_files = darwin8.0.q linux-gnu.q help.q log.q site.q sys.q trdr.q dbmaint.q \
-trdrc.q trader-cull.q commander.q fctry.q fctryc.q fctryc0.q fctrys.q
+trdrc.q trader-cull.q commander.q \
+fctry.q fctryc.q fctryc0.q fctrys.q csvguess.q
 
 bin_SCRIPTS = Qp Qr Qs qsys-config
 sysconf_DATA = use-q q.rc
