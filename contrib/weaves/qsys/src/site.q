@@ -15,6 +15,8 @@ if[0 < count getenv`QLOAD;
    .sys.i.args: .Q.opt .z.x;
    .sys.i.cwd: getenv`PWD;
    value ("\\l ",(getenv`QLOAD));
+   if[ 0 > count .z.x;
+      .Q.x: $[ "-" <> first first .z.x; enlist first .z.x; .Q.x ] ];
    .sys.args`;
 
    if[.sys.is_arg`debug; .sys.qloader enlist("log.q"); .log.trace:1];
@@ -43,7 +45,7 @@ if[0 < count getenv`QLOAD;
 
 /  Local Variables: 
 /  mode:q 
-/  q-prog-args: " -nodo -verbose -quiet -qpath $PWD .. -load help.q"
+/  q-prog-args: "t.q -nodo -verbose -quiet -qpath $PWD -load help.q"
 /  fill-column: 75
 /  comment-column:50
 /  comment-start: "/  "

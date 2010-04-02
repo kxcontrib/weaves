@@ -1,3 +1,8 @@
+// @file csvguess.q
+// @author Simon
+// @author weaves
+/ I have added a feature to allow csvguess.q to be loaded using -load.
+
 / guess a reasonable loadstring for a csv file (kdb+ 2.4 or greater)
 ("kdb+csvguess 0.39 2007.12.01: ", (string .z.f), " ", (" " sv .z.x))
 / 2007.12.01 add POSTSAVEALL for SAVE/BULKSAVE - allow disk `p# etc 
@@ -11,9 +16,15 @@ o: $[0 = count key `.sys; .Q.opt .z.x; .sys.i.args ]
 
 EXIT:`exit in key o
 
+.z.f: string last .sys.i.qloaded
+
+.Q.x: $[ .sys.is_arg`file; .sys.arg`file; .Q.x ]
+
+0N!(.Q.x; .z.f);
+
 if[0 = count key `.sys; .sys.exit: { $[ EXIT; exit x; :: ] } ]
 
-if[1>count .Q.x;-2"usage: q ",(string .z.f)," CSVFILE [-noheader|nh] [-discardempty|de] [-semicolon|sc] [-tab|tb] [-zaphdrs|zh] [-savescript|ss] [-saveinfo|si] [-zeuro|z1] [-exit]\n";.sys.exit 1]
+if[1>count .Q.x;-2"usage: q ",(string .z.f)," -file CSVFILE [-noheader|nh] [-discardempty|de] [-semicolon|sc] [-tab|tb] [-zaphdrs|zh] [-savescript|ss] [-saveinfo|si] [-zeuro|z1] [-exit]\n";.sys.exit 1]
 
 / -noheader|nh - the csv file doesn't have headers, so create some (c00..)
 / -discardempty|de - if a column is empty don't bother to load it 
@@ -234,3 +245,13 @@ if[EXIT;.sys.exit 0]
 first LOAD10 FILE
 select from info where maybe
 allfiles:{x where(lower x)like"*.csv"}key`:.
+
+/  Local Variables: 
+/  mode:q 
+/  q-prog-args: "matlab_log.csv -si -load csvguess.q"
+/  fill-column: 75
+/  comment-column:50
+/  comment-start: "/  "
+/  comment-end: ""
+/  End:
+

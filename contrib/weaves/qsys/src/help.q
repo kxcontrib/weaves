@@ -296,3 +296,12 @@ TXT,:(enlist`verbs)!enlist(
  )
 DIR,:(enlist`verbs)!enlist`$"verbs/functions"
 .q.help:.help.display
+
+/  Local Variables: 
+/  mode:q 
+/  q-prog-args: " t.q -nodo -verbose -quiet -qpath $PWD -load help.q"
+/  fill-column: 75
+/  comment-column:50
+/  comment-start: "/  "
+/  comment-end: ""
+/  End:
