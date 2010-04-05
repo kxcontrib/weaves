@@ -47,6 +47,8 @@ plot: { [x] x }
 
 #include <iterator>
 
+#include <boost/algorithm/string.hpp>
+
 using namespace std;
 
 int yyFlexLexer::yywrap() {
@@ -102,8 +104,10 @@ DEF     (<-)|(=)
 	REJECT;
 	}
 
-<INITIAL>^[ \t]*[.]*[[:alpha:]][[:alnum:].]*[ \t]*/: {
+<INITIAL>^[ \t]*[.]*[[:alpha:]][[:alnum:]_.]*[ \t]*/: {
 	fname = fname.assign(yytext);
+	bool classed = boost::find_first(fname, ".");
+
 	fname = asclassQ(fname);
 	if (yy_flex_debug) (*yyout) << "sm: id: class !impl: "
 	   << YYSTATE << fname << std::endl;
@@ -111,17 +115,6 @@ DEF     (<-)|(=)
 	(*yyout) << "namespace t { " << fname;
 
 	yy_push_state(nsdef);
-}
-
-<INITIAL>^[ \t]*[[:alpha:]][[:alnum:]_.]*[ \t]*/: {
-	fname = fname.assign(yytext);
-	fname = deQ(fname);
-	if (yy_flex_debug) (*yyout) << "sm: id: !impl: "
-	   << YYSTATE << fname << std::endl;
-
-	(*yyout) << fname;
-
-	yy_push_state(def);
 }
 
 <nsdef,def>:[ \t]* {
@@ -243,7 +236,7 @@ DEF     (<-)|(=)
   * \d .tmp or \d tmp starts a namespace until eof or another \d
   */
 
-^\\d[ \t]+[.]+[:alpha:][:alnum:_.]*$ {
+^\\d[ \t].+$ {
    if (ns0.length() > 0) printf("}");
    
    ns0.assign(yytext);
@@ -254,16 +247,19 @@ DEF     (<-)|(=)
   * remove anything left over
   */
 
-^\n {
+^\n { /* blank lines */
    printf("\n");
 }
 
-^\\[a-ce-zA-Z].*$ {
+^\\[a-ce-zA-Z].*$ { /* commands other than \d */
    printf("/* %s */", yytext);
 }
 
-^\\\n {
-	yy_push_state(end);
+^\\\n { /* Terminal comment */
+   if (ns0.length() > 0) printf("}");
+   
+   ns0.assign("");
+   yy_push_state(end);
 }
 
 <INITIAL,end>(.|\r) {
@@ -271,8 +267,12 @@ DEF     (<-)|(=)
 }
 
 <*><<EOF>>	{
-		  return(0);
-		}
+   if (ns0.length() > 0) printf("}");
+   
+   ns0.assign("");
+   yy_push_state(end);
+   return(0);
+}
 
 
 %%
