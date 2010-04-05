@@ -108,13 +108,20 @@ DEF     (<-)|(=)
 	fname = fname.assign(yytext);
 	bool classed = boost::find_first(fname, ".");
 
-	fname = asclassQ(fname);
-	if (yy_flex_debug) (*yyout) << "sm: id: class !impl: "
-	   << YYSTATE << fname << std::endl;
+	if (classed) {
+	  fname = asclassQ(fname);
+	  if (yy_flex_debug) (*yyout) << "sm: id: class !impl: "
+	     << YYSTATE << fname << std::endl;
 
-	(*yyout) << "namespace t { " << fname;
-
-	yy_push_state(nsdef);
+	  (*yyout) << "namespace t { " << fname;
+	  yy_push_state(nsdef);
+         } else {
+	  fname = deQ(fname);
+	  if (yy_flex_debug) (*yyout) << "sm: id: !impl: "
+	     << YYSTATE << fname << std::endl;
+	  (*yyout) << fname;
+	  yy_push_state(def);
+	 }
 }
 
 <nsdef,def>:[ \t]* {
