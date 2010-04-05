@@ -1,4 +1,4 @@
-DOXYGEN_OUT = doxygen.doxo
+DOXYGEN_OUT ?= doxygen.doxo
 
 include ../style/Makefile
 

@@ -43,6 +43,5 @@ ${DOXYGEN_PDF}: ${DOXYGEN_LATEX_DIR} ${DOXYGEN_PDF_TMP}
 	@rm -fr ${DOXYGEN_LATEX_DIR}
 
 clean:
-	@rm -f *.html *.pdf
+	@rm -f *.html *.pdf *.doxo
 	@rm -fr ${DOXYGEN_HTML_DIR} ${DOXYGEN_LATEX_DIR} ${DOXYGEN_PDF}
-

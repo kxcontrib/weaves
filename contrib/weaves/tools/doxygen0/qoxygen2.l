@@ -54,15 +54,16 @@ int yyFlexLexer::yywrap() {
 }
 
 /// variety of cleanups.
-string deR(string fname);
+string deQ(string fname);
 
 /// variety of cleanups.
-string asclass(string fname);
+string asclassQ(string fname);
 
 %}
 
 	int comment_caller;
 	string fname;
+	string ns0;
 	int linecount = 0;
 	int flinecount = 0; // lineno() doesn't work
 
@@ -71,7 +72,7 @@ QID	\"[.a-zA-Z][0-9a-zA-Z_. ]*\"
 WS	[ \t]*
 DEF     (<-)|(=)
 
-%s def defbody fn args fnbody doc
+%s def defbody fn args fnbody doc nsdef
 %x end table string block coldata
 
 %%
@@ -101,50 +102,53 @@ DEF     (<-)|(=)
 	REJECT;
 	}
 
-<INITIAL>^[ \t]*.[[:alpha:]][[:alnum:].]*[ \t]*/: {
-	    fname = fname.assign(yytext);
-	    fname = asclass(fname);
-	    if (yy_flex_debug) (*yyout) << "sm: id: class !impl: "
-	       << YYSTATE << fname << std::endl;
+<INITIAL>^[ \t]*[.]*[[:alpha:]][[:alnum:].]*[ \t]*/: {
+	fname = fname.assign(yytext);
+	fname = asclassQ(fname);
+	if (yy_flex_debug) (*yyout) << "sm: id: class !impl: "
+	   << YYSTATE << fname << std::endl;
 
-	(*yyout) << fname;
+	(*yyout) << "namespace t { " << fname;
 
-	yy_push_state(def);
+	yy_push_state(nsdef);
 }
 
 <INITIAL>^[ \t]*[[:alpha:]][[:alnum:]_.]*[ \t]*/: {
-	    fname = fname.assign(yytext);
-	    fname = deR(fname);
-	    if (yy_flex_debug) (*yyout) << "sm: id: !impl: " << YYSTATE << fname << std::endl;
+	fname = fname.assign(yytext);
+	fname = deQ(fname);
+	if (yy_flex_debug) (*yyout) << "sm: id: !impl: "
+	   << YYSTATE << fname << std::endl;
 
 	(*yyout) << fname;
 
 	yy_push_state(def);
 }
 
-<def>:[ \t]* {
+<nsdef,def>:[ \t]* {
 	printf("=");
-	yy_pop_state();
 	yy_push_state(defbody);
 }
 
 <defbody>[\r\n] {
 	printf(";\n");
 	yy_pop_state();
+	if (YYSTATE == nsdef) printf(" }");
+        yy_pop_state();
 }
 
 <defbody>[ \t]+\/[^:] {
 	printf("; ");
 	yy_pop_state();
+	if (YYSTATE == nsdef) printf(" }");
+        yy_pop_state();
 }
 
 <defbody>[,;] {
 	printf(" ");
 }
 
-<def>:[ \t]*\{[ \t]* {
+<nsdef,def>:[ \t]*\{[ \t]* {
 	printf("(");
-	yy_pop_state();
 	yy_push_state(fn);
 }
 
@@ -165,8 +169,10 @@ DEF     (<-)|(=)
 }
 
 <fn,fnbody>\} {
-	printf("};");
+        printf("};");
 	yy_pop_state();
+	if (YYSTATE == nsdef) printf(" }");
+        yy_pop_state();
 }
 
 <defbody,fnbody>\" {
@@ -234,6 +240,17 @@ DEF     (<-)|(=)
 }
 
  /*****************************************
+  * \d .tmp or \d tmp starts a namespace until eof or another \d
+  */
+
+^\\d[ \t]+[.]+[:alpha:][:alnum:_.]*$ {
+   if (ns0.length() > 0) printf("}");
+   
+   ns0.assign(yytext);
+   printf("/* %s */ namespace u { ", yytext);
+}
+
+ /*****************************************
   * remove anything left over
   */
 
@@ -241,7 +258,7 @@ DEF     (<-)|(=)
    printf("\n");
 }
 
-^\\[a-zA-Z].*$ {
+^\\[a-ce-zA-Z].*$ {
    printf("/* %s */", yytext);
 }
 

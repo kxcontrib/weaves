@@ -47,3 +47,36 @@ std::string asclass(std::string fname) {
   fname = replace0( fname, '.', '_' );
   return fname;
 }
+
+#include <boost/algorithm/string.hpp>
+
+using namespace std;
+using namespace boost;
+
+string as_(string fname) {
+  if (fname.length() <= 0) return fname;
+  if (fname[0] == '.')
+    fname[0]='_';
+  return fname;
+}
+
+/// variety of cleanups.
+string deQ(string fname) {
+  trim(fname);
+  fname = replace_all_copy( fname, "\"", "" );
+  fname = replace_all_copy( fname, "\'", "" );
+  fname = replace_all_copy( fname, "`", "" );
+
+  fname = as_(fname);
+  fname = replace_all_copy( fname, ".", "::" );
+  return fname;
+}
+
+/// variety of cleanups.
+string asclassQ(string fname) {
+  trim(fname);
+  if (fname.length() <= 0) return fname;
+  fname = as_(fname);
+  fname = replace_all_copy( fname, ".", "::" );
+  return fname;
+}
