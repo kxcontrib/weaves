@@ -22,9 +22,13 @@ f:{x}
 // class embedded
 
 // classed function
-.t.f: { [x] x }
+.u.f: { [x] x }
 // classed static
-.t.g: 42
+.u.g: 42
+
+// Sometimes you see this
+
+v.g: { [x] x }
 
 // A class
 \d .t

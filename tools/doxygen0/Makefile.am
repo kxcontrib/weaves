@@ -29,7 +29,8 @@ mtoc.c: mtoc.l
 
 rtocc_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 lex.cc
 
-qoxygen_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 qlex.cc rtocc2.cc
+qoxygen_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 \
+ qlex.cc rtocc2.cc
 
 qlex.cc: qoxygen2.l
 	flex -+ $(FLEX_DEBUG) -o $@ $<
@@ -39,14 +40,16 @@ CLEANFILES = qoxygen.c lex.yy.cc lex.yy.c rtoc.c $(BUILT_SOURCES)
 #  uncomment the following if mtoc requires the math library
 #mtoc_LDADD=-lm
 
-EXTRA_DIST=mtoc.lsm.in mtoc.spec.in mtoc.texinfo rtocc.l matlab-sample.m R-sample.R R-sample1.R tester fdoxy qoxygen.l
+EXTRA_DIST = mtoc.lsm.in mtoc.spec.in mtoc.texinfo \
+ rtocc.l matlab-sample.m R-sample.R R-sample1.R \
+ tester fdoxy qoxygen.l qoxygen2.l
 
 #  build and install the .info pages
 # info_TEXINFOS = mtoc.texinfo
 # mtoc_TEXINFOS = ../gpl.texinfo
 
 #  install the man pages
-man_MANS=mtoc.1 rtoc.1
+man_MANS = mtoc.1 rtoc.1
 
 export TOP = $(top_srcdir)
 export srcdir
