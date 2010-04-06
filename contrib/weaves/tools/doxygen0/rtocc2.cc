@@ -107,16 +107,38 @@ string accessors0(string fname) {
   trim(fname);
   to_lower(fname);
   string s0;
-  s0.assign("public");
-  if (find_first(fname, s0))
-    return t0(s0);
   s0.assign("protected");
   if (find_first(fname, s0))
     return t0(s0);
   s0.assign("private");
   if (find_first(fname, s0))
     return t0(s0);
-  return "";
+  // Assume this default
+  s0.assign("public");
+  if (find_first(fname, s0))
+    ;
+  return t0(s0);
+}
+
+string is_q(string fname, const char *q0, const char *r0) {
+  trim(fname);
+  to_lower(fname);
+  string s0(q0);
+  string r1(r0);
+
+  if (find_first(fname, s0))
+    return t0(r1);
+  string empty0("");
+  return t0(empty0);
+}
+
+string is_q(const char *fname0, const char *q0, const char *r0) {
+  return is_q(string(fname0), q0, r0);
+}
+
+string replace0(const char *fname0, const char *q0, const char *r0) {
+  string fname(fname0);
+  return replace_all_copy(fname, string(q0), string(r0));
 }
 
 string namespace1(string fname) {
@@ -143,3 +165,8 @@ string namespacen() {
   return fname0;
 }
 
+string static0(string fname) {
+  trim(fname);
+  fname = replace_all_copy(fname, "=", " ");
+  return fname;
+}

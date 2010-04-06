@@ -30,81 +30,99 @@ int yyFlexLexer::yywrap() {
 
 /// variety of cleanups.
 string deQ(string fname);
+string is_q(const char *s, const char *q0, const char *r0);
 string accessors0(string fname);
+string static0(string fname);
+string replace0(const char *s, const char *q0, const char *r0);
 
 %}
 
- int inCommentLine = 0; /* in comment line */
- int comment_caller;
  string tag1;
  string accessors;
  int linecount = 0;
- int flinecount = 0; // lineno() doesn't work
 
 ID [a-zA-Z][0-9a-zA-Z_]*
 WS [ \t]*
 
 %s func funcDef paramList props methods
-%x doc props0 methods0
+%x doc props0 methods0 class0 classes classes1
 
 %%
 
-^{WS}classdef{WS} {
- (*yyout) << "class ";
+^{WS}classdef{WS}{ID} {
+ tag1 = replace0(yytext, "classdef", "class");
+ (*yyout) << tag1;
+ yy_push_state(class0);
+}
+
+<class0>< {
+ (*yyout) << ":";
+ yy_push_state(classes);
+}
+
+<classes>{ID} {
+ (*yyout) << "public " << replace0(yytext, ".", "_");
+ yy_pop_state();
+ yy_push_state(classes1);
+}
+
+<classes1>{ID} {
+ (*yyout) << ", public " << replace0(yytext, ".", "_");
+}
+
+<classes,classes1,class0>\n {
+ (*yyout) << " {";
+ ECHO;
+ yy_pop_state();
 }
 
 ^{WS}properties {
+ yy_push_state(props);
  yy_push_state(props0);
 }
 
 ^{WS}methods {
+ yy_push_state(methods);
  yy_push_state(methods0);
 }
 
-<props0,methods0>(.+) {
+<props0,methods0>\(.+\) {
  accessors.assign(yytext);
 }
 
 <props0,methods0>\n {
  (*yyout) << accessors0(accessors);
+ accessors.assign("");
  ECHO;
  yy_pop_state();
- if (YYSTATE == props0)
-  yy_push_state(props);
- else
-  yy_push_state(methods);
 }
 
  /* end last function */
 <func>"%%" { 
- comment_caller = YY_START;
- BEGIN(doc);
+ yy_push_state(doc);
  (*yyout) << "}\n/// ";
- inCommentLine = 1; /* start of comment */
 }
 
  /* close old comment, start new one */
 <doc>"%%" {
+ yy_pop_state();
+ yy_push_state(doc);
  (*yyout) << "\n///";
- inCommentLine = 1; /* start of comment */
 }
 
  /* first token */
 "%%" { 
- comment_caller = YY_START;
- BEGIN(doc);
+ yy_push_state(doc);
  (*yyout) << "/// ";
- inCommentLine = 1; /* start of comment */
 }
 
 <doc>"%" {
  /* just a symbol in a comment */
- if (inCommentLine) 
+ if (YYSTATE == doc)
   ECHO;
  else {
   /* part of current comment block */
   (*yyout) << "*";
-  inCommentLine = 1;
  }
 }
 
@@ -115,53 +133,43 @@ WS [ \t]*
  /* start comment block */
 "%" { 
  (*yyout) << "/// ";
- comment_caller = YY_START;
- BEGIN(doc);
- inCommentLine = 1; /* start of comment */
+ yy_push_state(doc);
 }
 
 <doc>\n {
- ECHO; inCommentLine = 0;
- BEGIN(INITIAL);
+ ECHO;
+ yy_pop_state();
 }
 
-^{WS}function {
- if (!inCommentLine) {
-  (*yyout) << "\n";
-  BEGIN(comment_caller);
- }
-
+^{WS}function{WS}{ID}{WS} {
  (*yyout) << "void ";
- BEGIN(funcDef);
+ yy_push_state(funcDef);
+ (*yyout) << replace0(yytext, "function", "");
 }
 
-^{WS}function.*\[.*\].*= {
- if (!inCommentLine) {
-  (*yyout) << "\n";
-  BEGIN(comment_caller);
- }
- (*yyout) << "rets ";
- BEGIN(funcDef);
-}
-
-^{WS}function.*= {
- if (!inCommentLine) {
-  (*yyout) << "\n";
-  BEGIN(comment_caller);
- }
- (*yyout) << "ret ";
- BEGIN(funcDef);
+^{WS}function{WS}{ID}{WS}={WS}{ID}{WS} {
+ yy_push_state(funcDef);
+ tag1 = replace0(yytext, "function", "");
+ tag1 = replace0(tag1.c_str(), "=", "");
+ (*yyout) << tag1;
 }
 
 <funcDef>\( {
+ yy_pop_state();
  ECHO;
- BEGIN(paramList);
+ yy_push_state(paramList);
+}
+
+<paramList>\){WS}; {
+ yy_pop_state();
+ ECHO;
 }
 
 <paramList>\) {
+ yy_pop_state();
  ECHO;
  (*yyout) << "{\n";
- BEGIN(func);
+ yy_push_state(func);
 }
 
 <paramList>{ID} {
@@ -169,22 +177,16 @@ WS [ \t]*
  ECHO;
 }
 
-<doc>[0-9a-zA-Z]+ {
- if (!inCommentLine) {
-  (*yyout) << "\n";
-  BEGIN(comment_caller);
- }
+<doc>.* {
  ECHO;
 }
 
-[0-9a-zA-Z]+ {
- ECHO;
+<props,methods>^{WS}end{WS}$ {
+ yy_pop_state();
 }
 
 ^{WS}end{WS}$ {
- if (YYSTATE == props || YYSTATE == methods)
-  yy_pop_state();
- else (*yyout) << "}";
+ (*yyout) << "}";
 }
 
 <<EOF>> {
@@ -194,7 +196,7 @@ WS [ \t]*
 
 <*>^.*$ {
  linecount++;
- if (yy_flex_debug) (*yyout) << "default: " << yytext << "sm: " << YY_START;
+ if (yy_flex_debug) (*yyout) << "sm: " << YY_START;
  REJECT;
 }
 
