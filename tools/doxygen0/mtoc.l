@@ -45,7 +45,8 @@ ID [a-zA-Z][0-9a-zA-Z_]*
 WS [ \t]*
 
 %s func funcDef paramList props methods
-%x doc props0 methods0 class0 classes classes1
+%s props0 methods0 class0 classes classes1
+%x doc
 
 %%
 
@@ -86,7 +87,8 @@ WS [ \t]*
  yy_push_state(methods0);
 }
 
-<props0,methods0>\(.+\) {
+<props0,methods0>\(.*\) {
+ if (yy_flex_debug) (*yyout) << "sm: " << YYSTATE;
  accessors.assign(yytext);
 }
 
@@ -117,13 +119,7 @@ WS [ \t]*
 }
 
 <doc>"%" {
- /* just a symbol in a comment */
- if (YYSTATE == doc)
-  ECHO;
- else {
-  /* part of current comment block */
-  (*yyout) << "*";
- }
+ ECHO;
 }
 
 <doc>.+$ {
@@ -196,7 +192,7 @@ WS [ \t]*
 
 <*>^.*$ {
  linecount++;
- if (yy_flex_debug) (*yyout) << "sm: " << YY_START;
+ if (yy_flex_debug) (*yyout) << "sm: " << YYSTATE;
  REJECT;
 }
 
