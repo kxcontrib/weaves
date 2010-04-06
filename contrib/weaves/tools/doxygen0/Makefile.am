@@ -5,31 +5,31 @@
 ## qoxygen2 is the original
 ## qoxygen is the newer one that uses some C++ and counts lines.
 
-BUILT_SOURCES = mtoc.c lex.cc qlex.cc
+BUILT_SOURCES = mtoc1.cc lex.cc qlex.cc
 
 noinst_PROGRAMS = string0
 
 string0_SOURCES = string0.cc
 
-bin_PROGRAMS=mtoc rtoc rtocc qoxygen qoxygen2
+bin_PROGRAMS = mtoc rtoc rtocc qoxygen qoxygen2
 
 LDADD = -L$(top_srcdir)/lib -lgnu $(LEXLIB)
 
-mtoc_SOURCES=mtoc1.c xmalloc.c system.h aclocal.m4 mtoc.1 mtoc.l
-
-rtoc_SOURCES=rtoc1.c xmalloc.c system.h aclocal.m4 rtoc.1 rtoc.l lex.hh
+rtoc_SOURCES=rtoc1.c xmalloc.c lex.hh
 
 qoxygen2_SOURCES = qoxygen.l
 
 lex.cc: rtocc.l
 	flex -+ $(FLEX_DEBUG) -o $@ $<
 
-mtoc.c: mtoc.l
-	flex $(FLEX_DEBUG) -o $@ $<
+mtoc1.cc: mtoc.l
+	flex -+ $(FLEX_DEBUG) -o $@ $<
 
-rtocc_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 lex.cc
+rtocc_SOURCES = rtocc1.cc xmalloc.c lex.cc
 
-qoxygen_SOURCES = rtocc1.cc xmalloc.c system.h aclocal.m4 rtoc.1 \
+mtoc_SOURCES = rtocc1.cc mtoc1.cc xmalloc.c rtocc2.cc
+
+qoxygen_SOURCES = rtocc1.cc xmalloc.c rtoc.1 \
  qlex.cc rtocc2.cc
 
 qlex.cc: qoxygen2.l
@@ -42,7 +42,8 @@ CLEANFILES = qoxygen.c lex.yy.cc lex.yy.c rtoc.c $(BUILT_SOURCES)
 
 EXTRA_DIST = mtoc.lsm.in mtoc.spec.in mtoc.texinfo \
  rtocc.l matlab-sample.m R-sample.R R-sample1.R \
- tester fdoxy qoxygen.l qoxygen2.l
+ tester fdoxy qoxygen.l qoxygen2.l \
+ mtoc.l xmalloc.c system.h aclocal.m4 mtoc.1
 
 #  build and install the .info pages
 # info_TEXINFOS = mtoc.texinfo

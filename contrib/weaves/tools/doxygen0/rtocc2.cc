@@ -97,6 +97,28 @@ string namespace0(string fname) {
   return s0;
 }
 
+static const string colon0(":");
+
+string t0(string & s0) {
+  return s0 + colon0;
+}
+
+string accessors0(string fname) {
+  trim(fname);
+  to_lower(fname);
+  string s0;
+  s0.assign("public");
+  if (find_first(fname, s0))
+    return t0(s0);
+  s0.assign("protected");
+  if (find_first(fname, s0))
+    return t0(s0);
+  s0.assign("private");
+  if (find_first(fname, s0))
+    return t0(s0);
+  return "";
+}
+
 string namespace1(string fname) {
   fname = replace_all_copy(fname, "\t", " ");
   fname = replace_all_copy(fname, ":", "");
