@@ -6,77 +6,150 @@
  * See the GNU General Public License for more details.
  *
  * Ian Martins (ianxm@jhu.edu)
+ * Walter Eaves <walter.eaves@bigfoot.com>
  */
+
+%option debug
+%option c++
+%option yylineno
+
+%option stack
+
+%{
+#include <string>
+#include <iostream>
+#include "lex.hh"
+
+#include <iterator>
+
+using namespace std;
+
+int yyFlexLexer::yywrap() {
+    return ::yywrap();
+}
+
+/// variety of cleanups.
+string deQ(string fname);
+string accessors0(string fname);
+
+%}
 
  int inCommentLine = 0; /* in comment line */
  int comment_caller;
- void closeCommentBlock();
+ string tag1;
+ string accessors;
+ int linecount = 0;
+ int flinecount = 0; // lineno() doesn't work
 
 ID [a-zA-Z][0-9a-zA-Z_]*
 WS [ \t]*
 
-%s func funcDef paramList commentBlock
+%s func funcDef paramList props methods
+%x doc props0 methods0
 
 %%
+
+^{WS}classdef{WS} {
+ (*yyout) << "class ";
+}
+
+^{WS}properties {
+ yy_push_state(props0);
+}
+
+^{WS}methods {
+ yy_push_state(methods0);
+}
+
+<props0,methods0>(.+) {
+ accessors.assign(yytext);
+}
+
+<props0,methods0>\n {
+ (*yyout) << accessors0(accessors);
+ ECHO;
+ yy_pop_state();
+ if (YYSTATE == props0)
+  yy_push_state(props);
+ else
+  yy_push_state(methods);
+}
 
  /* end last function */
 <func>"%%" { 
  comment_caller = YY_START;
- BEGIN(commentBlock);
- fprintf(yyout,"}\n/**");
+ BEGIN(doc);
+ (*yyout) << "}\n/// ";
  inCommentLine = 1; /* start of comment */
 }
 
  /* close old comment, start new one */
-<commentBlock>"%%" {
- fprintf(yyout,"*/\n/**");
+<doc>"%%" {
+ (*yyout) << "\n///";
  inCommentLine = 1; /* start of comment */
 }
 
  /* first token */
 "%%" { 
  comment_caller = YY_START;
- BEGIN(commentBlock);
- fprintf(yyout,"/**");
+ BEGIN(doc);
+ (*yyout) << "/// ";
  inCommentLine = 1; /* start of comment */
 }
 
-<commentBlock>"%" {
+<doc>"%" {
  /* just a symbol in a comment */
  if (inCommentLine) 
   ECHO;
  else {
   /* part of current comment block */
-  fprintf(yyout,"*");
+  (*yyout) << "*";
   inCommentLine = 1;
  }
 }
 
+<doc>.+$ {
+  ECHO;
+}
+
  /* start comment block */
 "%" { 
- fprintf(yyout,"/*");
+ (*yyout) << "/// ";
  comment_caller = YY_START;
- BEGIN(commentBlock);
+ BEGIN(doc);
  inCommentLine = 1; /* start of comment */
 }
 
-\n ECHO; inCommentLine = 0;
+<doc>\n {
+ ECHO; inCommentLine = 0;
+ BEGIN(INITIAL);
+}
 
 ^{WS}function {
- closeCommentBlock(); 
- fprintf(yyout,"void ");
+ if (!inCommentLine) {
+  (*yyout) << "\n";
+  BEGIN(comment_caller);
+ }
+
+ (*yyout) << "void ";
  BEGIN(funcDef);
 }
 
 ^{WS}function.*\[.*\].*= {
- closeCommentBlock(); 
- fprintf(yyout,"rets ");
+ if (!inCommentLine) {
+  (*yyout) << "\n";
+  BEGIN(comment_caller);
+ }
+ (*yyout) << "rets ";
  BEGIN(funcDef);
 }
 
 ^{WS}function.*= {
- closeCommentBlock(); 
- fprintf(yyout,"ret ");
+ if (!inCommentLine) {
+  (*yyout) << "\n";
+  BEGIN(comment_caller);
+ }
+ (*yyout) << "ret ";
  BEGIN(funcDef);
 }
 
@@ -87,17 +160,20 @@ WS [ \t]*
 
 <paramList>\) {
  ECHO;
- fprintf(yyout,"{\n");
+ (*yyout) << "{\n";
  BEGIN(func);
 }
 
 <paramList>{ID} {
- fprintf(yyout,"type ");
+ (*yyout) << "type ";
  ECHO;
 }
 
-<commentBlock>[0-9a-zA-Z]+ {
- closeCommentBlock();
+<doc>[0-9a-zA-Z]+ {
+ if (!inCommentLine) {
+  (*yyout) << "\n";
+  BEGIN(comment_caller);
+ }
  ECHO;
 }
 
@@ -105,20 +181,24 @@ WS [ \t]*
  ECHO;
 }
 
+^{WS}end{WS}$ {
+ if (YYSTATE == props || YYSTATE == methods)
+  yy_pop_state();
+ else (*yyout) << "}";
+}
+
 <<EOF>> {
- fprintf(yyout,"}\n");
- return;
+ (*yyout) << "}\n";
+ return 1;
+}
+
+<*>^.*$ {
+ linecount++;
+ if (yy_flex_debug) (*yyout) << "default: " << yytext << "sm: " << YY_START;
+ REJECT;
 }
 
 %%
-
-/* end comment block */
-void closeCommentBlock() {
- if (!inCommentLine) {
-  fprintf(yyout,"*/\n");
-  BEGIN(comment_caller);
- }
-}
 
 #ifndef __GNUC__
 int main(int argc, char **argv) {
