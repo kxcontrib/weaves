@@ -40,6 +40,7 @@ string replace0(const char *s, const char *q0, const char *r0);
  string tag1;
  string accessors;
  int linecount = 0;
+ int ms0 = 0;
 
 ID [a-zA-Z][0-9a-zA-Z_]*
 WS [ \t]*
@@ -80,11 +81,13 @@ WS [ \t]*
 ^{WS}properties {
  yy_push_state(props);
  yy_push_state(props0);
+ ms0 = props;
 }
 
 ^{WS}methods {
  yy_push_state(methods);
  yy_push_state(methods0);
+ ms0 = methods;
 }
 
 <props0,methods0>\(.*\) {
@@ -97,6 +100,18 @@ WS [ \t]*
  ECHO;
  yy_pop_state();
  if (yy_flex_debug) (*yyout) << "sm: " << YYSTATE;
+}
+
+<props>^{WS}{ID}{WS}; {
+  (*yyout) << "type ";
+  ECHO;
+  if (yy_flex_debug) (*yyout) << "sm: pr0: " << YYSTATE;
+}
+
+<props>^{WS}{ID}{WS}={WS}[^%\n]+{WS}; {
+  (*yyout) << "type ";
+  ECHO;
+  if (yy_flex_debug) (*yyout) << "sm: pr1: " << YYSTATE;
 }
 
  /* end last function */
@@ -148,10 +163,21 @@ WS [ \t]*
  (*yyout) << tag1;
 }
 
-^{WS}{ID}{WS}={WS}{ID}{WS} {
- yy_push_state(funcDef);
- tag1 = replace0(yytext, "=", "");
- (*yyout) << tag1;
+<methods>^{WS}{ID}{WS}={WS}{ID}{WS} {
+  yy_push_state(funcDef);
+  tag1 = replace0(yytext, "=", "");
+  (*yyout) << tag1;
+}
+
+<methods>^{WS}{ID}{WS}={WS}{ID}{WS} {
+ if (ms0 == methods) {
+  yy_push_state(funcDef);
+  tag1 = replace0(yytext, "=", "");
+  (*yyout) << tag1;
+ } else {
+  ECHO;
+  yy_pop_state();
+ }
 }
 
 <funcDef>\( {
@@ -184,19 +210,20 @@ WS [ \t]*
 }
 
 <props,methods>^{WS}end{WS} {
- yy_pop_state();
+ if (YYSTATE) BEGIN(INITIAL);
+ if (yy_flex_debug) (*yyout) << "sm: pm0: " << YYSTATE;
 }
 
 <func>^{WS}end{WS} {
  (*yyout) << "}";
  yy_pop_state();
- if (yy_flex_debug) (*yyout) << "sm: e0: " << YYSTATE;
+ if (yy_flex_debug) (*yyout) << "sm: end 0: " << YYSTATE;
  BEGIN(methods);
 }
 
 ^{WS}end{WS} {
  (*yyout) << "}";
- if (yy_flex_debug) (*yyout) << "sm: e1: " << YYSTATE;
+ if (yy_flex_debug) (*yyout) << "sm: end 1: " << YYSTATE;
 }
 
 <<EOF>> {
