@@ -47,8 +47,6 @@ plot: { [x] x }
 
 #include <iterator>
 
-#include <boost/algorithm/string.hpp>
-
 using namespace std;
 
 int yyFlexLexer::yywrap() {
@@ -60,12 +58,16 @@ string deQ(string fname);
 
 /// variety of cleanups.
 string asclassQ(string fname);
+string namespace0(string fname);
+string namespace1(string fname);
+string namespacen();
 
 %}
 
 	int comment_caller;
 	string fname;
 	string ns0;
+	string ns1;
 	int linecount = 0;
 	int flinecount = 0; // lineno() doesn't work
 
@@ -106,14 +108,15 @@ DEF     (<-)|(=)
 
 <INITIAL>^[ \t]*[.]*[[:alpha:]][[:alnum:]_.]*[ \t]*/: {
 	fname = fname.assign(yytext);
-	bool classed = boost::find_first(fname, ".");
+	bool classed = fname.find_first_of(".") != -1;
 
 	if (classed) {
-	  fname = asclassQ(fname);
+	  ns1 = namespace1(fname);
+	  fname = namespacen();
 	  if (yy_flex_debug) (*yyout) << "sm: id: class !impl: "
 	     << YYSTATE << fname << std::endl;
 
-	  (*yyout) << "namespace t { " << fname;
+	  (*yyout) << "namespace " << ns1.c_str() << " { " << fname;
 	  yy_push_state(nsdef);
          } else {
 	  fname = deQ(fname);
@@ -245,9 +248,12 @@ DEF     (<-)|(=)
 
 ^\\d[ \t].+$ {
    if (ns0.length() > 0) printf("}");
-   
-   ns0.assign(yytext);
-   printf("/* %s */ namespace u { ", yytext);
+
+   fname = fname.assign(yytext);
+   ns0 = namespace0(fname);
+   printf("/* %s */ ", yytext);
+   if (ns0.length() > 0) 
+      printf("namespace %s { ", ns0.c_str());
 }
 
  /*****************************************
@@ -280,7 +286,6 @@ DEF     (<-)|(=)
    yy_push_state(end);
    return(0);
 }
-
 
 %%
 

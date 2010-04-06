@@ -15,13 +15,13 @@ PDFLATEX_FLAGS = --interaction batchmode
 
 all: $(DOXYGEN_OUT)
 
-%.doxo: %.doxs
-	$(DOXYGEN) $<
-	cat $< > $@
-
 %.doxs: %.doxi
 	cat $< > $@
 	$(DOXYGEN) -u $@
+
+%.doxo: %.doxs
+	$(DOXYGEN) $<
+	cat $< > $@
 
 %.pdf: %.tex
 	${PDFLATEX} ${PDFLATEX_FLAGS} $^
