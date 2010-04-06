@@ -55,8 +55,7 @@ using namespace boost;
 
 string as_(string fname) {
   if (fname.length() <= 0) return fname;
-  if (fname[0] == '.')
-    fname[0]='_';
+  if (fname[0] == '.') fname[0]='_';
   return fname;
 }
 
@@ -72,6 +71,9 @@ string deQ(string fname) {
   return fname;
 }
 
+static string::size_type p0;
+static string fname0;
+
 /// variety of cleanups.
 string asclassQ(string fname) {
   trim(fname);
@@ -80,3 +82,42 @@ string asclassQ(string fname) {
   fname = replace_all_copy( fname, ".", "::" );
   return fname;
 }
+
+string namespace0(string fname) {
+  fname = replace_all_copy(fname, "\t", " ");
+  trim(fname);
+  
+  string s0(fname.begin() + fname.find_first_of(" "),
+	    fname.end());
+  trim(s0);
+  s0 = as_(s0);
+  if ((s0.length() == 1) && (s0[0] == '_'))
+    s0 = "";
+
+  return s0;
+}
+
+string namespace1(string fname) {
+  fname = replace_all_copy(fname, "\t", " ");
+  fname = replace_all_copy(fname, ":", "");
+  trim(fname);
+
+  if (fname.length() <= 0) return string(""); // anonymous
+
+  if (fname[0] == '.') fname[0] = '_';
+
+  if (fname.length() <= 1) return string(""); // anonymous
+  
+  p0 = fname.find_first_of(".");
+  if (p0 == string::npos)	// anonymous
+    return string("");
+
+  fname0 = string(fname.begin() + p0 + 1, fname.end());
+
+  return string(fname.begin(), fname.begin() + p0);
+}
+
+string namespacen() {
+  return fname0;
+}
+

@@ -8,102 +8,129 @@
  * Ian Martins (ianxm@jhu.edu)
  */
 
-	int inCommentLine = 0;			/* in comment line */
-	int comment_caller;
-	void closeCommentBlock();
-ID	[a-zA-Z][0-9a-zA-Z_]*
-WS	[ \t]*
+ int inCommentLine = 0; /* in comment line */
+ int comment_caller;
+ void closeCommentBlock();
+
+ID [a-zA-Z][0-9a-zA-Z_]*
+WS [ \t]*
 
 %s func funcDef paramList commentBlock
-%%
-
-<func>"%%"	{				/* end last function */
-		  comment_caller = YY_START;
-		  BEGIN(commentBlock);
-		  fprintf(yyout,"}\n/**");
-		  inCommentLine = 1;		/* start of comment */
-		}
-<commentBlock>"%%"		{
-		  fprintf(yyout,"*/\n/**");	/* close old comment, start new one */
-		  inCommentLine = 1;		/* start of comment */
-		}
-"%%"		{				/* first token */
-		  comment_caller = YY_START;
-		  BEGIN(commentBlock);
-		  fprintf(yyout,"/**");
-		  inCommentLine = 1;		/* start of comment */
-		}
-<commentBlock>"%"	{
-		  if (inCommentLine)		/* just a symbol in a comment */
-		    ECHO;
-		  else 				/* part of current comment block */
-		  {
-		    fprintf(yyout,"*");
-		    inCommentLine = 1;
-		  }
-		}
-"%"		{				/* start comment block */
-		  fprintf(yyout,"/*");
-		  comment_caller = YY_START;
-		  BEGIN(commentBlock);
-		  inCommentLine = 1;		/* start of comment */
-		}
-\n		ECHO; inCommentLine = 0;
-^{WS}function	{
-		  closeCommentBlock(); 
-		  fprintf(yyout,"void ");
-		  BEGIN(funcDef);
-		}
-^{WS}function.*\[.*\].*=	{
-		  closeCommentBlock(); 
-		  fprintf(yyout,"rets ");
-		  BEGIN(funcDef);
-		}
-^{WS}function.*=	{
-		  closeCommentBlock(); 
-		  fprintf(yyout,"ret ");
-		  BEGIN(funcDef);
-		}
-<funcDef>\(	{
-		  ECHO;
-		  BEGIN(paramList);
-		}
-<paramList>\)	{
-		  ECHO;
-		  fprintf(yyout,"{\n");
-		  BEGIN(func);
-		}
-<paramList>{ID}	{
-		  fprintf(yyout,"type ");
-		  ECHO;
-		}
-<commentBlock>[0-9a-zA-Z]+	{
-		  closeCommentBlock();
-		  ECHO;
-		}
-[0-9a-zA-Z]+	{
-		  ECHO;
-		}
-<<EOF>>		{
-		  fprintf(yyout,"}\n");
-		  return;
-		}
 
 %%
 
-void closeCommentBlock()			/* end comment block */
-{
-  if (!inCommentLine)
-  {
-    fprintf(yyout,"*/\n");
-    BEGIN(comment_caller);
-  }
+ /* end last function */
+<func>"%%" { 
+ comment_caller = YY_START;
+ BEGIN(commentBlock);
+ fprintf(yyout,"}\n/**");
+ inCommentLine = 1; /* start of comment */
+}
+
+ /* close old comment, start new one */
+<commentBlock>"%%" {
+ fprintf(yyout,"*/\n/**");
+ inCommentLine = 1; /* start of comment */
+}
+
+ /* first token */
+"%%" { 
+ comment_caller = YY_START;
+ BEGIN(commentBlock);
+ fprintf(yyout,"/**");
+ inCommentLine = 1; /* start of comment */
+}
+
+<commentBlock>"%" {
+ /* just a symbol in a comment */
+ if (inCommentLine) 
+  ECHO;
+ else {
+  /* part of current comment block */
+  fprintf(yyout,"*");
+  inCommentLine = 1;
+ }
+}
+
+ /* start comment block */
+"%" { 
+ fprintf(yyout,"/*");
+ comment_caller = YY_START;
+ BEGIN(commentBlock);
+ inCommentLine = 1; /* start of comment */
+}
+
+\n ECHO; inCommentLine = 0;
+
+^{WS}function {
+ closeCommentBlock(); 
+ fprintf(yyout,"void ");
+ BEGIN(funcDef);
+}
+
+^{WS}function.*\[.*\].*= {
+ closeCommentBlock(); 
+ fprintf(yyout,"rets ");
+ BEGIN(funcDef);
+}
+
+^{WS}function.*= {
+ closeCommentBlock(); 
+ fprintf(yyout,"ret ");
+ BEGIN(funcDef);
+}
+
+<funcDef>\( {
+ ECHO;
+ BEGIN(paramList);
+}
+
+<paramList>\) {
+ ECHO;
+ fprintf(yyout,"{\n");
+ BEGIN(func);
+}
+
+<paramList>{ID} {
+ fprintf(yyout,"type ");
+ ECHO;
+}
+
+<commentBlock>[0-9a-zA-Z]+ {
+ closeCommentBlock();
+ ECHO;
+}
+
+[0-9a-zA-Z]+ {
+ ECHO;
+}
+
+<<EOF>> {
+ fprintf(yyout,"}\n");
+ return;
+}
+
+%%
+
+/* end comment block */
+void closeCommentBlock() {
+ if (!inCommentLine) {
+  fprintf(yyout,"*/\n");
+  BEGIN(comment_caller);
+ }
 }
 
 #ifndef __GNUC__
 int main(int argc, char **argv) {
-	yyin = (argc>1) ? fopen(argv[1], "r") : stdin;
-	yylex();
-	return EXIT_SUCCESS;
+ yyin = (argc>1) ? fopen(argv[1], "r") : stdin;
+ yylex();
+ return EXIT_SUCCESS;
 }
 #endif
+
+/* Local Variables: */
+/* mode: indented-text */
+/* comment-column: 80 */
+/* comment-start: "\/*" */
+/* comment-end: "*\/" */
+/* End: */

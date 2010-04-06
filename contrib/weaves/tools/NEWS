@@ -4,6 +4,40 @@ Walter.Eaves@bigfoot.com
 
 * qoxygen
 
+** March 2010
+
+I've improved the support for contexts. They are now treated as namespaces.
+
+\d .t
+
+f: { [x;y] x+y }
+
+\d .
+
+Becomes 
+
+ namespace _t {
+
+   f(x,y) {}
+ 
+ }
+
+Functions like 
+
+ .u.f
+
+ become namespace u { f() {} }
+
+It will document 
+
+\d .t
+
+i.args
+
+\d .
+
+as _t::i::args
+
 ** Limited support for contexts
 
 I've extended this to support definitions within contexts. This
