@@ -74,7 +74,7 @@ WS [ \t]*
 <classes,classes1,class0>\n {
  (*yyout) << " {";
  ECHO;
- yy_pop_state();
+ BEGIN(INITIAL);
 }
 
 ^{WS}properties {
@@ -88,7 +88,6 @@ WS [ \t]*
 }
 
 <props0,methods0>\(.*\) {
- if (yy_flex_debug) (*yyout) << "sm: " << YYSTATE;
  accessors.assign(yytext);
 }
 
@@ -97,6 +96,7 @@ WS [ \t]*
  accessors.assign("");
  ECHO;
  yy_pop_state();
+ if (yy_flex_debug) (*yyout) << "sm: " << YYSTATE;
 }
 
  /* end last function */
@@ -107,9 +107,7 @@ WS [ \t]*
 
  /* close old comment, start new one */
 <doc>"%%" {
- yy_pop_state();
- yy_push_state(doc);
- (*yyout) << "\n///";
+ (*yyout) << "///";
 }
 
  /* first token */
@@ -150,6 +148,12 @@ WS [ \t]*
  (*yyout) << tag1;
 }
 
+^{WS}{ID}{WS}={WS}{ID}{WS} {
+ yy_push_state(funcDef);
+ tag1 = replace0(yytext, "=", "");
+ (*yyout) << tag1;
+}
+
 <funcDef>\( {
  yy_pop_state();
  ECHO;
@@ -157,14 +161,16 @@ WS [ \t]*
 }
 
 <paramList>\){WS}; {
+ if (yy_flex_debug) (*yyout) << "sm: p0: " << YYSTATE;
  yy_pop_state();
  ECHO;
 }
 
-<paramList>\) {
+<paramList>\){WS}[^;] {
+ if (yy_flex_debug) (*yyout) << "sm: p1: " << YYSTATE;
  yy_pop_state();
  ECHO;
- (*yyout) << "{\n";
+ (*yyout) << "{";
  yy_push_state(func);
 }
 
@@ -177,17 +183,24 @@ WS [ \t]*
  ECHO;
 }
 
-<props,methods>^{WS}end{WS}$ {
+<props,methods>^{WS}end{WS} {
  yy_pop_state();
 }
 
-^{WS}end{WS}$ {
+<func>^{WS}end{WS} {
  (*yyout) << "}";
+ yy_pop_state();
+ if (yy_flex_debug) (*yyout) << "sm: e0: " << YYSTATE;
+ BEGIN(methods);
+}
+
+^{WS}end{WS} {
+ (*yyout) << "}";
+ if (yy_flex_debug) (*yyout) << "sm: e1: " << YYSTATE;
 }
 
 <<EOF>> {
- (*yyout) << "}\n";
- return 1;
+ return 0;
 }
 
 <*>^.*$ {
