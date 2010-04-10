@@ -1,6 +1,6 @@
 @INCLUDE = ../style/doxygen.conf 
 
-INPUT                  = .. . ../@singleton
+INPUT                  = . 
 FILTER_PATTERNS        = *.m=mtoc1.sh
 FILE_PATTERNS          = *.m *.cc
 PROJECT_NAME           = matlab

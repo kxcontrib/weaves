@@ -1,5 +1,5 @@
 /* 
-   mtoc - R to C for doxygen
+   rtoc - R to C for doxygen
 
    Copyright (C) 2008 Walter Eaves
 
