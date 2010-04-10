@@ -7,15 +7,15 @@
 
 BUILT_SOURCES = mtoc1.cc lex.cc qlex.cc
 
-noinst_PROGRAMS = string0
+noinst_PROGRAMS = string0 rtocc
 
 string0_SOURCES = string0.cc
 
-bin_PROGRAMS = mtoc rtoc rtocc qoxygen qoxygen2
+bin_PROGRAMS = mtoc rtoc qoxygen qoxygen2
 
 LDADD = -L$(top_srcdir)/lib -lgnu $(LEXLIB)
 
-rtoc_SOURCES=rtoc1.c xmalloc.c lex.hh
+rtoc_SOURCES=rtoc1.c xmalloc.c lex.hh rtoc.l
 
 qoxygen2_SOURCES = qoxygen.l
 

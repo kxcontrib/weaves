@@ -1,9 +1,9 @@
 STYLE_DIR = ${TOP_DIR}/style
 DOXYGEN = doxygen
 PDFLATEX = pdflatex
-DOXYGEN_HTML_DIR = source_reference
-DOXYGEN_LATEX_DIR = source_reference_latex
-DOXYGEN_PDF = source_reference.pdf
+DOXYGEN_HTML_DIR = html
+DOXYGEN_LATEX_DIR = latex
+DOXYGEN_PDF = document.pdf
 DOXYGEN_PDF_TMP = ${DOXYGEN_LATEX_DIR}/refman.pdf
 
 export TEXINPUTS = :.//:${TOP_DIR}/style:${TOP_DIR}/style/dblatex/latex/style:${TOP_DIR}/dblatex/latex/misc:${TOP_DIR}/include//
