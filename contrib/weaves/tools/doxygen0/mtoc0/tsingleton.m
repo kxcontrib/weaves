@@ -65,6 +65,24 @@ classdef singleton < handle handler2
      function set_Data(obj, singletonData)
        obj.Data = singletonData;
      end % end1
+     
+     function v = get.Data(obj)
+       v = obj.Data;
+     end
+      
+     function set.Data(obj, singletonData)
+       obj.Data = singletonData;
+     end % end1
+     
+     function v = showsTripleDot(obj, x_)
+       warning('showsTripleDot error %s\n', ...
+               x_);
+      if idx > length(obj.searched0)
+          warning('model2:system volatility %f > calibrated %f\n', ...
+            obj.volatility0, obj.searched0(end));
+         idx = length(obj.searched0);
+      end
+     end
       
    end
 

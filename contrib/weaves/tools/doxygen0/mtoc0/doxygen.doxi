@@ -3,5 +3,6 @@
 INPUT                  = . 
 FILTER_PATTERNS        = *.m=mtoc1.sh
 FILE_PATTERNS          = *.m *.cc
+# EXTENSION_MAPPING      = m=Java
 PROJECT_NAME           = matlab
 
