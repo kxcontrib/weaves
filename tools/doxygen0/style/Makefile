@@ -1,3 +1,5 @@
+DOXYGEN_OUT ?= doxygen.doxo
+
 STYLE_DIR = ${TOP_DIR}/style
 DOXYGEN = doxygen
 PDFLATEX = pdflatex
@@ -43,5 +45,5 @@ ${DOXYGEN_PDF}: ${DOXYGEN_LATEX_DIR} ${DOXYGEN_PDF_TMP}
 	@rm -fr ${DOXYGEN_LATEX_DIR}
 
 clean:
-	@rm -f *.html *.pdf *.doxo
+	@rm -f *.html *.pdf *.doxo ${DOXYGEN_OUT} $(basename ${DOXYGEN_OUT}).doxs
 	@rm -fr ${DOXYGEN_HTML_DIR} ${DOXYGEN_LATEX_DIR} ${DOXYGEN_PDF}
