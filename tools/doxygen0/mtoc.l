@@ -46,6 +46,7 @@ ID [a-zA-Z][0-9a-zA-Z_]*
 WS [ \t]*
 
 %s func funcDef paramList props methods
+%s construct0
 %s props0 methods0 class0 classes classes1
 %x doc
 
@@ -212,6 +213,15 @@ WS [ \t]*
 <props,methods>^{WS}end{WS} {
  if (YYSTATE) BEGIN(INITIAL);
  if (yy_flex_debug) (*yyout) << "sm: pm0: " << YYSTATE;
+}
+
+<func,construct0>^{WS}(if|while|for|switch){WS} {
+ ECHO;
+ yy_push_state(construct0);
+}
+
+<construct0>^{WS}end{WS} {
+ yy_pop_state();
 }
 
 <func>^{WS}end{WS} {

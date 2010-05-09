@@ -74,6 +74,7 @@ classdef singleton < handle handler2
        obj.Data = singletonData;
      end % end1
      
+     % And the if .. end issue.
      function v = showsTripleDot(obj, x_)
        warning('showsTripleDot error %s\n', ...
                x_);
@@ -81,6 +82,14 @@ classdef singleton < handle handler2
           warning('model2:system volatility %f > calibrated %f\n', ...
             obj.volatility0, obj.searched0(end));
          idx = length(obj.searched0);
+      end
+      
+      for idx = 1:length(obj.searched0)
+        switch idx
+         case 1
+         case 2
+         otherwise
+        end
       end
      end
       
