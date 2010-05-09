@@ -224,6 +224,10 @@ WS [ \t]*
  yy_pop_state();
 }
 
+<construct0>\;{WS}end{WS} {
+ yy_pop_state();
+}
+
 <func>^{WS}end{WS} {
  (*yyout) << "}";
  yy_pop_state();
