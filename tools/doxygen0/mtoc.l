@@ -147,7 +147,7 @@ WS [ \t]*
   ECHO;
  } else {
   (*yyout) << endl ;
-  (*yyout) << s0 ;
+  (*yyout) << s0 << ";";
  }
 }
 

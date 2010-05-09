@@ -15,6 +15,11 @@ There is now a dependency on Boost string functions and, because of this,
 the Windows version does support the new namespace method of handling
 contexts.
 
+mtoc
+
+I've also added a lot of features to this too. It supports classes and function 
+definitions in other files.
+
 -- From the original notes for mtoc
 
 This is a documentation system based on Doxygen. 
