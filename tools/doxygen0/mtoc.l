@@ -39,17 +39,19 @@ string replace0(const char *s, const char *q0, const char *r0);
 
  string tag1;
  string accessors;
+ string fn_;
  int linecount = 0;
  int ms0 = 0;
+ int fn_0 = 0;
  int inFunc = 0;
 
 ID [a-zA-Z][0-9a-zA-Z_]*
 WS [ \t]*
 
 %s func funcDef paramList props methods
-%s construct0
+%s construct0 
 %s props0 methods0 class0 classes classes1
-%x doc
+%x doc pre_def
 
 %%
 
@@ -137,6 +139,18 @@ WS [ \t]*
  ECHO;
 }
 
+<doc>{WS}@fn{WS}.+$ {
+ string s0 = replace0(yytext, "@fn", "");
+
+ fn_.assign(s0);
+ if (ms0 != methods) {
+  ECHO;
+ } else {
+  (*yyout) << endl ;
+  (*yyout) << s0 ;
+ }
+}
+
 <doc>.+$ {
   ECHO;
 }
@@ -153,24 +167,41 @@ WS [ \t]*
 }
 
 <INITIAL,methods,construct0,func>^{WS}function{WS}{ID}{WS} {
+   string s0;
+   int ns_ = funcDef;
+
+   s0 = replace0(yytext, "function", "");
    if (YYSTATE == func) {
     inFunc = 1;
    } else {
-    (*yyout) << "void ";
+    if (fn_.length()) {
+      ns_ = pre_def;
+      s0 = fn_ + " { "; fn_.assign(""); fn_0 = 1;
+    } else {
+      (*yyout) << "void ";
+    }
    }
-   yy_push_state(funcDef);
-   (*yyout) << replace0(yytext, "function", "");
+   (*yyout) << s0;
+   yy_push_state(ns_);
 }
 
 <INITIAL,methods,construct0,func>^{WS}function{WS}{ID}{WS}={WS}{ID}{WS} {
-   tag1 = replace0(yytext, "function", "");
+   string s0;
+   int ns_ = funcDef;
+
+   s0 = replace0(yytext, "function", "");
    if (YYSTATE == func) {
-      inFunc = 1;
+    inFunc = 1;
    } else {
-     tag1 = replace0(tag1.c_str(), "=", "");
+    if (fn_.length()) {
+      ns_ = pre_def;
+      s0 = fn_ + " { "; fn_.assign(""); fn_0 = 1;
+    } else {
+      s0 = replace0(s0.c_str(), "=", "");
+    }
    }
-   yy_push_state(funcDef);
-   (*yyout) << tag1;
+   (*yyout) << s0;
+   yy_push_state(ns_);
 }
 
 <methods>^{WS}{ID}{WS}={WS}{ID}{WS} {
@@ -208,6 +239,17 @@ WS [ \t]*
  ECHO;
  if (inFunc) (*yyout) << "/* ";
  (*yyout) << "{";
+ yy_push_state(func);
+}
+
+<pre_def>{WS}\(.+\){WS}; {
+ if (yy_flex_debug) (*yyout) << "sm: p1: " << YYSTATE;
+ yy_pop_state();
+}
+
+<pre_def>{WS}\(.+\){WS}[^;] {
+ if (yy_flex_debug) (*yyout) << "sm: p1: " << YYSTATE;
+ yy_pop_state();
  yy_push_state(func);
 }
 

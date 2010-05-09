@@ -100,6 +100,8 @@ classdef singleton < handle handler2
     function v = showsTripleDot1(obj, x_)
       v=v;
     end
+    
+    % @fn void update(type obj, type returner);
       
    end
 
