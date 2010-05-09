@@ -41,6 +41,7 @@ string replace0(const char *s, const char *q0, const char *r0);
  string accessors;
  int linecount = 0;
  int ms0 = 0;
+ int inFunc = 0;
 
 ID [a-zA-Z][0-9a-zA-Z_]*
 WS [ \t]*
@@ -151,17 +152,25 @@ WS [ \t]*
  yy_pop_state();
 }
 
-^{WS}function{WS}{ID}{WS} {
- (*yyout) << "void ";
- yy_push_state(funcDef);
- (*yyout) << replace0(yytext, "function", "");
+<INITIAL,methods,construct0,func>^{WS}function{WS}{ID}{WS} {
+   if (YYSTATE == func) {
+    inFunc = 1;
+   } else {
+    (*yyout) << "void ";
+   }
+   yy_push_state(funcDef);
+   (*yyout) << replace0(yytext, "function", "");
 }
 
-^{WS}function{WS}{ID}{WS}={WS}{ID}{WS} {
- yy_push_state(funcDef);
- tag1 = replace0(yytext, "function", "");
- tag1 = replace0(tag1.c_str(), "=", "");
- (*yyout) << tag1;
+<INITIAL,methods,construct0,func>^{WS}function{WS}{ID}{WS}={WS}{ID}{WS} {
+   tag1 = replace0(yytext, "function", "");
+   if (YYSTATE == func) {
+      inFunc = 1;
+   } else {
+     tag1 = replace0(tag1.c_str(), "=", "");
+   }
+   yy_push_state(funcDef);
+   (*yyout) << tag1;
 }
 
 <methods>^{WS}{ID}{WS}={WS}{ID}{WS} {
@@ -197,6 +206,7 @@ WS [ \t]*
  if (yy_flex_debug) (*yyout) << "sm: p1: " << YYSTATE;
  yy_pop_state();
  ECHO;
+ if (inFunc) (*yyout) << "/* ";
  (*yyout) << "{";
  yy_push_state(func);
 }
@@ -232,7 +242,13 @@ WS [ \t]*
  (*yyout) << "}";
  yy_pop_state();
  if (yy_flex_debug) (*yyout) << "sm: end 0: " << YYSTATE;
- BEGIN(methods);
+ if (YYSTATE != func) {
+  BEGIN(methods);
+ } else {
+  if (inFunc) (*yyout) << " */";
+  (*yyout) << ";";
+ }
+ inFunc = 0;
 }
 
 ^{WS}end{WS} {
