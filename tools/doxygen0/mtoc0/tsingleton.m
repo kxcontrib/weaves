@@ -76,6 +76,10 @@ classdef singleton < handle handler2
      
      % And the if .. end issue.
      function v = showsTripleDot(obj, x_)
+       function v_ = nested(x, y)
+         v_ = nested(x, y);
+       end
+       
        warning('showsTripleDot error %s\n', ...
                x_);
       if idx > length(obj.searched0)
@@ -91,7 +95,11 @@ classdef singleton < handle handler2
          otherwise
         end
       end
-     end
+    end
+    
+    function v = showsTripleDot1(obj, x_)
+      v=v;
+    end
       
    end
 
