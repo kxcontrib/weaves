@@ -101,7 +101,7 @@ classdef singleton < handle handler2
       v=v;
     end
     
-    % @fn void update(type obj, type returner);
+    % @fn void update(type obj, type returner)
       
    end
 
