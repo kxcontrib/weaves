@@ -4,4 +4,5 @@ set -e
 
 echo Looking for gnulib-tool
 gnulib-tool --libtool --import memchr memcpy strndup strerror error getopt long-options stdint crc
+libtoolize --force
 autoreconf
