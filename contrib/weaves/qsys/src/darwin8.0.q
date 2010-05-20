@@ -18,6 +18,8 @@ tracer:{ [m;l] }
 // typed writes a message and the list of variables with some type information.
 typed:{ [m;l] }
 
+toc0tic: { [m] }
+
 // @}
 
 \d .
@@ -371,6 +373,13 @@ trigger: { [ssym;f;v]
 	  args: $[ 0 > type arg; enlist(string arg); arg];
 	  args:{ (type y)$x }[;v] each args;
 	  any v f\: args }
+
+.i.tic:.z.N
+
+// @brief Time differencing
+tic0: { [] .sys.i.tic: .z.N }
+toc0: { [] .sys.i.tic: $[ .sys.undef . `.sys.i`tic; .z.N; .sys.i.tic ];
+       .z.N - .sys.i.tic }
 
 \d .
 
