@@ -17,4 +17,8 @@ tracer: { [m;l]
 typed: { [m;l] .log.tracer[m;(type l; count l;
 			      $[0 < count l; type first l; ::]; l)] }
 
+toc0tic: { [m] if[.log.trace<=0; : ::];
+	  .log.tracer[m;.sys.toc0`];
+	  .sys.tic0` }
+
 \d .
