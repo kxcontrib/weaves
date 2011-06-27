@@ -18,7 +18,8 @@ tracer:{ [m;l] }
 // typed writes a message and the list of variables with some type information.
 typed:{ [m;l] }
 
-toc0tic: { [m] }
+// typed writes a message and the list of variables with some type information.
+toc0tic:{ [m] }
 
 // @}
 
@@ -141,6 +142,9 @@ remap: { [ahsym] ahsym }
 
 \d .sys
 
+// One second as a real
+sec1: 2011.04.05T08:00:01.000 - 2011.04.05T08:00:00.000
+
 // Some useful biggish prime numbers - http://primes.utm.edu/lists/small/10000.txt
 i.primes:(104677 104681 104683 104693 104701 104707 104711 104717 104723 104729);
 
@@ -191,6 +195,17 @@ qpath.add.i: { `QPATH setenv (x,.os.paths_sep,(getenv`QPATH)); }
 
 // Add the current working directry to the environment variable QPATH
 qpath.cwd: { t:getenv`PWD; .sys.qpath.add.i t; t }
+
+qpath.list: { [] QPATH:enlist ".",.os.paths_sep;
+	 QPATH:QPATH,.os.paths_sep,.sys.i.cwd;
+	 QPATH:(getenv`QPATH),.os.paths_sep,(getenv`QHOME);
+	 ":" vs QPATH }
+
+qpath.locate0: { [path0;file0] x:.os.path_sep sv (path0;file0);
+		.os.file x }
+
+qpath.locate: { [p;f] a: { t:qpath.locate0[x;y] }[;f] each p;
+	       first a where 0 < count each a }
 
 // @brief A list of files/directories loaded.
 // Basenames of files are stored.
@@ -374,12 +389,15 @@ trigger: { [ssym;f;v]
 	  args:{ (type y)$x }[;v] each args;
 	  any v f\: args }
 
-.i.tic:.z.N
+// i.tic: .z.N
+// tic0: { [] .sys.i.tic:.z.N }
+// toc0: { [] .sys.i.tic: $[ .sys.undef @ `.sys.i`tic; .z.N; .sys.i.tic ];
+//       .z.N - .sys.i.tic }
 
-// @brief Time differencing
-tic0: { [] .sys.i.tic: .z.N }
-toc0: { [] .sys.i.tic: $[ .sys.undef . `.sys.i`tic; .z.N; .sys.i.tic ];
-       .z.N - .sys.i.tic }
+i.tic: 0
+tic0: { [] .sys.i.tic:0 }
+toc0: { [] .sys.i.tic: $[ .sys.undef @ `.sys.i`tic; .z.N; .sys.i.tic ];
+       0 - .sys.i.tic }
 
 \d .
 
@@ -392,6 +410,15 @@ toc0: { [] .sys.i.tic: $[ .sys.undef . `.sys.i`tic; .z.N; .sys.i.tic ];
 // @{
 
 \d .sch
+
+// Return the float of strings like: 04 01234
+// @todo
+// "I"$"04" does the same.
+str2num: { [s] r0:(`short$s) - `short$"0";
+	  fx:*[10]; 
+	  n0: max ( ((count r0) - 2); 0);
+	  n1: reverse [ 1, n0 fx\10 ];
+	  (`float$r0) mmu (`float$n1) }
 
 // True is a string begins with a character 
 // @todo
@@ -554,8 +581,9 @@ rename: { [l; n; prfx ]
 rename1: { [l;x;y] l[l?x]:y; l }
 
 // Given a table name as a symbol and a string mime type return an hsym.
-mimefile: { [tsym;mime] 
-	   v:(.sys.i.cwd,.os.path_sep,(string tsym),".",mime);
+mimefile: { [tsym;mime;tpath] 
+	   tpath: $[ count tpath; tpath; .sys.i.cwd ];
+	   v:(tpath,.os.path_sep,(string tsym),".",mime);
 	   hsym `$v }
 
 // @brief Generates a file name with the given MIME extension and saves to it.
@@ -563,12 +591,13 @@ mimefile: { [tsym;mime]
 // This is nothing more than a "save" command.
 // @note
 // The path of the saved file is to the initial current working directory.
-t2mime: { [tsym; mime]
-	 v1:.sch.mimefile[tsym;mime];
+t2mime: { [tsym; mime;tpath]
+	 v1:.sch.mimefile[tsym;mime;tpath];
 	 save v1 }
 
 // @brief Save to a CSV file.
-t2csv:t2mime[;"csv"]
+t2csv:t2mime[;"csv";""]
+t2csv3:t2mime[;"csv";]
 
 // Convert a table's symbols to strings and save the resulting table.
 t2csv2: { [tsym]
