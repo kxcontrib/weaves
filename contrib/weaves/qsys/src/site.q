@@ -35,6 +35,7 @@ if[0 < count getenv`QLOAD;
 
    // If autoport is given on the command-line it will call .sys.autoport
    if[.sys.is_arg`autoport; .sys.autoport["I"$first .sys.i.args`autoport] ];
+   if[.sys.is_arg`autoport0; .sys.autoport0["I"$first .sys.i.args`autoport0] ];
 
    if[0 < count getenv`QTRDR; .sys.qloader enlist("trdrc.q") ];
 
