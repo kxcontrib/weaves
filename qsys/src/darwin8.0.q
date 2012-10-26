@@ -143,7 +143,8 @@ remap: { [ahsym] ahsym }
 \d .sys
 
 // One second as a real
-sec1: 2011.04.05T08:00:01.000 - 2011.04.05T08:00:00.000
+// sec1: 08:00:01.000 - 08:00:00.000
+sec1: 2011.06.22T01:00:22.000 - 2011.06.22T01:00:21.000
 
 // Some useful biggish prime numbers - http://primes.utm.edu/lists/small/10000.txt
 i.primes:(104677 104681 104683 104693 104701 104707 104711 104717 104723 104729);
@@ -343,15 +344,17 @@ trigger: { [arg; f; v]
 
 
 // @brief Lowest port for use by Q servers.
-i.lowerport:10000
+i.lowerport:14444
 // @brief Highest port for use by Q servers.
-i.upperport:65535
+i.upperport:15440
 
 // @brief Randomly generate a port.
-i.rport: { [n] n:0;
-	 while[not n within (.sys.i.lowerport;.sys.i.upperport);
-	       n:(rand .sys.i.upperport)];
+i.rport0: { [n;l0;u0] n:0;
+	 while[not n within (l0;u0);
+	       n:(rand u0)];
 	 n }
+
+i.rport: .sys.i.rport0[;.sys.i.lowerport;.sys.i.upperport]
 
 // @brief attempt to open a port.
 i.probe: { [n] n1:@[value;("\\p ",(string n)); `]; -11h <> type n1 }
@@ -369,6 +372,16 @@ autoport: { [x]
 	      ];
 	   x:.sys.i.rport`;
 	   while[not .sys.i.probe[x]; x:.sys.i.rport`];
+	   x }
+
+// This version ignores limits on port numbers
+autoport0: { [x]
+	   if[(not null x);
+	      if[(-6h = type x) and ( x >= 10000) and (x <= 65536);
+		 if[.sys.i.probe[x]; : value"\\p"] ];
+	      ];
+	   x:.sys.i.rport0[`;10000;65536];
+	   while[not .sys.i.probe[x]; x:.sys.i.rport0[`;10000;65536]];
 	   x }
 
 // @brief True if a key falls within the set of keys of a table/dictionary.
@@ -454,9 +467,10 @@ a2sym: { [tbl;asym]
 	![tbl;();b;a] }
 
 
-// Make an hsym.
-a2hsym:{ [x;y]
-	p:":" sv ("";(string x);(string y));
+// Make an hsym - actually a host:port not a directory
+a2hsym:{ [x;y] p: $[ 10h <> type x;
+	     ":" sv ("";(string x);(string y));
+	     (":",("/" sv (x;y))) ];
 	hsym `$p }
 
 // Make a url from an hsym and a symbol
@@ -605,6 +619,10 @@ t2csv2: { [tsym]
 	 v:save mimefile[tsym;"csv"] set tbl1;
 	 v }
 
+// Useful conversion
+// Make a date, such as 2012.10.12, a printable string
+dt2str: { [dt] (string dt) where not "." = (string dt) }
+
 // @brief Flips a table: columns become rows.
 //
 // The table has 1 key. The key's values will become the column headings.
@@ -668,6 +686,8 @@ t2retype: { [tbl;rtbl]
 	   { .t.tbl::.sch.a2retype[.t.tbl;x[0];x[1]] } each bad1;
 	   .t.tbl }
 
+// Return those cols that are not atomic
+tnatoms: { [t0] (cols t0) where 0 < { type first y[;x] }[;t0] each cols t0 }
 
 // Update a table so that the attribute named with the symbol asym is set to the value.
 // @note

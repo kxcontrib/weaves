@@ -1,7 +1,8 @@
 // @file csvguess.q
 // @author Simon
 // @author weaves
-/ I have added a feature to allow csvguess.q to be loaded using -load.
+// I have added a feature to allow csvguess.q to be loaded using -load.
+// I have added an oname arg to specify the output filename.
 
 / guess a reasonable loadstring for a csv file (kdb+ 2.4 or greater)
 ("kdb+csvguess 0.39 2007.12.01: ", (string .z.f), " ", (" " sv .z.x))
@@ -19,6 +20,8 @@ EXIT:`exit in key o
 .z.f: string last .sys.i.qloaded
 
 .Q.x: $[ .sys.is_arg`file; .sys.arg`file; .Q.x ]
+
+.t.filename: { s: $[.sys.is_arg`oname; raze .sys.arg`oname; (string LOADNAME),".load.q" ]; `$(":",s) };
 
 0N!(.Q.x; .z.f);
 
@@ -44,6 +47,9 @@ FILE:LOADFILE:hsym`${x[where"\\"=x]:"/";x}first .Q.x
 NOHEADER:any`noheader`nh in key o
 DISCARDEMPTY:any`discardempty`de in key o
 DELIM:$[any`semicolon`sc in key o;";";any`tab`tb in key o;"\t";","]
+
+DELIM: $[.sys.is_arg`delim; first first .sys.arg`delim; DELIM]
+
 ZAPHDRS:any`zaphdrs`zh in key o
 ZAPHDRS:ZAPHDRS and not NOHEADER
 SAVESCRIPT:any`savescript`ss in key o
@@ -182,7 +188,8 @@ JUSTSYM:{[file] .tmp.jsc:0;fs2[{.tmp.jsc+:count .Q.en[`. `SAVEDB]POSTLOADEACH$[N
 / q xxx.q FILENAME -bs -savedb foo -saveptn 2006.12.25 / to bulksave FILENAME to directory foo in the 2006.12.25 date partition
 / q xxx.q FILENAME -bs -savedb foo -saveptn 2006.12.25 -savename goo / to bulksave FILENAME to directory foo in the 2006.12.25 date partition as table goo
 / q xxx.q ... -exit / exit on completion of commands (only makes sense with -bs and -js)
-savescript:{refresh[];f:`$":",(string LOADNAME),".load.q";f 1:"";hs:neg hopen f;
+savescript:{refresh[];
+	f:.t.filename`; f 1:"";hs:neg hopen f;
 	hs"/ ",(string .z.z)," ",(string .z.h)," ",(string .z.u);
 	hs"/ q ",(string LOADNAME),".load.q FILE [-bl|bulkload] [-bs|bulksave] [-js|justsym] [-exit] [-savedb SAVEDB] [-saveptn SAVEPTN] [-savename SAVENAME] ";
 	hs"/ q ",(string LOADNAME),".load.q FILE";
@@ -221,6 +228,8 @@ forceS:{update t:"S" from`info where t="*"} / no string cols
 
 forceS`
 
+if[.sys.is_arg`lscript; 0N!(.sys.arg`lscript); 0N!(.sys.qloader .sys.arg`lscript) ]
+
 if[SAVESCRIPT;-1(string`second$.z.t)," savescript file <",(1_string savescript[]),"> written"]
 
 / save (append) info about the csv columns to INFOFILE - saveinfo[]
@@ -248,7 +257,7 @@ allfiles:{x where(lower x)like"*.csv"}key`:.
 
 /  Local Variables: 
 /  mode:q 
-/  q-prog-args: "matlab_log.csv -si -load csvguess.q"
+/  q-prog-args: "-file x-008h-0264.csv -zh -ze -delim | -load csvguess.q"
 /  fill-column: 75
 /  comment-column:50
 /  comment-start: "/  "
