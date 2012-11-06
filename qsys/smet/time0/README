@@ -1,0 +1,7 @@
+weaves
+
+This library is still in prototype.
+
+It provides access for q/kdb+ to UTC functions in the C libraries.
+
+In particular, it can convert a datetime to a UTC. That is, seconds since 1970.01.01T00:00:00.000.

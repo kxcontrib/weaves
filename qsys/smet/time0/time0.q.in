@@ -1,0 +1,140 @@
+// weaves
+
+/ Regular expression matching - requires egex.so
+
+\d .regex
+
+i.lib:`$"@pkglibdir@/libqregex"
+
+// Compile an expression and place in a cache. Accessible by the 
+// index number returns.
+compile: .regex.i.lib 2:(`q_re_compile;1)
+
+// Reset all the expressions stored in the cache.
+reset: .regex.i.lib 2:(`q_re_reset;1)
+
+// Regular expression match: 1st arg is a pattern (string or integer index),
+// 2nd string.
+// Returns boolean
+m: .regex.i.lib 2:(`q_match;2)
+m1: .regex.i.lib 2:(`q_match1;3)
+
+/ Regular expression match: 1st string pattern, 2nd string
+/ Returns integer pair (first, last)
+mark: .regex.i.lib 2:(`q_re_location;2)
+
+/ Regular expression match: 1st string pattern, 2nd string, 3rd 1 for case-insensitive
+/ Returns integer pair (first, last)
+mark1: .regex.i.lib 2:(`q_re_location1;3)
+
+// Replace a sub-string within s matching a pattern p with t
+gsub: { [s;p;t;opt] a:.regex.mark1[p;s;opt];
+      if[a[0] < 0; :s ];
+      b:(a[1] - a[0])#(a[0])_s;
+      ssr[s;b;t] }
+
+
+.i.space: .regex.i.lib 2:(`q_re_despace;2)
+.i.punct: .regex.i.lib 2:(`q_re_depunct;2)
+
+// Removes all punctuation marks.
+punct: { [x] x:ssr[x;"'";""]; .i.punct[x;1] }
+
+// Reduces multiple spaces to just one.
+space: .i.space[;1]
+
+// Removes all spaces.
+space0: { [x] x[where not x in " "] }
+
+// Remove all the punctuation and reduce spaces to 1
+clean: { [x] .regex.space .regex.punct x }
+
+// Remove all the punctuation and remove all spaces
+clean1: { [x] .regex.space0 .regex.space .regex.punct x }
+
+
+
+
+// Remove from x all the occurrences of y.
+// @note
+// Splits the string into sub-strings (separated by spaces)
+i.elide0.all: { [x;y] x:trim x;
+	       a:(" " vs x);
+	       b:{ $[ x ~ y;"";x] }[;y] each a;
+	       trim .regex.space raze (" " sv b) }
+
+// Remove from x all the occurrences of y.
+// @note
+// Splits the string into sub-strings (separated by spaces)
+elide0: .regex.i.elide0.all
+
+// Remove last occurrences of y in x.
+// @note
+// Split the string into sub-strings (separated by spaces)
+i.elide0.last: { [x;y] x:trim x;
+		a:(" " vs x);
+		b:$[y ~ last a; (-1)_a; a];
+		trim .regex.space raze (" " sv b) }
+
+i.elide0.op: { [x;l;f] .t.x:x; .t.f:f; 
+	      { .t.x:.t.f[.t.x;x] } each l;
+	      .t.x }
+
+// Remove all occurrences of elements in l from x.
+elide1.all: .regex.i.elide0.op[;;.regex.i.elide0.all]
+elide1.last: .regex.i.elide0.op[;;.regex.i.elide0.last]
+
+i.spaced: { [x] any(" " = trim x) }
+
+// Remove all occurrences of elements in l from x when any of the l
+// is in the last place.
+.regex.elide2.last: { [x;l] .t.x1:x; .t.x2:x;
+		     .t.x1: .regex.elide1.last[.t.x2;l];
+		     while[.regex.i.spaced[.t.x1] & ((count .t.x1) < (count .t.x2));
+			   .t.x2: .t.x1;
+			   .t.x1: .regex.elide1.last[.t.x2;l] ];
+		     .t.x1 }
+
+\d .
+
+/ TODO - Convert to a symbol, dropping punctuation
+
+/ atom
+.regex.sym0: { [x] .regex.space .regex.punct (string x) }
+/ list or atom
+.regex.sym: { [x]
+	     if[ 0 > type x; : .regex.sym0[x]]; 
+	     if[ 10 = type x; : .regex.sym0[`$x]];
+	     .regex.sym0 each x
+	     }
+
+/ These take a dictionary as third argument
+/ icase ignore case
+/ least use least number of characters
+/ wreplace weight replace to double
+
+.smet.lev.d: .regex.i.lib 2:(`q_lev_dist;3)
+.smet.lev.r: .regex.i.lib 2:(`q_lev_ratio;3)
+
+/ wreplace should not be used.
+/ The fourth argument is the weight to give to prefix
+.smet.jrw.r: .regex.i.lib 2:(`q_lev_jaro_winkler_ratio;4)
+
+// Cyclic redundancy checks
+
+\d .crc
+
+i.lib:.regex.i.lib
+
+// Basic string based.
+// @return long unsigned integer
+i.str:.crc.i.lib 2:(`q_crc32;1)
+
+// The base36 encoding of the CRC32 of the cleaned  string
+// @return string
+str2str: { [str] .Q.x12 .crc.i.str[ lower .regex.space0 .regex.space .regex.punct str ] }
+
+\d
+
+
+

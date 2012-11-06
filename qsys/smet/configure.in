@@ -8,6 +8,7 @@ AC_INIT([q], [0.1.0], [walter.eaves@bigfoot.com], [qsys])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([test/egexm.c])
 AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_COPYRIGHT([README])
@@ -115,5 +116,6 @@ dnl Checks for library functions.
 AC_OUTPUT([Makefile
 test/Makefile
 regex/Makefile
+time0/Makefile
 examples/Makefile
 egex.lsm egex.spec])
