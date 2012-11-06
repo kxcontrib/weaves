@@ -10,6 +10,27 @@
 #include "regex.h"
 #endif
 
+/* Check if using time.h */
+#if defined(HAVE_TIME_H)
+#include "time.h"
+#else
+#error "no time.h found"
+#endif
+
+/* Check if using time.h */
+#if defined(HAVE_SYS_TIME_H)
+#include "sys/time.h"
+#else
+#error "no sys/time.h found"
+#endif
+
+extern int tm0_print(struct tm *);
+
+/* This takes a 7 integer array, first is a year, last is milliseconds */
+#define TM0_N 7
+extern double tm0_tm2utc(int *x, int is_dst);
+extern int* tm0_empty0(int *x);
+
 extern int re1_cc(regex_t *r, const char *p, int flags);
 extern int re1_match(const regex_t *r, const char *s, regmatch_t *result, int len, int flags);
 

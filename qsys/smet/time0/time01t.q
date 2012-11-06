@@ -1,80 +1,44 @@
-// @file egex.q
-// @brief Regular expressions demonstration - basic
+// @file time01t.q
+// @brief UTC time functions demonstration - basic
 // @author weaves
 //
-// I've chosen to use the POSIX regular expression library.
-// GNU support it, but POSIX doesn't support GNU.
-// @n
-// The net effect is that to do sub-string matching you need to put 
-// your regular expressions into a pair of brackets.
+// @note
 
-.egex.lib:`$".libs/libqregex"
+.time01t.lib:`$".libs/libqtime"
 
-0N!("Linkage: about to load"; .egex.lib);
+0N!("Linkage: about to load"; .time01t.lib);
 
 / Simplest interface, take one (null sym) argument
 / This returns 1j
 
-read_cycles:.egex.lib 2:(`q_get_first_cpu_frequency;1)
+utime0:.time01t.lib 2:(`q_utime0;1)
 
-/ Simple CRC-32
+0N!(type utime0[]; utime0[]);
 
-.crc32.str:.egex.lib 2:(`q_crc32;1)
+utime1:.time01t.lib 2:(`q_utime1;1)
 
-0N!("crc32: ",string .crc32.str["abc"]);
-0N!("crc32: ",string .crc32.str["abc1"]);
+x0:utime1[]
+0N!(type x0; ; `int$floor x0; .Q.f[8;] x0 - floor x0 );
 
+utime2:.time01t.lib 2:(`q_utime2;2)
+utime3:.time01t.lib 2:(`q_utime3;1)
 
-/ in: two args; out: boolean
-matchre: .egex.lib 2:(`q_match;2)
-markre: .egex.lib 2:(`q_re_location;2)
-markire: .egex.lib 2:(`q_re_location1;3)
+parts: { [dt] dt0:`date$dt; tm0:`time$dt;
+	x0: (dt0.year;dt0.mm;dt0.dd; `hh$tm0; `mm$tm0; `ss$tm0; `int$tm0 mod 1000);
+	x0: { `int$x } each x0;
+	0N!(x0);
+	utime2[ x0; 0 ] }
 
-0N!("read_cycles: "; 1);
-read_cycles`
+dt0: 2000.01.01T00:00:00.000
+dt0
+x0: parts @ dt0
+x1: utime3 @ `real$x0
 
-tstr:"abcdefghijkkl"
-count tstr
-0N!("test string: "; tstr);
-
-0N!("match: ");
-
-/ Expecting four passes, but one fails in script mode, but works on the command-line
-
-/ Case insensitive option doesn't work either
-0N!("case insensitive:");
-
-0N!("fail: "; 1);
-a:markire["B.+";tstr;0]
-(type a; a)
-
-0N!("passes: "; 1);
-a:markire["B.+";tstr;1]
-(type a; a)
-
-0N!("passes: "; 4);
-a:matchre[enlist "l";tstr]
-a
-
-if[not a; .sys.exit[1]]
-
-matchre["l$";tstr]
-matchre[".+";tstr]
-matchre["b.+";tstr]
-
-0N!("fails: "; 1);
-a:matchre["z.+";tstr]
-(type a; a)
-
-0N!("mark: ");
-
-0N!("fails: "; 1);
-a:markre["z.+";tstr]
-(type a; a)
-
-0N!("passes: "; 1);
-a:markre["b.+";tstr]
-(type a; a)
+dt0: .z.z
+dt0
+x0: parts @ dt0
+" " sv string each (type x0; floor x0; x0 - floor x0)
+x1: utime3 @ x0
 
 if[.sys.is_arg`exit; exit 0]
 
