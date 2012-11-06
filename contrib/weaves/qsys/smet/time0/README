@@ -2,6 +2,22 @@ weaves
 
 This library is still in prototype.
 
+Not needed: use this two, where secs1day is 86000
+
+// datetime to fractional seconds
+//
+// Add the offset from kdb datetime epoch start and the UTC epoch start.
+// Add the datetime on and multiply up by the day count.
+// Doesn't work. Adds 25 seconds.
+// @note
+// Don't use real only float seems to work. float is double.
+// @TODO
+// This counts the leap seconds because the arithmetic is done by the 
+// the subtraction of the types.
+atime1: { [dt] x0:`float$dt; (`float$.f.consts[`secs1day]) * (x0 + 10957.0f) }
+
+atime2: { [f0] f1: (`float$f0) % `float$.f.consts[`secs1day]; f1-: 10957.0f; `datetime$f1 }
+
 It provides access for q/kdb+ to UTC functions in the C libraries.
 
 In particular, it can convert a datetime to a UTC. That is, seconds since 1970.01.01T00:00:00.000.
