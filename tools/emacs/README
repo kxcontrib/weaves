@@ -1,0 +1,9 @@
+weaves
+
+This files can be used with Emacs (but not for XEmacs) to provide
+an IDE for q/kdb. It works with the Qr script that is part of qsys.
+
+The init-01.el file should be appended to your init.el
+The other .el files should be on your emacs load path.
+
+Tested with XEmacs 21.
