@@ -11,7 +11,7 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = lib test regex time0 examples
+SUBDIRS = lib test regex examples
 
 #  build and install the .info pages
 egex_TEXINFOS = gpl.texinfo
