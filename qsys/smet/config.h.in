@@ -334,6 +334,9 @@
 # define _Restrict
 #endif
 
+/* Define to `unsigned int' if <sys/types.h> does not define. */
+#undef size_t
+
 /* Define to rpl_strnlen if the replacement function should be used. */
 #undef strnlen
 
