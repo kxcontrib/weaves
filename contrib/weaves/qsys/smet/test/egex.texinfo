@@ -95,7 +95,7 @@ prescription pharmaceuticals, based on his extensive personal and
 professional experience.)
 
 @node Copying, Overview, Instructions, Top
-@include gpl.texinfo
+@include ../gpl.texinfo
 
 @node Overview, Sample, Copying, Top
 @chapter Overview

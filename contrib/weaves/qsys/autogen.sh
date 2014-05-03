@@ -2,34 +2,37 @@
 
 # weaves
 # This script is an example of how to run configure and build
+# it takes arguments on the command-line like this
+#  autogen.sh smet=1
+# It expects SHELL to be a BASH shell.
 
-# The build uses SVN to get externals: see INSTALL
+: ${QHOME:=$HOME/q}
 
-cd smet
-./autogen.sh
-cd -
+for i in $*
+do
+    eval "$i"
+done
 
-# Sometimes, I use git and that doesn't support externals.
-if [ -d ../.git ]
+if [ -n "$smet" -a $smet -ge 1 ]
 then
- test -d lib || mkdir lib
- ( 
- cd lib 
- find . -maxdepth 1 -type l -exec rm -f {} \;
- cp -sr ../../../../kx/kdb+/l32/* .
- )
- 
- test -d qdoc || ln -s ../qdoc .
- ( 
- cd qdoc/cfg
- ln -sf ~-/dev.doxy.in . 
- )
+    (   cd smet;
+	$nodo $SHELL -e autogen.sh $*
+    )
+else
+ unset smet
 fi
 
-cp lib2/Makefile.am lib
-
 # autoreconf doesn't add missing files
-aclocal && automake --add-missing --copy
-autoreconf --force --install
-./configure --prefix=$HOME --with-qhomedir=$HOME/src/q --with-string-metrics --with-qtrdrhost=$HOSTNAME --with-qtrdrport=15001 --disable-dependency-tracking
-make
+$nodo libtoolize --force
+
+$nodo aclocal
+$nodo automake --add-missing --copy
+$nodo autoreconf --force --install
+
+$nodo ./configure --prefix=$HOME --with-qhomedir=$QHOME \
+ --with-string-metrics=${smet:+'no'} \
+ --with-qtrdrhost=$HOSTNAME \
+ --with-qtrdrport=15001 \
+ --disable-dependency-tracking
+
+$nodo make

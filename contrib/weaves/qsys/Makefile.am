@@ -1,7 +1,7 @@
 # weaves
 # The $(subdirs) comes from the configure call - usually smet.
 
-SUBDIRS = src lib $(subdirs)
+SUBDIRS = src $(subdirs)
 
 #  uncomment the following if qsys requires the math library
 #qsys_LDADD=-lm
