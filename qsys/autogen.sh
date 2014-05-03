@@ -18,6 +18,10 @@ done
 # Make sure a QHOME has been set on the command-line or environment.
 : ${QHOME:=$HOME/q}
 test -d "$QHOME" || exit 1
+: ${QOSTYPE:=l32}
+test -d "$QHOME/$QOSTYPE" || exit 2
+: ${QPROG:=q}
+test -x "$QHOME/$QOSTYPE/$QPROG" || exit 3
 
 # Make sure the string metrics have been set correctly.
 : ${smet:="disable"}
@@ -42,11 +46,8 @@ $nodo autoreconf --force --install
 # We override the Q progdir because we only have Linux 32 bit
 # We override the Q homedir because of a home directory layout quirk
 
-$nodo ./configure --prefix=$HOME \
- --with-qhomedir=$QHOME \
- --with-qprogdir=$QHOME/l32 \
+$nodo ./configure QHOME=$QHOME PATH=$PATH:$QHOME/${QOSTYPE} --prefix=$HOME \
  --${smet}-string-metrics \
  --with-qtrdrhost=$HOSTNAME \
  --with-qtrdrport=15001 \
  --disable-dependency-tracking
-
