@@ -17,7 +17,7 @@ do_subst = sed -e 's,[@]pkgdatadir[@],$(pkgdatadir),g' \
 	       -e 's,[@]qprogdir[@],$(qprogdir),g' \
 	       -e 's,[@]qtrdrhost[@],$(qtrdrhost),g' \
 	       -e 's,[@]qtrdrport[@],$(qtrdrport),g' \
-	       -e 's,[@]qprog[@],$(qprog),g' \
+	       -e 's,[@]qprog[@],$(QPROG),g' \
                -e 's,[@]PERL[@],$(PERL),g' \
                -e 's,[@]PACKAGE[@],$(PACKAGE),g' \
                -e 's,[@]VERSION[@],$(VERSION),g'

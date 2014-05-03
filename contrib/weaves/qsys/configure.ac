@@ -4,7 +4,7 @@ dnl Regular expression and string metrics for q/kdb
 
 dnl This uses gnulib
 
-AC_INIT([q], [0.1.1], [walter.eaves@bigfoot.com], [qsys])
+AC_INIT([q], [0.1.1], [walter.d.eaves@gmail.com], [qsys])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([qsys.1])
 AC_CONFIG_AUX_DIR([config])
@@ -33,15 +33,12 @@ AC_PATH_PROG([PDFLATEX], [pdflatex])
 AC_PATH_PROG([MAKEINDEX], [makeindex])
 AC_PATH_PROG([DVIPS], [dvips])
 AC_PATH_PROG([QOXYGEN], [qoxygen])
-AC_PATH_PROG([QPROG], [q])
 
 AC_ARG_WITH([qhomedir],
               AC_HELP_STRING([--with-qhomedir],
                [If enabled, set the QHOME variable to be as given. Otherwise, $libdir/q.]),
               [qhomedir=$withval],
-              [qhomedir=$libdir/q])
-
-AC_SUBST([qhomedir],[$qhomedir])
+              [qhomedir=$prefix/q])
 
 if test "x$build_cpu" = "xi386"; then
  qcpu=32
@@ -74,15 +71,26 @@ AC_ARG_WITH([qprogdir],
               [qprogdir=$withval],
               [qprogdir=$qhomedir/$qdirsuffix])
 
-AC_SUBST([qprogdir],[$qprogdir])
-
 AC_ARG_WITH([qprog],
               AC_HELP_STRING([--with-qprog],
                [If enabled, set the name of the Q executable to be as given. Otherwise, "q"]),
               [qprog=$withval],
               [qprog=q])
 
-AC_SUBST([qprog],[$qprogdir/$qprog])
+dnl Hopefully, we will have the q we want to use on the original PATH
+dnl or we will have constructed a PATH using the OS
+
+AC_PATH_PROG([QPROG], [$qprog], [$qprogdir/$qprog], [path = $PATH:$progdir])
+
+if test -n "$QPROG"; then
+   qprog=`basename $QPROG`
+   qprogdir=`dirname $QPROG`
+   qhomedir=`dirname $qprogdir`
+fi
+
+AC_SUBST([qhomedir],[$qhomedir])
+AC_SUBST([qprogdir],[$qprogdir])
+AC_SUBST([qprog],[$qprog])
 
 qtrdrhost=""
 AC_ARG_WITH([qtrdrhost],
@@ -120,19 +128,7 @@ fi
 
 dnl Checks for libraries.
 
-dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h sys/ndir.h ndir.h alloca.h locale.h )
-
-
-jm_CHECK_TYPE_STRUCT_UTIMBUF
-AC_HEADER_MAJOR
-AC_FUNC_ALLOCA
-AC_STRUCT_TM
-AC_STRUCT_ST_BLOCKS
-AC_FUNC_CLOSEDIR_VOID
-AC_CHECK_FUNCS(mkfifo)
-AC_CHECK_FUNC(mknod)
+# No code for this scripting system.
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 

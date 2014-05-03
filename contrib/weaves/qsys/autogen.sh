@@ -50,4 +50,3 @@ $nodo ./configure --prefix=$HOME \
  --with-qtrdrport=15001 \
  --disable-dependency-tracking
 
-$nodo make
