@@ -34,21 +34,44 @@ scripts. There are two of these: one in smet/ and
 The String Metrics component is optional.
  
 The installation needs to run gnulib-tool on the smet directory. There is a
-script autogen.sh that shows the steps.
+script autogen.sh that shows the steps. It may work for you if you have the
+l32/ trial distribution.
 
 * qsys deployment profile
 
-On Debian-Linux systems, you would need to use install at least
+If you just want qsys/, then you can use my script. It assumes you have the
+l32/q executable.
+
+On Debian-Linux systems, you would need to install at least these
  autoconf automake libtool
 and then doxygen is useful.
 
 Then, from qsys/ run 
 
- $ sh -e ./autogen.sh 
+ $ sh -x -e ./autogen.sh QHOME=$HOME/q
+This then runs the automake utilities and my l32/ configure setup.
 
-This then runs the automake components.
+ $ make all
+ $ make install
 
-* qsys and smet
+Will place the shell scripts into ~/bin, a configuration file into
+~/etc/q.rc and some supporting q scripts into ~/share/qsys.
+
+* qsys and smet deployment profile
+
+You can follow use my build script and follow the same instructions but the
+initial invocation is
+
+ $ sh -x -e ./autogen.sh QHOME=$HOME/q smet=enable
+This then runs the automake utilities and my l32/ configure setup.
+
+The build system will descend into the smet/ directory and build gnulib
+components and then some C modules.
+
+It assumes that c.o is available available from the same directory as the q
+executable is.
+
+*
 
 You need to 
 

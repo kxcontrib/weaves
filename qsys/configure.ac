@@ -33,6 +33,7 @@ AC_PATH_PROG([PDFLATEX], [pdflatex])
 AC_PATH_PROG([MAKEINDEX], [makeindex])
 AC_PATH_PROG([DVIPS], [dvips])
 AC_PATH_PROG([QOXYGEN], [qoxygen])
+AC_PATH_PROG([QPROG], [q])
 
 AC_ARG_WITH([qhomedir],
               AC_HELP_STRING([--with-qhomedir],
@@ -103,12 +104,11 @@ AC_SUBST([qtrdrport],[$qtrdrport])
 
 ## Added an add-on directory
 AC_ARG_ENABLE([string-metrics],
-        [AC_HELP_STRING([--with-string-metrics],
-         [Build the string metrics package (smet) (default yes)] )],
-	[smet_build=$enableval],
-	[smet_build=set])
+        [AC_HELP_STRING([--enable-string-metrics],
+         [Build the string metrics package (smet) (default disable)] )],
+	[smet_build=$enableval])
 
-if test x$smet_build = xset; then
+if test x$smet_build = xyes; then
  if test -d "$srcdir/smet"; then
   AC_CONFIG_SUBDIRS([smet])
  fi
