@@ -13,7 +13,7 @@ BUILT_SOURCES = c.o
 
 c.o:
 	$(RM) $@
-	$(LN_S) ../../lib/c.o 
+	$(LN_S) ${qprogdir}/c.o 
 
 pkglib_LTLIBRARIES = libqtime.la
 libqtime_la_LIBADD = $(LTLIBINTL) ${top_srcdir}/lib/libgnu.la
