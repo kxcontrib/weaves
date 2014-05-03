@@ -141,6 +141,5 @@ dnl Checks for library functions.
 AC_OUTPUT([Makefile
 qsys.lsm
 qsys.spec
-src/Makefile
-lib/Makefile])
+src/Makefile])
 
