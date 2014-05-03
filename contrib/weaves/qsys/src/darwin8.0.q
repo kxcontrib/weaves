@@ -389,18 +389,10 @@ trigger: { [ssym;f;v]
 	  args:{ (type y)$x }[;v] each args;
 	  any v f\: args }
 
-<<<<<<< refs/remotes/git-svn
 // i.tic: .z.N
 // tic0: { [] .sys.i.tic:.z.N }
 // toc0: { [] .sys.i.tic: $[ .sys.undef @ `.sys.i`tic; .z.N; .sys.i.tic ];
 //       .z.N - .sys.i.tic }
-
-i.tic: 0
-tic0: { [] .sys.i.tic:0 }
-toc0: { [] .sys.i.tic: $[ .sys.undef @ `.sys.i`tic; .z.N; .sys.i.tic ];
-       0 - .sys.i.tic }
-=======
->>>>>>> HEAD~0
 
 \d .
 

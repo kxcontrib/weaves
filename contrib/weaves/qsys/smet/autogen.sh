@@ -16,6 +16,4 @@ $nodo libtoolize --force
 
 $nodo aclocal 
 $nodo automake --add-missing --copy
-$nodo autoconf
-
-$nodo autoreconf
+$nodo autoreconf --force --install
