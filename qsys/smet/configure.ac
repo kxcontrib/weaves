@@ -100,6 +100,9 @@ dnl the GNU regular expression library. So check if the POSIX one is there and
 dnl use that.
 AC_CHECK_MEMBERS([regmatch_t.rm_sp],[],[],[[#include <regex.h>]])
 
+dnl Checks for typedefs, structures, and compiler characteristics.
+dnl Checks for library functions.
+
 jm_CHECK_TYPE_STRUCT_UTIMBUF
 AC_HEADER_MAJOR
 AC_FUNC_ALLOCA
@@ -109,9 +112,6 @@ AC_FUNC_CLOSEDIR_VOID
 AC_CHECK_FUNCS(mkfifo)
 AC_CHECK_FUNC(mknod)
 
-dnl Checks for typedefs, structures, and compiler characteristics.
-
-dnl Checks for library functions.
 
 AC_OUTPUT([Makefile
 test/Makefile
