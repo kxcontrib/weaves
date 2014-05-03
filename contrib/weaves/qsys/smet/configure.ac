@@ -1,6 +1,7 @@
 dnl weaves
 dnl 
 dnl Regular expression and string metrics for q/kdb
+dnl we only need a QPROG to locate the qprogdir
 
 dnl This uses gnulib
 
@@ -38,18 +39,13 @@ AC_ARG_WITH([qhomedir],
               AC_HELP_STRING([--with-qhomedir],
                [If enabled, set the QHOME variable to be as given. Otherwise, $libdir/q.]),
               [qhomedir=$withval],
-              [qhomedir=$libdir/q])
-
-AC_SUBST([qhomedir],[$qhomedir])
-
-dnl Begin
-dnl Should be a Q macro to deduce the directory name given the host_cpu and host_os
+              [qhomedir=$prefix/q])
 
 if test "x$build_cpu" = "xi386"; then
  qcpu=32
 elif test "x$build_cpu" = "xi686"; then
  qcpu=32
-elif test "x$build_cpu" = "sparc"; then
+elif test "x$build_cpu" = "xsparc"; then
  qcpu=32
 else
  qcpu=64
@@ -68,10 +64,7 @@ fi
 echo $host_os | grep solaris > /dev/null 2>&1 
 if test $? -eq 0; then
    qdirsuffix=s$qcpu
-
 fi
-
-dnl End
 
 AC_ARG_WITH([qprogdir],
               AC_HELP_STRING([--with-qprogdir],
@@ -79,15 +72,26 @@ AC_ARG_WITH([qprogdir],
               [qprogdir=$withval],
               [qprogdir=$qhomedir/$qdirsuffix])
 
-AC_SUBST([qprogdir],[$qprogdir])
-
 AC_ARG_WITH([qprog],
               AC_HELP_STRING([--with-qprog],
                [If enabled, set the name of the Q executable to be as given. Otherwise, "q"]),
               [qprog=$withval],
               [qprog=q])
 
-AC_SUBST([qprog],[$qprogdir/$qprog])
+dnl Hopefully, we will have the q we want to use on the original PATH
+dnl or we will have constructed a PATH using the OS
+
+AC_PATH_PROG([QPROG], [$qprog], [$qprogdir/$qprog], [path = $PATH:$progdir])
+
+if test -n "$QPROG"; then
+   qprog=`basename $QPROG`
+   qprogdir=`dirname $QPROG`
+   qhomedir=`dirname $qprogdir`
+fi
+
+AC_SUBST([qhomedir],[$qhomedir])
+AC_SUBST([qprogdir],[$qprogdir])
+AC_SUBST([qprog],[$qprog])
 
 dnl Checks for libraries.
 
