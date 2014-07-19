@@ -15,6 +15,16 @@ do
     eval "$i"
 done
 
+if [ -n "$clean" -a "$clean" = "yes" ]
+then
+    set +e
+    test -f Makefile && $nodo make distclean
+    $nodo rm -rf m4 config lib
+    $nodo find . -type d -name autom4te.cache -exec rm -rf {} \;
+    $nodo find . -type f \( -name Makefile.in -o -name aclocal.m4 -o -name configure -o -name '*~' \) -delete
+    exit 0
+fi
+
 # Make sure a QHOME has been set on the command-line or environment.
 : ${QHOME:=$HOME/q}
 test -d "$QHOME" || exit 1

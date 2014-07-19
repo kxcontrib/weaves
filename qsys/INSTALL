@@ -42,14 +42,29 @@ l32/ trial distribution.
 If you just want qsys/, then you can use my script. It assumes you have the
 l32/q executable.
 
-On Debian-Linux systems, you would need to install at least these
- autoconf automake libtool
-and then doxygen is useful.
+** Packages
 
-Then, from qsys/ run 
+On Debian-Linux systems, you would need to install at least these
+
+ autoconf automake libtool
+
+and then doxygen is useful. If you want to try the smet also add
+
+ gnulib 
+
+for the check goal in the Makefile and for the runtime system you will also
+to need to add
+
+ rlwrap
+
+** Configuring the automake build system
+
+From qsys/ run 
 
  $ sh -x -e ./autogen.sh QHOME=$HOME/q
-This then runs the automake utilities and my l32/ configure setup.
+
+This then runs the automake utilities and my l32/ configure setup. After
+which it should be possible to run 
 
  $ make all
  $ make install
@@ -63,6 +78,7 @@ You can follow use my build script and follow the same instructions but the
 initial invocation is
 
  $ sh -x -e ./autogen.sh QHOME=$HOME/q smet=enable
+
 This then runs the automake utilities and my l32/ configure setup.
 
 The build system will descend into the smet/ directory and build gnulib
@@ -71,12 +87,15 @@ components and then some C modules.
 It assumes that c.o is available available from the same directory as the q
 executable is.
 
-*
+* Configurable options: producing distributions
 
-You need to 
+As noted above, the autogen.sh script is there for me to build the
+system. You may need to build a distribution, in which case, you would 
 
-Simply use ./configure, but usually one only wants to install in one's
-own home directory and into the q executable directory
+ make dist
+
+and then simply use ./configure. Usually one only wants to install in
+one's own home directory and into the q executable directory
 
  ./configure --prefix=$HOME --with-qhomedir=$HOME/q
 
@@ -94,7 +113,7 @@ If this doesn't work, you can try to override by setting
 
 for example.
 
-String Metrics - the smet directory
+* String Metrics - the smet directory
 
 The qsys environment comes with a C plugin for the q interpreter "smet".
 The build is in in a sub-directory of this and is built by default. 
@@ -115,9 +134,19 @@ If you want to extend the package you'll need at least automake 1.9
 It's best to delete the contents of the config/ and smet/config/ 
 directories and then
 
- autoreconf --force --install
+ autoconf --force
 
 and then configure as normal.
+
+--
+
+The autogen.sh script also has a nodo option
+
+ autogen.sh nodo=echo 
+
+and a clean option
+
+ autogen.sh clean=yes
 
 --
 
