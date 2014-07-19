@@ -39,9 +39,11 @@ fi
 
 # autoreconf doesn't add missing files
 
+test -d config || mkdir config
+
 $nodo aclocal
 $nodo automake --add-missing --copy
-$nodo autoreconf --force --install
+$nodo autoconf --force
 
 # We override the Q progdir because we only have Linux 32 bit
 # We override the Q homedir because of a home directory layout quirk
