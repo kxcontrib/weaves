@@ -1,7 +1,7 @@
-\name{open.q}
-\alias{close.q}
-\alias{execute.q}
+\name{q4r}
+\alias{q4r}
 \alias{exec.q}
+\alias{close.q}
 
 \title{Access a q/kdb+ time-series database server}
 
