@@ -9,17 +9,19 @@ load.q <- function() {
 }
 
 .onLoad <- function(libname, pkgname) {
-  cat("This is a pre-release. The interface might change...\n")
   # cat(paste(libname, pkgname))
-  # cat("This is a pre-release. The interface might change...\n")
-  library.dynam("q4r", pkgname, lib.loc = libname, verbose = TRUE )
+  # Because we use useDynLib() in NAMESPCE this is not needed.
+  # library.dynam("q4r", pkgname, lib.loc = libname, verbose = TRUE )
   # load.q()
 }
 
+.onUnload <- function(libpath) {
+    # libpath = "/usr/local/lib/R/site-library"
+    # library.dynam.unload("q4r", libpath)
+}
+
 .onAttach <- function(libname, pkgname) {
-  # cat("This is a pre-release. The interface might change...\n")
-  # library.dynam("qserver", pkg, lib, lib.loc = .libPaths()[[1]] )
-  # load.q()
+  packageStartupMessage("This is a pre-release. The interface might change...\n")
 }
 
 

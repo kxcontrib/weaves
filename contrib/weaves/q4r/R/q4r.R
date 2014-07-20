@@ -14,30 +14,24 @@ open.q <- function(host="localhost", port=1444, user=NULL, hsym = NULL,
 
   parameters <- list(host, as.integer(port), user)
   if(verbose) print(parameters)
-  .Call("kx_r_open_connection", parameters, "q4r")
+  h <- .Call("kx_r_open_connection", parameters, "q4r")
+  assign(".k.h", h, envir = .GlobalEnv)
+  h
 }
 
-open1.q <- function(host="localhost", port=1444, user=NULL, hsym = NULL) {
-  if(!is.null(hsym))
-    
-    if(is.null(host) || is.na(host)) host <- "localhost"
-  if(is.null(port) || is.na(port)) port <- 1444
-
-  parameters <- list(host, as.integer(port), user)
-  .Call("kx_r_open_connection", parameters)
+close.q <- function(connection = get(".k.h", envir = .GlobalEnv)) {
+    if(is.null(connection)) return(NULL)
+    .Call("kx_r_close_connection", as.integer(connection))
 }
 
-close.q <- function(connection) {
-        .Call("kx_r_close_connection", as.integer(connection))
-}
-
-execute.q <- function(connection, query) {
+execute.q <- function(connection = get(".k.h", envir = .GlobalEnv), query) {
         .Call("kx_r_execute", as.integer(connection), query)
 }
 
-exec.q <- function(query, connection, host="localhost", port=1444, user=NULL) {
+exec.q <- function(query, connection = get(".k.h", envir = .GlobalEnv),
+                   host="localhost", port=1444, user=NULL) {
   opened <- FALSE
-  if(missing(connection)) {
+  if(missing(connection) || is.null(connection) || is.na(connection)) {
 	connection <- open.q(host, port, user) 
         opened <- TRUE
   }
