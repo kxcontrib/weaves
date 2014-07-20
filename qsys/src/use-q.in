@@ -77,8 +77,8 @@ Qa () {
 }
 
 # Export to shell
-
-typeset -fx q2_3 Q
+# This used to work
+# typeset -fx q2_3 Q
 
 : ${QHOST:=$HOSTNAME}
 export QHOST
