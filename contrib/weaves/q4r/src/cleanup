@@ -1,0 +1,2 @@
+#!/bin/sh
+rm -f base.o q4r.so

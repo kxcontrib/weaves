@@ -1,1 +1,2 @@
 export(open.q,close.q,execute.q,load.q,exec.q)
+useDynLib(q4r)
