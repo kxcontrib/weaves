@@ -14,7 +14,7 @@ open.q <- function(host="localhost", port=1444, user=NULL, hsym = NULL,
 
   parameters <- list(host, as.integer(port), user)
   if(verbose) print(parameters)
-  .Call("kx_r_open_connection", parameters)
+  .Call("kx_r_open_connection", parameters, "q4r")
 }
 
 open1.q <- function(host="localhost", port=1444, user=NULL, hsym = NULL) {

@@ -1,2 +1,2 @@
-PKG_CFLAGS = -I.
-PKG_LIBS = ../lib/c.o -lpthread
+PKG_CFLAGS = -I. -DKXVER=2 -m32 -shared 
+PKG_LIBS = ../lib/c.o -lpthread -L$(R_HOME)/lib -lR
